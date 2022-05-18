@@ -1,0 +1,163 @@
+/*
+ * Copyright (c) Meta Platforms, Inc. and affiliates.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+#include <Eigen/Dense>
+
+#include <eyetorch_host.h>
+#include <models/dispatch.h>
+#include <typedefs.h>
+
+namespace eyetorch {
+
+template <typename ScalarT, typename ProjectorT>
+void project_forward_cpu(
+    const typename TypeDefs<ScalarT, ProjectorT>::Point3D* points,
+    const typename TypeDefs<ScalarT, ProjectorT>::CalibParamVec* calibParams,
+    typename TypeDefs<ScalarT, ProjectorT>::Point2D* projections,
+    const int N) {
+  at::parallel_for(0, N, 1, [&](int64_t start, int64_t end) {
+    for (int64_t i = start; i < end; ++i) {
+      projections[i] = ProjectorT::project(points[i], calibParams[i]);
+    }
+  });
+}
+
+template <typename ScalarT, typename ProjectorT>
+void project_backward_cpu(
+    const typename TypeDefs<ScalarT, ProjectorT>::Point3D* points,
+    const typename TypeDefs<ScalarT, ProjectorT>::CalibParamVec* calibParams,
+    const typename TypeDefs<ScalarT, ProjectorT>::Point2D* gradProjections,
+    typename TypeDefs<ScalarT, ProjectorT>::Point3D* gradPoints,
+    typename TypeDefs<ScalarT, ProjectorT>::CalibParamVec* gradParams,
+    const int N) {
+  using T = TypeDefs<ScalarT, ProjectorT>;
+
+  using JPoint2DxPoint3D = typename T::JPoint2DxPoint3D;
+  using JPoint2DxCalibParamVec = typename T::JPoint2DxCalibParamVec;
+
+  at::parallel_for(0, N, 1, [&](int64_t start, int64_t end) {
+    JPoint2DxPoint3D jProjectionByPoint;
+    JPoint2DxCalibParamVec jProjectionByParams;
+
+    for (int64_t i = start; i < end; ++i) {
+      ProjectorT::computeProjectJacobians(
+          points[i], calibParams[i], jProjectionByPoint, jProjectionByParams);
+
+      gradPoints[i] = jProjectionByPoint.transpose() * gradProjections[i];
+      gradParams[i] = jProjectionByParams.transpose() * gradProjections[i];
+    }
+  });
+}
+
+template <typename ScalarT, typename ProjectorT>
+void unproject_forward_cpu(
+    const typename TypeDefs<ScalarT, ProjectorT>::Point2D* pixels,
+    const typename TypeDefs<ScalarT, ProjectorT>::CalibParamVec* calibParams,
+    typename TypeDefs<ScalarT, ProjectorT>::Point3D* rays,
+    const int N) {
+  at::parallel_for(0, N, 1, [&](int64_t start, int64_t end) {
+    for (int64_t i = start; i < end; ++i) {
+      rays[i] = ProjectorT::unproject(pixels[i], calibParams[i]);
+    }
+  });
+}
+
+template <typename ScalarT, typename ProjectorT>
+void unproject_backward_cpu(
+    const typename TypeDefs<ScalarT, ProjectorT>::Point2D* pixels,
+    const typename TypeDefs<ScalarT, ProjectorT>::CalibParamVec* calibParams,
+    const typename TypeDefs<ScalarT, ProjectorT>::Point3D* gradRays,
+    typename TypeDefs<ScalarT, ProjectorT>::Point2D* gradPixels,
+    typename TypeDefs<ScalarT, ProjectorT>::CalibParamVec* gradParams,
+    const int N) {
+  using T = TypeDefs<ScalarT, ProjectorT>;
+
+  using JPoint2DxPoint2D = typename T::JPoint2DxPoint2D;
+  using JPoint2DxCalibParamVec = typename T::JPoint2DxCalibParamVec;
+
+  at::parallel_for(0, N, 1, [&](int64_t start, int64_t end) {
+    // The projected ray is in 3D. Therefore, the Jacobians for the
+    // pixel location and param vector should be 3x2 and 3xK,
+    // respectively. However, because EyeTorch always unprojects
+    // onto the unit plane, the partials w.r.t. the z-coordinate
+    // are always zero. It is thus sufficient to compute the
+    // 2x2 and 2xK top rows of the Jacobians, with the last row
+    // being implicitly zero.
+    JPoint2DxPoint2D jRayByPixels;
+    JPoint2DxCalibParamVec jRayByParams;
+
+    for (int64_t i = start; i < end; ++i) {
+      ProjectorT::computeUnprojectJacobians(pixels[i], calibParams[i], jRayByPixels, jRayByParams);
+
+      gradPixels[i] = jRayByPixels.transpose() * gradRays[i].template head<2>();
+      gradParams[i] = jRayByParams.transpose() * gradRays[i].template head<2>();
+    }
+  });
+}
+
+#define INSTANTIATE_GPU_FUNCTIONS(ProjectionModel)               \
+  template void project_forward_cpu<float, ProjectionModel>(     \
+      const typename TypeDefsF<ProjectionModel>::Point3D*,       \
+      const typename TypeDefsF<ProjectionModel>::CalibParamVec*, \
+      typename TypeDefsF<ProjectionModel>::Point2D*,             \
+      const int);                                                \
+  template void project_forward_cpu<double, ProjectionModel>(    \
+      const typename TypeDefsD<ProjectionModel>::Point3D*,       \
+      const typename TypeDefsD<ProjectionModel>::CalibParamVec*, \
+      typename TypeDefsD<ProjectionModel>::Point2D*,             \
+      const int);                                                \
+  template void project_backward_cpu<float, ProjectionModel>(    \
+      const typename TypeDefsF<ProjectionModel>::Point3D*,       \
+      const typename TypeDefsF<ProjectionModel>::CalibParamVec*, \
+      const typename TypeDefsF<ProjectionModel>::Point2D*,       \
+      typename TypeDefsF<ProjectionModel>::Point3D*,             \
+      typename TypeDefsF<ProjectionModel>::CalibParamVec*,       \
+      const int);                                                \
+  template void project_backward_cpu<double, ProjectionModel>(   \
+      const typename TypeDefsD<ProjectionModel>::Point3D*,       \
+      const typename TypeDefsD<ProjectionModel>::CalibParamVec*, \
+      const typename TypeDefsD<ProjectionModel>::Point2D*,       \
+      typename TypeDefsD<ProjectionModel>::Point3D*,             \
+      typename TypeDefsD<ProjectionModel>::CalibParamVec*,       \
+      const int);                                                \
+  template void unproject_forward_cpu<float, ProjectionModel>(   \
+      const typename TypeDefsF<ProjectionModel>::Point2D*,       \
+      const typename TypeDefsF<ProjectionModel>::CalibParamVec*, \
+      typename TypeDefsF<ProjectionModel>::Point3D*,             \
+      const int);                                                \
+  template void unproject_forward_cpu<double, ProjectionModel>(  \
+      const typename TypeDefsD<ProjectionModel>::Point2D*,       \
+      const typename TypeDefsD<ProjectionModel>::CalibParamVec*, \
+      typename TypeDefsD<ProjectionModel>::Point3D*,             \
+      const int);                                                \
+  template void unproject_backward_cpu<float, ProjectionModel>(  \
+      const typename TypeDefsF<ProjectionModel>::Point2D*,       \
+      const typename TypeDefsF<ProjectionModel>::CalibParamVec*, \
+      const typename TypeDefsF<ProjectionModel>::Point3D*,       \
+      typename TypeDefsF<ProjectionModel>::Point2D*,             \
+      typename TypeDefsF<ProjectionModel>::CalibParamVec*,       \
+      const int);                                                \
+  template void unproject_backward_cpu<double, ProjectionModel>( \
+      const typename TypeDefsD<ProjectionModel>::Point2D*,       \
+      const typename TypeDefsD<ProjectionModel>::CalibParamVec*, \
+      const typename TypeDefsD<ProjectionModel>::Point3D*,       \
+      typename TypeDefsD<ProjectionModel>::Point2D*,             \
+      typename TypeDefsD<ProjectionModel>::CalibParamVec*,       \
+      const int)
+
+CALL_PREPROC_MACRO_FOR_EACH_PROJECTOR(INSTANTIATE_GPU_FUNCTIONS);
+
+} // namespace eyetorch
