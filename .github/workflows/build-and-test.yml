@@ -18,8 +18,7 @@ jobs:
         shell: bash
         run: |
           cd ./src/scripts/
-          sh install_deps_centos.sh
-          pip3 install pybind11 numpy pyopengl
+          sh install_deps_debian.sh
 
       - name: Configure
         shell: bash
