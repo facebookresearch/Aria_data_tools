@@ -9,7 +9,7 @@ const darkCodeTheme = require('prism-react-renderer/themes/dracula');
 /** @type {import('@docusaurus/types').DocusaurusConfig} */
 (module.exports = {
   title: 'aria-research-kit-sdk',
-  tagline: 'aria-research-kit-sdk is cool',
+  tagline: 'aria-research-kit-sdk is great',
   url: 'https://internalfb.com',
   baseUrl: '/',
   onBrokenLinks: 'throw',
