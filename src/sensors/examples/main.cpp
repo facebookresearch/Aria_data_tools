@@ -28,6 +28,7 @@
 #include <sstream>
 
 namespace fs = std::filesystem;
+using namespace ark::datatools;
 
 namespace {
 
@@ -46,7 +47,7 @@ std::string getCalibStrFromFile(const std::string& filePath) {
   } else if (ext == ".vrs") {
     vrs::RecordFileReader reader;
     reader.openFile(filePath);
-    return ark::getCalibrationFromVrsFile(reader);
+    return sensors::getCalibrationFromVrsFile(reader);
   } else {
     std::cerr << "Unsupported file type: " << ext << std::endl;
     assert(false);
@@ -58,10 +59,10 @@ std::string getCalibStrFromFile(const std::string& filePath) {
 int main(int argc, char** argv) {
   // Load calibration file.
   if (argc <= 1) {
-    std::cerr << "Usage: ark_example [<path_to_calib>.json | <path_to_vrs>.vrs]" << std::endl;
+    std::cerr << "Usage: sensors_example [<path_to_calib>.json | <path_to_vrs>.vrs]" << std::endl;
     return 1;
   }
-  ark::DeviceModel model = ark::DeviceModel::fromJson(getCalibStrFromFile(argv[1]));
+  sensors::DeviceModel model = sensors::DeviceModel::fromJson(getCalibStrFromFile(argv[1]));
 
   std::cout << fmt::format("Successfully loaded calibration file from: {}.", argv[1]) << std::endl;
 

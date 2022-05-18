@@ -12,17 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-add_executable(ark_example
+add_executable(sensors_example
     main.cpp
 )
 
 set(THREADS_PREFER_PTHREAD_FLAG ON)
 find_package(Threads REQUIRED)
 
-target_link_libraries(ark_example
+target_link_libraries(sensors_example
     PUBLIC
-        ark
-        Eigen3::Eigen
+        sensors
         fmt::fmt
     PRIVATE
         Threads::Threads

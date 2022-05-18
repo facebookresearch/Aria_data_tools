@@ -14,14 +14,15 @@
 
 find_package(GTest)
 
-add_executable(ark_tests
+add_executable(deviceModel_tests
     DeviceModelTests.cpp
 )
 
-target_link_libraries(ark_tests
+target_link_libraries(deviceModel_tests
     PUBLIC
-        ark
-        Eigen3::Eigen
+        sensors
         GTest::Main
 )
-gtest_discover_tests(ark_tests)
+gtest_discover_tests(deviceModel_tests)
+add_test(NAME deviceModel_tests WORKING_DIRECTORY ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}
+             COMMAND $<TARGET_FILE:deviceModel_tests>)

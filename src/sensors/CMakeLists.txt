@@ -41,12 +41,11 @@ target_link_libraries(sensors
 )
 
 # Build tests.
-if(BUILD_SENSORS_TESTS)
-    enable_testing()
+if(BUILD_ARK_TESTS)
     add_subdirectory(tests)
-endif(BUILD_SENSORS_TESTS)
+endif(BUILD_ARK_TESTS)
 
 # Build examples.
-if (BUILD_SENSORS_EXAMPLES)
+if (BUILD_ARK_EXAMPLES)
     add_subdirectory(examples)
-endif(BUILD_SENSORS_EXAMPLES)
+endif(BUILD_ARK_EXAMPLES)
