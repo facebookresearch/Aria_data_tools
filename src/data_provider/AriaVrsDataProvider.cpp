@@ -285,6 +285,10 @@ void AriaVrsDataProvider::setWifiBeaconPlayer() {
   setStreamPlayer(vrs::StreamId(vrs::RecordableTypeId::WifiBeaconRecordableClass, 1));
 }
 
+void AriaVrsDataProvider::setBluetoothBeaconPlayer() {
+  setStreamPlayer(vrs::StreamId(vrs::RecordableTypeId::BluetoothBeaconRecordableClass, 1));
+}
+
 void AriaVrsDataProvider::setAudioPlayer() {
   setStreamPlayer(vrs::StreamId(vrs::RecordableTypeId::StereoAudioRecordableClass, 1));
 }

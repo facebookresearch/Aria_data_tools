@@ -111,6 +111,7 @@ void exportDataProvider(py::module& m) {
       .def("setImuLeftPlayer", &AriaVrsDataProvider::setImuLeftPlayer)
       .def("setMagnetometerPlayer", &AriaVrsDataProvider::setMagnetometerPlayer)
       .def("setWifiBeaconPlayer", &AriaVrsDataProvider::setWifiBeaconPlayer)
+      .def("setBluetoothBeaconPlayer", &AriaVrsDataProvider::setBluetoothBeaconPlayer)
       .def("setAudioPlayer", &AriaVrsDataProvider::setAudioPlayer)
       .def("setGpsPlayer", &AriaVrsDataProvider::setGpsPlayer)
       .def("setBarometerPlayer", &AriaVrsDataProvider::setBarometerPlayer)

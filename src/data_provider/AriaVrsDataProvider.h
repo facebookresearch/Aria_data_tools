@@ -76,6 +76,7 @@ class AriaVrsDataProvider : public AriaDataProvider {
   void setMagnetometerPlayer();
   void setWifiBeaconPlayer();
   void setAudioPlayer();
+  void setBluetoothBeaconPlayer();
   void setGpsPlayer();
   void setBarometerPlayer();
   void setTimeSyncPlayer();
