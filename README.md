@@ -1,5 +1,7 @@
 # Aria Data Tools
 
+[![Continuous Integration Status](https://github.com/facebookresearch/Aria_data_tools/actions/workflows/build-and-test.yml/badge.svg?branch=main)](https://github.com/facebookresearch/Aria_data_tools/actions/workflows/build-and-test.yml)
+
 ## About
 
 Project Aria makes open data and open tooling available to support researchers expand the horizons of Augmented Reality, Machine Learning and Artificial Intelligence by releasing the Aria Pilot Dataset and Aria Research Kit: Aria Data Tools.
@@ -45,14 +47,14 @@ Some of the ways researchers use Project Aria data, sensor and visualization too
 ## Getting Started
 
 * Documentation [[Overview (index.md)](TBD)]
-* Aria data tool - build and install [[WEBSITE link](TBD)]
+* Aria data tool - [[build and install](https://github.com/facebookresearch/Aria_data_tools/blob/main/BUILD.md)]
 * Aria Pilot Dataset - [[WEBSITE link](https://fb.quip.com/2nFgAAuoYxfb)]
 * Aria Pilot Dataset documentation [[1. Aria Pilot Dataset Overview](TBD)]
 * How to Use the Tools [(howto/index.md)](TBD)
 
 ## How to Contribute
 
-We welcome contributions! See [CONTRIBUTING](link to contributing .md) for details on how to get started, and our [code of conduct](link to code of conduct.md).
+We welcome contributions! See [CONTRIBUTING](https://github.com/facebookresearch/Aria_data_tools/blob/main/CONTRIBUTING.md) for details on how to get started, and our [code of conduct](https://github.com/facebookresearch/Aria_data_tools/blob/main/CODE_OF_CONDUCT.md).
 
 ## Citation
 
