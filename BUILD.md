@@ -35,7 +35,8 @@ Aria Data Tools depend on multiple 3rd party system libraries and toolchains.  W
 Use these commands if you use CentOS-family linux such as Fedora, Redhat, CentOS or any other distribution using dnf.
 
 ```
-$ sh ./src/scripts/install_deps_centos.sh
+$ cd src/scripts
+$ sh ./install_deps_centos.sh
 ```
 
 #### Debian-family setup
@@ -43,7 +44,8 @@ $ sh ./src/scripts/install_deps_centos.sh
 Use these commands if you use Debian-family linux  such as Ubuntu, Debian or any other distribution using apt-get.
 
 ```
-$ sh ./src/scripts/install_deps_debian.sh
+$ cd src/scripts
+$ sh ./install_deps_debian.sh
 ```
 
 #### MacOS  setup
@@ -51,7 +53,8 @@ $ sh ./src/scripts/install_deps_debian.sh
 Use these commands to set up on MacOS.
 
 ```
-$ sh ./src/scripts/install_deps_mac.sh
+$ cd src/scripts
+$ sh ./install_deps_mac.sh
 ```
 
 ### Build the C++ and python libraries
@@ -59,16 +62,17 @@ $ sh ./src/scripts/install_deps_mac.sh
 Once Aria Data Tools is running, build the C++ library.
 
 ```
+$ cd ../../
 $ mkdir build
 $ cd build
-$ cmake ..
+$ cmake ../src
 $ make -j8
 ```
 
 Build and install the Python code (provided as a [pip](https://pypi.org/project/pip/) package).
 
 ```
-$ pip install --global-option=build_ext --global-option="-j8"
+$ pip install --global-option=build_ext --global-option="-j8" .
 ```
 
 ### Dependencies
