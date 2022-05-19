@@ -49,7 +49,9 @@ class AriaFolderDataProvider : public AriaDataProvider {
  public:
   bool open(const std::string& folderPath, const std::string& posePath = "") override;
   void setStreamPlayer(const vrs::StreamId& streamId) override;
-  bool tryFetchNextData(const vrs::StreamId& streamId, double currentTimestampSec) override;
+  bool tryFetchNextData(
+      const vrs::StreamId& streamId,
+      double currentTimestampSec = std::numeric_limits<double>::max()) override;
   void* getImageBuffer(const vrs::StreamId& streamId) const override;
   double getFastestNominalRateHz() override {
     std::cout << "getFastestNominalRateHz is not implemented yet!" << std::endl;

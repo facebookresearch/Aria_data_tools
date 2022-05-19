@@ -518,9 +518,9 @@ double AriaVrsDataProvider::getNextTimestampSec(const vrs::StreamId& streamId) c
 bool AriaVrsDataProvider::tryFetchNextData(
     const vrs::StreamId& streamId,
     double currentTimestampSec) {
-  auto nextImageRecord = getDataRecordByTime(streamId, getNextTimestampSec(streamId));
-  if (nextImageRecord != nullptr && nextImageRecord->timestamp < currentTimestampSec) {
-    readRecord(*nextImageRecord);
+  auto nextRecord = getDataRecordByTime(streamId, getNextTimestampSec(streamId));
+  if (nextRecord && nextRecord->timestamp < currentTimestampSec) {
+    readRecord(*nextRecord);
     return true;
   }
   return false;

@@ -31,7 +31,9 @@ class AriaDataProvider {
   virtual ~AriaDataProvider() = default;
   virtual bool open(const std::string& sourcePath, const std::string& posePath = "") = 0;
   virtual void setStreamPlayer(const vrs::StreamId& streamId) = 0;
-  virtual bool tryFetchNextData(const vrs::StreamId& streamId, double currentTimestampSec) = 0;
+  virtual bool tryFetchNextData(
+      const vrs::StreamId& streamId,
+      double currentTimestampSec = std::numeric_limits<double>::max()) = 0;
   virtual void* getImageBuffer(const vrs::StreamId& streamId) const = 0;
   virtual uint32_t getImageWidth(const vrs::StreamId& streamId) const = 0;
   virtual uint32_t getImageHeight(const vrs::StreamId& streamId) const = 0;

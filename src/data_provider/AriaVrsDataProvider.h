@@ -117,7 +117,9 @@ class AriaVrsDataProvider : public AriaDataProvider {
 
   // Override functions for AriaDataProvider
   bool open(const std::string& vrsPath, const std::string& posePath = "") override;
-  bool tryFetchNextData(const vrs::StreamId& streamId, double currentTimestampSec) override;
+  bool tryFetchNextData(
+      const vrs::StreamId& streamId,
+      double currentTimestampSec = std::numeric_limits<double>::max()) override;
   void* getImageBuffer(const vrs::StreamId& streamId) const override;
   uint32_t getImageWidth(const vrs::StreamId& streamId) const override;
   uint32_t getImageHeight(const vrs::StreamId& streamId) const override;
