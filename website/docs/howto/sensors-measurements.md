@@ -22,7 +22,7 @@ Each sensor is associated with an instance-invariant name. For example, the left
 
 
 ```
-`>>> deviceModel.getCameraLabels()
+>>> deviceModel.getCameraLabels()
 ['camera-et-left', 'camera-et-right', 'camera-rgb', 'camera-slam-left', 'camera-slam-right']>>> deviceModel.getImuLabels()
 ['imu-left', 'imu-right']`
 ```

@@ -14,11 +14,11 @@ In Python, you can fetch this information from VRS and parse it into a structure
 
 
 ```
-`>>> import pyark
+>>> import pyark
 >>> reader = pyark.RecordFileReader()
 >>> reader.openFile('./data/aria_unit_test_sequence_calib.vrs')
 [ProgressLogger][INFO]: 26881.515: Opening diskfile file...0
->>> deviceModel = pyark.DeviceModel.fromJson(pyark.getCalibrationFromVrsFile(reader))`
+>>> deviceModel = pyark.DeviceModel.fromJson(pyark.getCalibrationFromVrsFile(reader))
 ```
 
 
@@ -60,13 +60,13 @@ You can transform a 3d point from one sensor to the another one using the `trans
 
 
 ```
-`>>> import numpy as np
+>>> import numpy as np
 >>> p_slamLeft = np.array([3.0, 2.0, 1.0])
 >>> p_imuRight = deviceModel.transform(p_slamLeft, 'camera-slam-left', 'imu-right')
 >>> p_imuRight
 array([ 3.33343274, -1.41484796,  1.20512771])
 >>> deviceModel.transform(p_imuRight, 'imu-right', 'camera-slam-left')
-array([3., 2., 1.]) # as you see we retrieve the initial 3D point`
+array([3., 2., 1.]) # as you see we retrieve the initial 3D point
 ```
 
 
@@ -84,7 +84,7 @@ You can perform the projection and unprojection operations using the following P
 
 
 ```
-`>>> p_slamLeft = np.array([3.0, 2.0, 1.0])
+>>> p_slamLeft = np.array([3.0, 2.0, 1.0])
 >>> uv_slamLeft = deviceModel.getCameraCalib('camera-slam-left').projectionModel.project(p_slamLeft)>>> uv_slamLeft
 array([583.48105528, 411.98136675])
 >>> deviceModel.getCameraCalib('camera-slam-left').projectionModel.unproject(uv_slamLeft)

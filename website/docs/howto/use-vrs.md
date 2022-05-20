@@ -86,7 +86,7 @@ For more information, see [VRS Data Extraction](https://facebookresearch.github.
 ## Inspect how many data recordings there are by type
 
 ```
-   `$ vrs <file.vrs> | grep "] records."`
+$ vrs <file.vrs> | grep "] records."
 ```
 
 

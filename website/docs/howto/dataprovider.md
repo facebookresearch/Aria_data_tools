@@ -122,26 +122,26 @@ In this example, `getConfigRecord()` is used to read the configuration records f
 There are calibration strings for each image and motion stream. Reading the configuration record for any one of them will load the device model. Load the device model:
 
 ```
-`>>>`` slam_left_camera_stream_id ``=`` slam_left_camera_player``.``getStreamId``()`
-`>>>`` slam_left_camera_stream_id`
-`<``pyark``.``datatools``.``dataprovider``.``StreamId`` ``object`` at ``0x7f955808c270``>`
-`>>>`` vrs_data_provider``.``readFirstConfigurationRecord``(``slam_left_camera_stream_id``)`
-`True`
-`>>>`` vrs_data_provider``.``loadDeviceModel``()`
-`True
+>>> slam_left_camera_stream_id = slam_left_camera_player.getStreamId()
+>>> slam_left_camera_stream_id
+<pyark.datatools.dataprovider.StreamId object at 0x7f955808c270>
+>>> vrs_data_provider.readFirstConfigurationRecord(slam_left_camera_stream_id)
+True
+>>> vrs_data_provider.loadDeviceModel()
+True
 >>> device_model = vrs_data_provider.getDeviceModel()
 >>> device_model
-<pyark.datatools.sensors.DeviceModel object at 0x7f955808c2b0>`
+<pyark.datatools.sensors.DeviceModel object at 0x7f955808c2b0>
 ```
 
 Then a 3D point from one sensor coordinate system can be transformed into another with:
 
 ```
-`>>> import numpy as np
+>>> import numpy as np
 >>> p_slamLeft = np.array([3.0, 2.0, 1.0])
 >>> p_imuRight = device_model.transform(p_slamLeft, 'camera-slam-left', 'imu-right')
 >>> p_imuRight
-array([ 3.32648252, -1.50695095, 1.10720445])`
+array([ 3.32648252, -1.50695095, 1.10720445])
 ```
 
 To find out more about Calibration go to [Using Aria Calibration Sensor Data](calibration.md)

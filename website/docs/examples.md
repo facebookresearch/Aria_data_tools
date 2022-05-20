@@ -68,10 +68,10 @@ All records in timestamp order
 
 ```
 >> vrs_data_provider.readAllRecords()
-`4822.486 Camera Data (SLAM) #1 [1201-1]: jpg, 44338 bytes. # JPEG compressed image data size before decompression`
-`...`
-`4832.286 Camera Data (SLAM) #1 [1201-1]: jpg, 64148 bytes.`
-`4832.386 Camera Data (SLAM) #1 [1201-1]: jpg, 64174 bytes.`
+4822.486 Camera Data (SLAM) #1 [1201-1]: jpg, 44338 bytes. # JPEG compressed image data size before decompression
+...
+4832.286 Camera Data (SLAM) #1 [1201-1]: jpg, 64148 bytes.
+4832.386 Camera Data (SLAM) #1 [1201-1]: jpg, 64174 bytes.
 ```
 
 
@@ -138,8 +138,8 @@ The following instructions show running sample usages of Aria VRS data provider 
 
 ```
 $ cd build/data_provider
-$ `./``read_all ``<vrs_path>`` ``# Read records of all streams verbosely`
-`$ ``./``read_selected ``<vrs_path>`` # Read records of selected streams verbosely`
+$ ./read_all <vrs_path> # Read records of all streams verbosely
+$ ./read_selected <vrs_path> # Read records of selected streams verbosely
 ```
 
 
