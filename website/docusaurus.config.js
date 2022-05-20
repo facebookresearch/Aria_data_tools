@@ -8,16 +8,16 @@ const darkCodeTheme = require('prism-react-renderer/themes/dracula');
 // With JSDoc @type annotations, IDEs can provide config autocompletion
 /** @type {import('@docusaurus/types').DocusaurusConfig} */
 (module.exports = {
-  title: 'aria-research-kit-sdk',
-  tagline: 'aria-research-kit-sdk is great',
-  url: 'https://internalfb.com',
+  title: 'Aria Research Kit',
+  tagline: 'Open tooling to support researchers expand the horizons of Augmented Reality, Machine Learning and Artificial Intelligence',
+  url: 'https://facebookresearch.github.io',
   baseUrl: '/',
   onBrokenLinks: 'throw',
   onBrokenMarkdownLinks: 'throw',
   trailingSlash: true,
-  favicon: 'img/favicon.ico',
+  favicon: 'img/aria_icon.png',
   organizationName: 'facebook',
-  projectName: 'aria-research-kit-sdk',
+  projectName: 'aria-research-kit-open-data-tools',
 
   presets: [
     [
@@ -26,7 +26,7 @@ const darkCodeTheme = require('prism-react-renderer/themes/dracula');
       ({
         docs: {
           sidebarPath: require.resolve('./sidebars.js'),
-          editUrl: 'https://www.internalfb.com/code/fbsource/arvr/projects/ariane/aria_research_kit/aria_data_tools/website', // TODO Please change this to your repo.
+          editUrl: 'https://github.com/facebookresearch/aria_data_tools', // TODO Please change this to your repo. - changed to github repo -EA
         },
         blog: {
           showReadingTime: true,
@@ -43,21 +43,25 @@ const darkCodeTheme = require('prism-react-renderer/themes/dracula');
     /** @type {import('@docusaurus/preset-classic').ThemeConfig} */
     ({
       navbar: {
-        title: 'aria-research-kit-sdk',
+        title: 'Aria Data Tools',
         logo: {
           alt: 'aria-research-kit-sdk Logo',
-          src: 'img/logo.svg',
+          src: 'img/glasses-solid.svg',
         },
         items: [
           {
             type: 'doc',
-            docId: 'intro',
+            docId: 'overview',
             position: 'left',
-            label: 'Tutorial',
+            label: 'Documentation',
           },
-          {to: '/blog', label: 'Blog', position: 'left'},
           {
-            href: 'https://github.com/facebook/docusaurus',
+            href: 'https://about.facebook.com/realitylabs/projectaria/',
+            label: 'Aria Pilot Dataset',
+            position: 'left',
+          },
+          {
+            href: 'https://github.com/facebookresearch/aria_data_tools',
             label: 'GitHub',
             position: 'right',
           },
@@ -67,46 +71,48 @@ const darkCodeTheme = require('prism-react-renderer/themes/dracula');
         style: 'dark',
         links: [
           {
-            title: 'Docs',
+            title: 'Learn',
             items: [
               {
-                label: 'Tutorial',
-                to: '/docs/intro',
+                label: 'Documentation',
+                to: '/docs/overview',
               },
             ],
           },
           {
-            title: 'Community',
+            title: 'Project Aria',
             items: [
               {
-                label: 'Stack Overflow',
-                href: 'https://stackoverflow.com/questions/tagged/docusaurus',
+                label: 'Introducing Project Aria',
+                href: 'https://about.facebook.com/realitylabs/projectaria/',
               },
               {
-                label: 'Discord',
-                href: 'https://discordapp.com/invite/docusaurus',
-              },
-              {
-                label: 'Twitter',
+                label: 'Aria Pilot Dataset',
                 href: 'https://twitter.com/docusaurus',
               },
             ],
           },
           {
-            title: 'More',
+            title: 'Responsible Innovation',
             items: [
               {
-                label: 'Blog',
-                to: '/blog',
+                label: 'Responsible Innovation Principles',
+                to: 'https://about.facebook.com/realitylabs/responsible-innovation-principles/',
               },
               {
-                label: 'GitHub',
-                href: 'https://github.com/facebook/docusaurus',
+                label: 'Project Aria Research Community Guidelines',
+                href: 'https://about.facebook.com/realitylabs/projectaria/community-guidelines/',
               },
             ],
           },
         ],
-        copyright: `Copyright © ${new Date().getFullYear()} My Project, Inc. Built with Docusaurus.`,
+        logo: {
+          alt: 'Facebook Open Source Logo',
+          src: 'img/oss_logo.png',
+          href: 'https://opensource.facebook.com',
+        },
+
+        copyright: `Copyright © ${new Date().getFullYear()} Meta Platforms, Inc. Built with Docusaurus.`,
       },
       prism: {
         theme: lightCodeTheme,

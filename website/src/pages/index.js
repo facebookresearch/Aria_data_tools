@@ -16,12 +16,14 @@ function HomepageHeader() {
     <header className={clsx('hero hero--primary', styles.heroBanner)}>
       <div className="container">
         <h1 className="hero__title">{siteConfig.title}</h1>
-        <p className="hero__subtitle">{siteConfig.tagline}</p>
+        <h1 className="hero__title"> Aria Data Tools</h1>
+
+        <br></br>
         <div className={styles.buttons}>
           <Link
             className="button button--secondary button--lg"
-            to="/docs/intro">
-            Docusaurus Tutorial - 5min ⏱️
+            to="/docs/overview">
+            Get Started
           </Link>
         </div>
       </div>
@@ -33,8 +35,8 @@ export default function Home() {
   const {siteConfig} = useDocusaurusContext();
   return (
     <Layout
-      title={`Hello from ${siteConfig.title}`}
-      description="Description will go into a meta tag in <head />">
+      title={`${siteConfig.title}`}
+      description="C++ and Python tools to support researchers expand the horizons of Augmented Reality, Machine Learning and Artificial Intelligence<head />">
       <HomepageHeader />
       <main>
         <HomepageFeatures />

@@ -10,14 +10,15 @@
 
 /* You can override the default Infima variables here. */
 :root {
-  --ifm-color-primary: #25c2a0;
+  --ifm-color-primary: #67788A;
   --ifm-color-primary-dark: rgb(33, 175, 144);
-  --ifm-color-primary-darker: rgb(31, 165, 136);
+  --ifm-color-primary-darker: rgb(12, 14, 13);
   --ifm-color-primary-darkest: rgb(26, 136, 112);
   --ifm-color-primary-light: rgb(70, 203, 174);
   --ifm-color-primary-lighter: rgb(102, 212, 189);
   --ifm-color-primary-lightest: rgb(146, 224, 208);
   --ifm-code-font-size: 95%;
+  --ifm-link-color: #1877F2;
 }
 
 .docusaurus-highlight-code-line {
@@ -27,6 +28,10 @@
   padding: 0 var(--ifm-pre-padding);
 }
 
+
 html[data-theme='dark'] .docusaurus-highlight-code-line {
   background-color: rgba(0, 0, 0, 0.3);
+}
+.button.button--secondary.button--outline:not(.button--active):not(:hover) {
+  color: var(--ifm-font-color-base-inverse)
 }

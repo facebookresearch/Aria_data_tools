@@ -7,37 +7,38 @@ import clsx from 'clsx';
 import styles from './HomepageFeatures.module.css';
 
 const FeatureList = [
-  {
-    title: 'Easy to Use',
-    Svg: require('../../static/img/undraw_docusaurus_mountain.svg').default,
+
+   {
+    title: 'C++ and Python tools ',
+    Svg: require('../../static/img/python-brands.svg').default,
     description: (
       <>
-        Docusaurus was designed from the ground up to be easily installed and
-        used to get your website up and running quickly.
+        Support researchers to analyze Project Aria data & expand the horizons of Augmented Reality, Machine Learning and Artificial Intelligence
+      </>
+    ),
+  },
+
+  {
+    title: 'A Rich Sensor Suite',
+    Svg: require('../../static/img/arrows-to-eye-solid.svg').default,
+    description: (
+      <>
+       Read & visualize Project Aria sequences and sensor data
       </>
     ),
   },
   {
-    title: 'Focus on What Matters',
-    Svg: require('../../static/img/undraw_docusaurus_tree.svg').default,
+    title: '6DoF Transformations',
+    Svg: require('../../static/img/glasses-solid.svg').default,
     description: (
       <>
-        Docusaurus lets you focus on your docs, and we&apos;ll do the chores. Go
-        ahead and move your docs into the <code>docs</code> directory.
+        Retrieve calibration data and interact with Aria camera models
       </>
     ),
   },
-  {
-    title: 'Powered by React',
-    Svg: require('../../static/img/undraw_docusaurus_react.svg').default,
-    description: (
-      <>
-        Extend or customize your website layout by reusing React. Docusaurus can
-        be extended while reusing the same header and footer.
-      </>
-    ),
-  },
+
 ];
+
 
 function Feature({Svg, title, description}) {
   return (
