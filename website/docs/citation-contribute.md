@@ -6,7 +6,7 @@ title: Citation and Contributing
 
 # Citation and Contributing
 
-If you use Aria Data Tools in your research, please cite the following [technical report/paper](link) and/or
+If you use Aria Data Tools in your research, please cite the following technical report/paper and/or
 
 If you use the dataset in GitHub, please consider starring ⭐ us and citing:
 
@@ -24,4 +24,4 @@ If you use the dataset in GitHub, please consider starring ⭐ us and citing:
 
 ## How to contribute
 
-We welcome contributions! See [CONTRIBUTING] for details on how to get started, and our [code of conduct].
+We welcome contributions! See CONTRIBUTING for details on how to get started, and our code of conduct.

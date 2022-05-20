@@ -8,7 +8,7 @@ title: Acknowledgements
 
 ## Team
 
-See https://github.com/facebookresearch/Replica-Dataset for example of who gets listed as part of the team.
+See [https://github.com/facebookresearch/Replica-Dataset](https://github.com/facebookresearch/Replica-Dataset) for example of who gets listed as part of the team.
 
 
 ## Acknowledgements
