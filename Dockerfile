@@ -40,3 +40,6 @@ RUN cd /opt/aria_research_kit_Build; make -j ; ctest -j;
 
 # Build python bindings
 RUN cd /opt/aria_research_kit/src; pip3 install --global-option=build_ext --global-option="-j8" .;
+
+# Link shared Pangolin libraries
+RUN ldconfig;
