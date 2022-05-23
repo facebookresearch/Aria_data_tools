@@ -60,7 +60,7 @@ int main(int argc, const char* argv[]) {
   dataProvider->loadDeviceModel();
 
   std::unique_ptr<visualization::AriaViewer> viewer =
-      std::make_unique<visualization::AriaViewer>(dataProvider.get(), 700, 800);
+      std::make_unique<visualization::AriaViewer>(dataProvider.get(), 1280, 800);
 
   double waitTimeSec = (1 / fastestNominalRateHz) / 10;
   std::thread readerThread([&dataProvider, &viewer, &currentTimestampSec, &waitTimeSec]() {

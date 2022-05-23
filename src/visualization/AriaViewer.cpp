@@ -55,7 +55,7 @@ void AriaViewer::run() {
   pangolin::OpenGlRenderState Visualization3D_camera(
       pangolin::ProjectionMatrix(
           width_ / 2, height_ / 2, width_ / 2, height_ / 2, width_ / 4, height_ / 4, 0.1, 100),
-      pangolin::ModelViewLookAt(0.2, 0, 0.2, 0, 0, 0, pangolin::AxisNegY));
+      pangolin::ModelViewLookAt(2.0, 2.0, 1.0, 0, 0, 0, pangolin::AxisZ));
   auto* handler = new pangolin::Handler3D(Visualization3D_camera);
   pangolin::OpenGlMatrix Twc;
   Twc.SetIdentity();
@@ -102,17 +102,14 @@ void AriaViewer::run() {
       GL_LUMINANCE,
       GL_UNSIGNED_BYTE);
   pangolin::View& camTraj = pangolin::Display("camTrajectory").SetAspect(640 / (float)640);
-  pangolin::CreateDisplay()
-      .SetBounds(0.5, 1.0, pangolin::Attach::Pix(180), 1.0)
-      .SetLayout(pangolin::LayoutEqualHorizontal)
-      .AddDisplay(cameraSlamLeftVideo)
-      .AddDisplay(cameraSlamRightVideo);
-  pangolin::CreateDisplay()
-      .SetBounds(0.0, 0.5, pangolin::Attach::Pix(180), 1.0)
-      .SetLayout(pangolin::LayoutEqualHorizontal)
-      .AddDisplay(cameraRgbVideo)
-      .AddDisplay(camTraj);
   camTraj.SetHandler(handler);
+  auto& container = pangolin::CreateDisplay()
+                        .SetBounds(0.0, 1.0, pangolin::Attach::Pix(180), 1.0)
+                        .SetLayout(pangolin::LayoutEqual)
+                        .AddDisplay(cameraSlamLeftVideo)
+                        .AddDisplay(cameraSlamRightVideo)
+                        .AddDisplay(cameraRgbVideo)
+                        .AddDisplay(camTraj);
 
   pangolin::CreatePanel("ui").SetBounds(0.0, 1.0, 0.0, pangolin::Attach::Pix(180));
   // Settings
@@ -125,15 +122,23 @@ void AriaViewer::run() {
   pangolin::Var<bool> showRgbCam3D("ui.RgbCam", true, true);
   pangolin::Var<bool> showRig3D("ui.Rig", true, true);
   pangolin::Var<bool> showTraj("ui.Trajectory", true, true);
+  pangolin::Var<bool> showWorldCoordinateSystem("ui.World Coord.", true, true);
   pangolin::Var<float> playbackSlide("ui.playback_speed", playbackSpeedFactor_, 0.1, 10, false);
   pangolin::Var<int> sparsitySlide("ui.camSparsity", 1, 1, 10, false);
+  pangolin::Var<std::function<void(void)>> save_window(
+      "ui.Snapshot UI", [&container]() { pangolin::SaveWindowOnRender("snapshot", container.v); });
+  // keys 0-9 are used to toggle the different views
+  std::array<char, 10> show_hide_keys = {'1', '2', '3', '4', '5', '6', '7', '8', '9', '0'};
+  for (size_t v = 0; v < container.NumChildren() && v < show_hide_keys.size(); v++) {
+    pangolin::RegisterKeyPressCallback(
+        show_hide_keys[v], [v, &container]() { container[v].ToggleShow(); });
+  }
 
   // Main loop
   while (!pangolin::ShouldQuit()) {
     {
       std::unique_lock<std::mutex> dataLock(dataMutex_);
       glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-      camTraj.Activate(Visualization3D_camera);
       isPlaying_ = playButton.Get();
       playbackSpeedFactor_ = playbackSlide.Get();
       // Draw images.
@@ -141,10 +146,7 @@ void AriaViewer::run() {
                                 [kSlamLeftCameraStreamId.getInstanceId()]) {
         texCameraSlamLeft.Upload(
             dataProvider_->getImageBuffer(kSlamLeftCameraStreamId), GL_LUMINANCE, GL_UNSIGNED_BYTE);
-        auto queriedPose = dataProvider_->getPose();
-        if (queriedPose) {
-          setPose(queriedPose.value());
-        }
+        setPose(dataProvider_->getPose());
         cameraImageChangedMap_[kSlamLeftCameraStreamId.getTypeId()]
                               [kSlamLeftCameraStreamId.getInstanceId()] = false;
       }
@@ -166,25 +168,40 @@ void AriaViewer::run() {
       }
     }
     if (hasFirstPose_) {
+      // draw 3D
+      camTraj.Activate(Visualization3D_camera);
+      // draw origin of world coordinate system
+      if (showWorldCoordinateSystem) {
+        glLineWidth(3);
+        pangolin::glDrawAxis(0.3);
+      }
       if (showTraj) {
         drawTraj();
       }
       drawRigs(showRig3D, showLeftCam3D, showRightCam3D, showRgbCam3D, sparsitySlide.Get());
     }
 
-    if (showLeftCamImg.Get()) {
+    // propagate show parameters
+    container[0].Show(showLeftCamImg);
+    container[1].Show(showRightCamImg);
+    container[2].Show(showRgbCamImg);
+    cameraSlamLeftVideo.Show(showLeftCamImg);
+    cameraSlamRightVideo.Show(showRightCamImg);
+    cameraRgbVideo.Show(showRgbCamImg);
+
+    if (cameraSlamLeftVideo.IsShown()) {
       cameraSlamLeftVideo.Activate();
       glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
       texCameraSlamLeft.RenderToViewportFlipY();
     }
 
-    if (showRgbCamImg.Get()) {
+    if (cameraRgbVideo.IsShown()) {
       cameraRgbVideo.Activate();
       glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
       texCameraRgb.RenderToViewportFlipY();
     }
 
-    if (showRightCamImg.Get()) {
+    if (cameraSlamRightVideo.IsShown()) {
       cameraSlamRightVideo.Activate();
       glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
       texCameraSlamRight.RenderToViewportFlipY();
@@ -199,12 +216,11 @@ void AriaViewer::run() {
 void AriaViewer::drawTraj() {
   glColor3f(1, 0.8, 0);
   glLineWidth(3);
-
-  glBegin(GL_LINE_STRIP);
-  for (auto const& p : T_World_ImuLeft_) {
-    glVertex3f(p.translation()[0], p.translation()[1], p.translation()[2]);
+  std::vector<Eigen::Vector3d> trajectory;
+  for (auto const& T_wi : T_World_ImuLeft_) {
+    trajectory.emplace_back(T_wi.translation());
   }
-  glEnd();
+  pangolin::glDrawLineStrip(trajectory);
 }
 
 void AriaViewer::drawRigs(
@@ -227,24 +243,15 @@ void AriaViewer::drawRigs(
   int counter = 0;
   while (counter < T_World_ImuLeft_.size()) {
     auto const& T_World_ImuLeft = T_World_ImuLeft_[counter];
-    Sophus::Matrix4f matImuLeft = T_World_ImuLeft.matrix().cast<float>();
-    Sophus::Matrix4f matCamSlamLeft =
-        (T_World_ImuLeft *
-         T_ImuLeft_cameraMap_[kSlamLeftCameraStreamId.getTypeId()]
-                             [kSlamLeftCameraStreamId.getInstanceId()])
-            .matrix()
-            .cast<float>();
-    Sophus::Matrix4f matCamSlamRight =
-        (T_World_ImuLeft *
-         T_ImuLeft_cameraMap_[kSlamRightCameraStreamId.getTypeId()]
-                             [kSlamRightCameraStreamId.getInstanceId()])
-            .matrix()
-            .cast<float>();
-    Sophus::Matrix4f matCamRgb =
-        (T_World_ImuLeft *
-         T_ImuLeft_cameraMap_[kRgbCameraStreamId.getTypeId()][kRgbCameraStreamId.getInstanceId()])
-            .matrix()
-            .cast<float>();
+    // Sophus::Matrix4f matImuLeft = T_World_ImuLeft.matrix().cast<float>();
+    const auto T_World_CamSlamLeft = T_World_ImuLeft *
+        T_ImuLeft_cameraMap_[kSlamLeftCameraStreamId.getTypeId()]
+                            [kSlamLeftCameraStreamId.getInstanceId()];
+    const auto T_World_CamSlamRight = T_World_ImuLeft *
+        T_ImuLeft_cameraMap_[kSlamRightCameraStreamId.getTypeId()]
+                            [kSlamRightCameraStreamId.getInstanceId()];
+    const auto T_World_CamRgb = T_World_ImuLeft *
+        T_ImuLeft_cameraMap_[kRgbCameraStreamId.getTypeId()][kRgbCameraStreamId.getInstanceId()];
 
     if (counter == T_World_ImuLeft_.size() - 1)
       glColor3f(0.0, 1.0, 0.0);
@@ -253,45 +260,36 @@ void AriaViewer::drawRigs(
 
     if (showRig3D) {
       // Rig
-      glPushMatrix();
-      glMultMatrixf((GLfloat*)matImuLeft.data());
-      pangolin::glDrawAxis(sz / 2);
-      glPopMatrix();
+      pangolin::glDrawAxis(T_World_ImuLeft.matrix(), sz / 2);
     }
     if (showLeftCam3D) {
       // Left cam
-      glPushMatrix();
-      glMultMatrixf((GLfloat*)matCamSlamLeft.data());
+      pangolin::glSetFrameOfReference(T_World_CamSlamLeft.matrix());
       pangolin::glDrawFrustum(-cx / fx, -cy / fy, 1. / fx, 1. / fy, width, height, sz * 0.8);
-      glPopMatrix();
+      pangolin::glUnsetFrameOfReference();
     }
 
     if (showRightCam3D) {
       // Right cam
-      glPushMatrix();
-      glMultMatrixf((GLfloat*)matCamSlamRight.data());
+      pangolin::glSetFrameOfReference(T_World_CamSlamRight.matrix());
       pangolin::glDrawFrustum(-cx / fx, -cy / fy, 1. / fx, 1. / fy, width, height, sz * 0.8);
-      glPopMatrix();
+      pangolin::glUnsetFrameOfReference();
     }
 
     if (showRgbCam3D) {
       // Rgb cam
-      glPushMatrix();
-      glMultMatrixf((GLfloat*)matCamRgb.data());
+      pangolin::glSetFrameOfReference(T_World_CamRgb.matrix());
       pangolin::glDrawFrustum(-cx / fx, -cy / fy, 1. / fx, 1. / fy, width, height, sz);
-      glPopMatrix();
+      pangolin::glUnsetFrameOfReference();
     }
 
-    glBegin(GL_LINE_STRIP);
-    if (showLeftCam3D)
-      glVertex3f(matCamSlamLeft(0, 3), matCamSlamLeft(1, 3), matCamSlamLeft(2, 3));
-    if (showRgbCam3D)
-      glVertex3f(matCamRgb(0, 3), matCamRgb(1, 3), matCamRgb(2, 3));
-    if (showRig3D)
-      glVertex3f(matImuLeft(0, 3), matImuLeft(1, 3), matImuLeft(2, 3));
-    if (showRightCam3D)
-      glVertex3f(matCamSlamRight(0, 3), matCamSlamRight(1, 3), matCamSlamRight(2, 3));
-    glEnd();
+    // draw line connecting rig coordinate frames
+    pangolin::glDrawLineStrip(std::vector<Eigen::Vector3d>{
+        T_World_CamSlamLeft.translation(),
+        T_World_CamRgb.translation(),
+        T_World_ImuLeft.translation(),
+        T_World_CamSlamRight.translation(),
+    });
 
     // Always draw the latest camera.
     if (counter != T_World_ImuLeft_.size() - 1 &&
@@ -303,20 +301,21 @@ void AriaViewer::drawRigs(
   }
 }
 
-void AriaViewer::setPose(const std::optional<Sophus::SE3d>& pose) {
-  if (!pose) {
+void AriaViewer::setPose(const std::optional<Sophus::SE3d>& T_World_ImuLeft) {
+  if (!T_World_ImuLeft) {
     return;
   }
   if (!hasFirstPose_) {
-    // Use first pose as the world frame.
-    T_Viewer_World_ = pose.value().inverse();
+    // Use first pose translation to define the world frame.
+    // Rotation is gravity aligned so we leave it as is.
+    T_Viewer_World_ = Sophus::SE3d(Sophus::SO3d(), -T_World_ImuLeft.value().translation());
     hasFirstPose_ = true;
   }
 
   // Set pose based on slam-left-camera timestamps.
   if (cameraImageChangedMap_[kSlamLeftCameraStreamId.getTypeId()]
                             [kSlamLeftCameraStreamId.getInstanceId()]) {
-    T_World_ImuLeft_.emplace_back(T_Viewer_World_ * pose.value());
+    T_World_ImuLeft_.emplace_back(T_Viewer_World_ * T_World_ImuLeft.value());
   }
 }
 } // namespace visualization

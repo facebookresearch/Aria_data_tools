@@ -37,7 +37,7 @@ class AriaViewer {
       bool showRightCam3D,
       bool showRgbCam3D,
       int camSparsity);
-  void setPose(const std::optional<Sophus::SE3d>& pose);
+  void setPose(const std::optional<Sophus::SE3d>& T_World_ImuLeft);
 
   std::mutex& getDataMutex() {
     return dataMutex_;
