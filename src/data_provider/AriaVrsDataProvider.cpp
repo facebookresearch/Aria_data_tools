@@ -72,6 +72,7 @@ auto kWifiBeaconCallback =
       return true;
     };
 constexpr const char* kTrajectoryPathSuffix = "location/trajectory.csv";
+constexpr const char* kEyetrackingPathSuffix = "eyetracking/et_in_rgb_stream.csv";
 }; // namespace
 
 namespace ark {
@@ -468,9 +469,13 @@ void AriaVrsDataProvider::setVerbose(bool verbose) {
   }
 }
 
-bool AriaVrsDataProvider::open(const std::string& vrsPath, const std::string& posePath) {
+bool AriaVrsDataProvider::open(
+    const std::string& vrsPath,
+    const std::string& posePath,
+    const std::string& eyetrackingPath) {
   sourcePath_ = vrsPath;
   hasPoses_ = loadPosesFromCsv(posePath);
+  hasEyetracks_ = loadEyetrackingFromCsv(eyetrackingPath);
   return openFile(vrsPath);
 }
 
@@ -634,10 +639,46 @@ bool AriaVrsDataProvider::loadPosesFromCsv(const std::string& posePath) {
   }
   std::filesystem::path trajectoryCsvPath(trajectoryCsvFile);
   if (!std::filesystem::exists(trajectoryCsvPath)) {
-    std::cout << "No pose file found, not visualizing poses" << std::endl;
+    std::cout << "No pose file found at " << trajectoryCsvPath << " , not visualizing poses"
+              << std::endl;
     return false;
   }
+  std::cout << "Loading poses file from " << trajectoryCsvFile << std::endl;
   imuLeftPoses_ = readPosesFromCsvFile(trajectoryCsvFile);
+  return true;
+}
+
+std::optional<Eigen::Vector2f> AriaVrsDataProvider::getEyetracksOnRgbImage() const {
+  if (!hasEyetracks_) {
+    return {};
+  }
+
+  // Always query using the rgb camera timestamp.
+  uint64_t slamCameraLeftTimestampNs = static_cast<uint64_t>(
+      1e9 * getNextTimestampSec(vrs::StreamId(vrs::RecordableTypeId::RgbCameraRecordableClass, 1)));
+  return queryEyetrack(slamCameraLeftTimestampNs, eyetracksOnRgbImage_);
+}
+
+bool AriaVrsDataProvider::loadEyetrackingFromCsv(const std::string& eyetrackingPath) {
+  std::string eyetrackingCsvFile = "";
+  if (!eyetrackingPath.empty()) {
+    eyetrackingCsvFile = eyetrackingPath;
+  } else {
+    auto pathSplitted = strSplit(sourcePath_, '/');
+    pathSplitted.pop_back();
+    for (auto& subfolder : pathSplitted) {
+      eyetrackingCsvFile += subfolder + "/";
+    }
+    eyetrackingCsvFile += kEyetrackingPathSuffix;
+  }
+  std::filesystem::path eyetrackingCsvPath(eyetrackingCsvFile);
+  if (!std::filesystem::exists(eyetrackingCsvPath)) {
+    std::cout << "No eyetracking file found at " << eyetrackingCsvPath
+              << " , not visualizing eye tracks" << std::endl;
+    return false;
+  }
+  std::cout << "Loading eye tracking file from " << eyetrackingCsvFile << std::endl;
+  eyetracksOnRgbImage_ = readEyetrackingFromCsvFile(eyetrackingCsvFile);
   return true;
 }
 

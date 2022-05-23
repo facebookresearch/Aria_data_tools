@@ -31,11 +31,19 @@ std::map<uint64_t, Sophus::SE3d> readPosesFromCsvFile(
     const std::string& inputPoseCsv,
     const int firstN = -1);
 
+std::map<uint64_t, Eigen::Vector2f> readEyetrackingFromCsvFile(
+    const std::string& inputEyetrackingCsv,
+    const int firstN = -1);
+
 std::vector<std::string> strSplit(const std::string& s, const char delimiter);
 
 std::optional<Sophus::SE3d> queryPose(
     const uint64_t timestamp,
     const std::map<uint64_t, Sophus::SE3d>& timestampToPose);
+
+std::optional<Eigen::Vector2f> queryEyetrack(
+    const uint64_t timestamp,
+    const std::map<uint64_t, Eigen::Vector2f>& timestampToEyetrack);
 
 } // namespace dataprovider
 } // namespace datatools

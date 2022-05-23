@@ -40,12 +40,18 @@ int main(int argc, const char* argv[]) {
   std::unique_ptr<dataprovider::AriaDataProvider> dataProvider =
       std::make_unique<dataprovider::AriaVrsDataProvider>();
   const std::string vrsPath = argv[1];
+  // override default pose and eyetracking paths from commandline. If left empty
+  // strings they will be automatically set according to the folder layout.
   std::string posePath = "";
+  std::string eyetrackingPath = "";
   if (argc == 3) {
     posePath = argv[2];
   }
+  if (argc == 4) {
+    eyetrackingPath = argv[3];
+  }
 
-  if (!dataProvider->open(vrsPath, posePath)) {
+  if (!dataProvider->open(vrsPath, posePath, eyetrackingPath)) {
     fmt::print(stderr, "Failed to open '{}'.\n", vrsPath);
     return 0;
   }

@@ -61,6 +61,25 @@ std::map<uint64_t, Sophus::SE3d> readPosesFromCsvFile(
   return timeToPoseMap;
 }
 
+std::map<uint64_t, Eigen::Vector2f> readEyetrackingFromCsvFile(
+    const std::string& inputEyetrackingCsv,
+    const int firstN) {
+  std::map<uint64_t, Eigen::Vector2f> timeToEtMap;
+  if (!inputEyetrackingCsv.empty()) {
+    io::CSVReader<3> in(inputEyetrackingCsv);
+    in.read_header(
+        io::ignore_extra_column, "timestamp_unix_ns", "calib_x [pixel]", "calib_y [pixel]");
+    uint64_t ts;
+    Eigen::Vector2f etCalib_im;
+    int count = 0;
+    while (in.read_row(ts, etCalib_im(0), etCalib_im(1)) && (firstN < 0 || count++ < firstN)) {
+      timeToEtMap[ts] = etCalib_im;
+    }
+  }
+  std::cout << "Loaded " << timeToEtMap.size() << " eye tracking points" << std::endl;
+  return timeToEtMap;
+}
+
 std::vector<std::string> strSplit(const std::string& s, const char delimiter) {
   std::vector<std::string> result;
   std::stringstream ss(s);
@@ -97,6 +116,30 @@ std::optional<Sophus::SE3d> queryPose(
   result.translation() = interpT;
   result.setRotationMatrix(interpQ.toRotationMatrix());
   return result;
+}
+
+std::optional<Eigen::Vector2f> queryEyetrack(
+    const uint64_t timestamp,
+    const std::map<uint64_t, Eigen::Vector2f>& timestampToEyetrack) {
+  if (timestamp < timestampToEyetrack.begin()->first ||
+      timestamp > timestampToEyetrack.rbegin()->first) {
+    return {};
+  }
+  if (timestampToEyetrack.find(timestamp) != timestampToEyetrack.end()) {
+    return {};
+  }
+  // Interpolation
+  auto laterEyePtr = timestampToEyetrack.lower_bound(timestamp);
+  auto earlyEyePtr = std::prev(laterEyePtr);
+  uint64_t tsEarly = earlyEyePtr->first;
+  uint64_t tsLater = laterEyePtr->first;
+  Eigen::Vector2f eyeEarly = earlyEyePtr->second;
+  Eigen::Vector2f eyeLater = laterEyePtr->second;
+
+  double interpFactor =
+      static_cast<double>(timestamp - tsEarly) / static_cast<double>(tsLater - tsEarly);
+  auto interpEye = (1.0 - interpFactor) * eyeEarly + interpFactor * eyeLater;
+  return interpEye;
 }
 
 } // namespace dataprovider

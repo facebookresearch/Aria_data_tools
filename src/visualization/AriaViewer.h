@@ -38,6 +38,7 @@ class AriaViewer {
       bool showRgbCam3D,
       int camSparsity);
   void setPose(const std::optional<Sophus::SE3d>& T_World_ImuLeft);
+  void setEyetracksOnRgbImage(const std::optional<Eigen::Vector2f>& eyetrackOnRgbImage);
 
   std::mutex& getDataMutex() {
     return dataMutex_;
@@ -60,6 +61,7 @@ class AriaViewer {
   bool isPlaying_ = false;
   float playbackSpeedFactor_ = 1;
   std::vector<Sophus::SE3d> T_World_ImuLeft_;
+  std::vector<Eigen::Vector2f> eyetracksOnRgbImage_;
   Sophus::SE3d T_Viewer_World_;
   bool hasFirstPose_ = false;
   bool hasPose_ = false;

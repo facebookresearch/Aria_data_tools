@@ -134,6 +134,22 @@ void AriaViewer::run() {
         show_hide_keys[v], [v, &container]() { container[v].ToggleShow(); });
   }
 
+  cameraRgbVideo.extern_draw_function =
+      [this, rgbCameraImageWidth, rgbCameraImageHeight](pangolin::View& v) {
+        v.ActivatePixelOrthographic();
+        glColor3f(1.0, 0.0, 0.0);
+        glLineWidth(3);
+        pangolin::glDrawLineStrip(eyetracksOnRgbImage_);
+        if (eyetracksOnRgbImage_.size()) {
+          // scale to the current display size
+          const float scale = (float)v.v.w / (float)rgbCameraImageWidth;
+          pangolin::glDrawCross(
+              scale * eyetracksOnRgbImage_.back()(0),
+              scale * (rgbCameraImageHeight - eyetracksOnRgbImage_.back()(1)),
+              10);
+        }
+      };
+
   // Main loop
   while (!pangolin::ShouldQuit()) {
     {
@@ -156,6 +172,7 @@ void AriaViewer::run() {
             dataProvider_->getImageBuffer(kRgbCameraStreamId), GL_RGB, GL_UNSIGNED_BYTE);
         cameraImageChangedMap_[kRgbCameraStreamId.getTypeId()][kRgbCameraStreamId.getInstanceId()] =
             false;
+        setEyetracksOnRgbImage(dataProvider_->getEyetracksOnRgbImage());
       }
       if (cameraImageChangedMap_[kSlamRightCameraStreamId.getTypeId()]
                                 [kSlamRightCameraStreamId.getInstanceId()]) {
@@ -318,6 +335,14 @@ void AriaViewer::setPose(const std::optional<Sophus::SE3d>& T_World_ImuLeft) {
     T_World_ImuLeft_.emplace_back(T_Viewer_World_ * T_World_ImuLeft.value());
   }
 }
+
+void AriaViewer::setEyetracksOnRgbImage(const std::optional<Eigen::Vector2f>& eyetrackOnRgbImage) {
+  if (!eyetrackOnRgbImage) {
+    return;
+  }
+  eyetracksOnRgbImage_.emplace_back(eyetrackOnRgbImage.value());
+}
+
 } // namespace visualization
 } // namespace datatools
 } // namespace ark

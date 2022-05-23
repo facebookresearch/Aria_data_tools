@@ -29,7 +29,10 @@ class AriaDataProvider {
  public:
   AriaDataProvider() = default;
   virtual ~AriaDataProvider() = default;
-  virtual bool open(const std::string& sourcePath, const std::string& posePath = "") = 0;
+  virtual bool open(
+      const std::string& sourcePath,
+      const std::string& posePath = "",
+      const std::string& eyetrackingPath = "") = 0;
   virtual void setStreamPlayer(const vrs::StreamId& streamId) = 0;
   virtual bool tryFetchNextData(
       const vrs::StreamId& streamId,
@@ -39,8 +42,12 @@ class AriaDataProvider {
   virtual uint32_t getImageHeight(const vrs::StreamId& streamId) const = 0;
   virtual double getFastestNominalRateHz() = 0;
   virtual double getFirstTimestampSec() = 0;
+  // aria pose side-loading (from csv file) and time-aligned serving
   virtual std::optional<Sophus::SE3d> getPose() const = 0;
   virtual bool loadPosesFromCsv(const std::string& posePath) = 0;
+  // eyetracking data side-loading (from csv file) and time-aligned serving
+  virtual std::optional<Eigen::Vector2f> getEyetracksOnRgbImage() const = 0;
+  virtual bool loadEyetrackingFromCsv(const std::string& eyetrackingPath) = 0;
   virtual bool atLastRecords() = 0;
   virtual bool loadDeviceModel() = 0;
 
@@ -57,8 +64,10 @@ class AriaDataProvider {
   datatools::sensors::DeviceModel deviceModel_;
 
   bool hasPoses_ = false;
+  bool hasEyetracks_ = false;
   std::string sourcePath_;
   std::map<uint64_t, Sophus::SE3d> imuLeftPoses_;
+  std::map<uint64_t, Eigen::Vector2f> eyetracksOnRgbImage_;
 };
 } // namespace dataprovider
 } // namespace datatools

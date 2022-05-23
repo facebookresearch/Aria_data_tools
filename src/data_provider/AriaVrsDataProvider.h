@@ -116,7 +116,10 @@ class AriaVrsDataProvider : public AriaDataProvider {
   void setVerbose(bool verbose);
 
   // Override functions for AriaDataProvider
-  bool open(const std::string& vrsPath, const std::string& posePath = "") override;
+  bool open(
+      const std::string& vrsPath,
+      const std::string& posePath = "",
+      const std::string& eyetrackingPath = "") override;
   bool tryFetchNextData(
       const vrs::StreamId& streamId,
       double currentTimestampSec = std::numeric_limits<double>::max()) override;
@@ -127,6 +130,8 @@ class AriaVrsDataProvider : public AriaDataProvider {
   double getFirstTimestampSec() override;
   std::optional<Sophus::SE3d> getPose() const override;
   bool loadPosesFromCsv(const std::string& posePath) override;
+  std::optional<Eigen::Vector2f> getEyetracksOnRgbImage() const override;
+  bool loadEyetrackingFromCsv(const std::string& eyetrackingPath) override;
   bool atLastRecords() override;
   bool loadDeviceModel() override;
 
