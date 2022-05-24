@@ -20,7 +20,7 @@ brew install cmake ccache doxygen
 # VRS and Pybind11 dependencies
 brew install boost sophus cereal googletest glog glew lz4 zstd xxhash libpng jpeg
 # Installing pybind11
-pip install pybind11 numpy
+pip3 install pybind11 numpy
 
 # Install and compile libraries
 sh ./install_compile_3rd_party.sh
