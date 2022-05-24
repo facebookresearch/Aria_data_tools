@@ -199,6 +199,52 @@ std::vector<std::string> DeviceModel::getImuLabels() const {
   return imuLabels;
 }
 
+namespace {
+const int kFocalIdx = 0;
+const int kPrincipalPointColIdx = 1;
+const int kPrincipalPointRowIdx = 2;
+} // namespace
+
+bool DeviceModel::tryCropAndScaleCameraCalibration(
+    const std::string& label,
+    const int nativeResolution,
+    const int newWidth) {
+  // Camera calibration should be rectified only once
+  if (updatedCameraCalibs_.count(label)) {
+    return true;
+  }
+  if (cameraCalibs_.find(label) != cameraCalibs_.end()) {
+    auto& cameraCalib = cameraCalibs_.at(label);
+    // Aria supports two RGB resolution:
+    // - Full res 2880x2880 & Medium res 1408x1408
+    // We are applying here the necessary intrinsics parameters change
+    //  to fit camera calibration to the used resolution
+    if (label == "camera-rgb") {
+      Eigen::VectorXd& camParams = cameraCalib.projectionModel.projectionParams;
+      // Testing if principal point is appropriate for this image width
+      if (camParams[kPrincipalPointColIdx] * 2 >
+          newWidth) { // We need to rescale calibration parameters
+
+        // Assume the resolution change follows the following steps:
+        // - centered cropping -> sensor pixel binning
+        const double rescaleFactor = std::floor(
+            nativeResolution / static_cast<double>(newWidth)); // binning can only be an integer
+        const double halfCroppedSize = (nativeResolution - newWidth * rescaleFactor) / 2.0;
+        camParams[kPrincipalPointColIdx] -= halfCroppedSize;
+        camParams[kPrincipalPointRowIdx] -= halfCroppedSize;
+
+        camParams[kFocalIdx] /= rescaleFactor;
+        camParams[kPrincipalPointColIdx] /= rescaleFactor;
+        camParams[kPrincipalPointRowIdx] /= rescaleFactor;
+
+        updatedCameraCalibs_.insert(label);
+        return true;
+      }
+    }
+  }
+  return false;
+}
+
 } // namespace sensors
 } // namespace datatools
 } // namespace ark

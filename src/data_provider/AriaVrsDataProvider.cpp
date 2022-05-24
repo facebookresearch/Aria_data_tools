@@ -73,6 +73,7 @@ auto kWifiBeaconCallback =
     };
 constexpr const char* kTrajectoryPathSuffix = "location/trajectory.csv";
 constexpr const char* kEyetrackingPathSuffix = "eyetracking/et_in_rgb_stream.csv";
+const int kAriaNativeRgbResolution = 2880;
 }; // namespace
 
 namespace ark {
@@ -596,6 +597,7 @@ bool AriaVrsDataProvider::loadDeviceModel() {
       if (imagePlayer) {
         deviceModel_ = datatools::sensors::DeviceModel::fromJson(
             imagePlayer->getConfigRecord().factoryCalibration);
+        tryCropAndScaleRgbCameraCalibration();
         return true;
       }
     }
@@ -606,11 +608,27 @@ bool AriaVrsDataProvider::loadDeviceModel() {
       if (motionPlayer) {
         deviceModel_ = datatools::sensors::DeviceModel::fromJson(
             motionPlayer->getConfigRecord().factoryCalibration);
+        std::cout
+            << "Loaded device model using a motion stream player, may result in invalid RGB camera calibration."
+            << std::endl;
         return true;
       }
     }
   }
   // Couldn't find a player to load device model from calibration
+  return false;
+}
+
+bool AriaVrsDataProvider::tryCropAndScaleRgbCameraCalibration() {
+  // RGB calibration is always stored for max resolution
+  // If needed we rescale it to match the actual used resolution
+  const auto rgbCameraPlayer = getRgbCameraPlayer();
+  if (rgbCameraPlayer) {
+    const vrs::StreamId rgbStream = rgbCameraPlayer->getStreamId();
+    return deviceModel_.tryCropAndScaleCameraCalibration(
+        "camera-rgb", kAriaNativeRgbResolution, getImageWidth(rgbStream));
+  }
+  std::cout << "RGB stream player doesn't exist, cannot update camera calibration" << std::endl;
   return false;
 }
 

@@ -145,6 +145,8 @@ class AriaVrsDataProvider : public AriaDataProvider {
   void createBarometerPlayer(const vrs::StreamId& streamId);
   void createTimeSyncPlayer(const vrs::StreamId& streamId);
 
+  bool tryCropAndScaleRgbCameraCalibration();
+
   vrs::RecordFileReader reader_;
   std::mutex readerMutex_;
 

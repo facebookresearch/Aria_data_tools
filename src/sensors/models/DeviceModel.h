@@ -20,9 +20,10 @@
 #include <sophus/se3.hpp>
 #include <Eigen/Core>
 
-#include <map>
 #include <optional>
 #include <string>
+#include <unordered_map>
+#include <unordered_set>
 #include <vector>
 
 namespace ark {
@@ -75,6 +76,11 @@ class DeviceModel {
   std::optional<CameraCalibration> getCameraCalib(const std::string& label) const;
   std::optional<ImuCalibration> getImuCalib(const std::string& label) const;
 
+  bool tryCropAndScaleCameraCalibration(
+      const std::string& label,
+      const int nativeResolution,
+      const int imageWidth);
+
   std::vector<std::string> getCameraLabels() const;
   std::vector<std::string> getImuLabels() const;
 
@@ -84,8 +90,9 @@ class DeviceModel {
       const std::string& destSensorLabel) const;
 
  private:
-  std::map<std::string, CameraCalibration> cameraCalibs_;
-  std::map<std::string, ImuCalibration> imuCalibs_;
+  std::unordered_map<std::string, CameraCalibration> cameraCalibs_;
+  std::unordered_map<std::string, ImuCalibration> imuCalibs_;
+  std::unordered_set<std::string> updatedCameraCalibs_;
 };
 
 } // namespace sensors
