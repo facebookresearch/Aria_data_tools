@@ -59,7 +59,7 @@ class AriaBarometerPlayer : public vrs::RecordFormatStreamPlayer {
     return dataRecord_;
   }
 
-  const vrs::StreamId& getStreamId() {
+  const vrs::StreamId& getStreamId() const {
     return streamId_;
   }
 
