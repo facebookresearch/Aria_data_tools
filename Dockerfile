@@ -27,19 +27,19 @@ RUN if type sudo 2>/dev/null; then \
 RUN apt-get update && DEBIAN_FRONTEND="noninteractive" TZ="America/New_York" apt-get install -y tzdata
 
 # Code
-ADD ./ /opt/aria_research_kit
+ADD ./ /opt/aria_data_tools
 
 # Install build
-RUN cd /opt/aria_research_kit/src/scripts/; sh ./install_deps_debian.sh
+RUN cd /opt/aria_data_tools/src/scripts/; sh ./install_deps_debian.sh
 
 # Configure
-RUN mkdir /opt/aria_research_kit_Build; cd /opt/aria_research_kit_Build; cmake -DCMAKE_BUILD_TYPE=RELEASE /opt/aria_research_kit/src;
+RUN mkdir /opt/aria_data_tools_Build; cd /opt/aria_data_tools_Build; cmake -DCMAKE_BUILD_TYPE=RELEASE /opt/aria_data_tools/src;
 
 # Build & test
-RUN cd /opt/aria_research_kit_Build; make -j ; ctest -j;
+RUN cd /opt/aria_data_tools_Build; make -j ; ctest -j;
 
 # Build python bindings
-RUN cd /opt/aria_research_kit/src; pip3 install --global-option=build_ext --global-option="-j8" .;
+RUN cd /opt/aria_data_tools/src; pip3 install --global-option=build_ext --global-option="-j8" .;
 
 # Link shared Pangolin libraries
 RUN ldconfig;
