@@ -44,9 +44,15 @@ if __name__ == "__main__":
         help="Optional path to the input pose file.",
         default="",
     )
+    parser.add_argument(
+        "--eyetracking_path",
+        type=str,
+        help="Optional path to the input eyetracking file.",
+        default="",
+    )
     args = parser.parse_args()
     data_provider = datatools.dataprovider.AriaVrsDataProvider()
-    if data_provider.open(args.vrs_path, args.pose_path):
+    if data_provider.open(args.vrs_path, args.pose_path, args.eyetracking_path):
         print("Opened the VRS file successfully")
     else:
         print("Couldn't open the VRS file")

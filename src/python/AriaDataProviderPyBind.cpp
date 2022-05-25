@@ -167,7 +167,12 @@ void exportDataProvider(py::module& m) {
       .def("setVerbose", &AriaVrsDataProvider::setVerbose, py::arg("verbose"))
 
       // AriaDataProvider override functions
-      .def("open", &AriaVrsDataProvider::open, py::arg("vrsPath"), py::arg("posePath"))
+      .def(
+          "open",
+          &AriaVrsDataProvider::open,
+          py::arg("vrsPath"),
+          py::arg("posePath"),
+          py::arg("eyetrackingPath"))
       .def("setStreamPlayer", &AriaVrsDataProvider::setStreamPlayer, py::arg("streamId"))
       .def(
           "tryFetchNextData",
