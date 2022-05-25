@@ -94,6 +94,28 @@ ImuCalibration parseImuCalibFromJson(const fb_rapidjson::Value& json) {
   return imuCalib;
 }
 
+MagnetometerCalibration parseMagnetometerCalibrationFromJson(const fb_rapidjson::Value& json) {
+  MagnetometerCalibration magnetometerCalibration;
+  magnetometerCalibration.label = json["Label"].GetString();
+  magnetometerCalibration.model = parseRectModelFromJson(json);
+  return magnetometerCalibration;
+}
+
+BarometerCalibration parseBarometerCalibrationFromJson(const fb_rapidjson::Value& json) {
+  BarometerCalibration barometerCalibration;
+  barometerCalibration.label = json["Label"].GetString();
+  barometerCalibration.pressure.slope = json["PressureModel"]["Slope"].GetDouble();
+  barometerCalibration.pressure.offsetPa = json["PressureModel"]["OffsetPa"].GetDouble();
+  return barometerCalibration;
+}
+
+MicrophoneCalibration parseMicrophoneCalibrationFromJson(const fb_rapidjson::Value& json) {
+  MicrophoneCalibration microphoneCalibration;
+  microphoneCalibration.label = json["Label"].GetString();
+  microphoneCalibration.dSensitivity1KDbv = json["DSensitivity1KDbv"].GetDouble();
+  return microphoneCalibration;
+}
+
 } // namespace
 
 Eigen::Vector2d CameraProjectionModel::project(const Eigen::Vector3d& p) const {
@@ -136,6 +158,29 @@ std::optional<ImuCalibration> DeviceModel::getImuCalib(const std::string& label)
   return imuCalibs_.at(label);
 }
 
+std::optional<MagnetometerCalibration> DeviceModel::getMagnetometerCalib(
+    const std::string& label) const {
+  if (magnetometerCalibs_.find(label) == magnetometerCalibs_.end()) {
+    return {};
+  }
+  return magnetometerCalibs_.at(label);
+}
+
+std::optional<BarometerCalibration> DeviceModel::getBarometerCalib(const std::string& label) const {
+  if (barometerCalibs_.find(label) == barometerCalibs_.end()) {
+    return {};
+  }
+  return barometerCalibs_.at(label);
+}
+
+std::optional<MicrophoneCalibration> DeviceModel::getMicrophoneCalib(
+    const std::string& label) const {
+  if (microphoneCalibs_.find(label) == microphoneCalibs_.end()) {
+    return {};
+  }
+  return microphoneCalibs_.at(label);
+}
+
 DeviceModel DeviceModel::fromJson(const fb_rapidjson::Document& json) {
   DeviceModel calib;
   if (json.FindMember("CameraCalibrations") != json.MemberEnd()) {
@@ -148,6 +193,25 @@ DeviceModel DeviceModel::fromJson(const fb_rapidjson::Document& json) {
     for (const auto& imuJson : json["ImuCalibrations"].GetArray()) {
       ImuCalibration imuCalib = parseImuCalibFromJson(imuJson);
       calib.imuCalibs_[imuCalib.label] = imuCalib;
+    }
+  }
+  if (json.FindMember("BaroCalibrations") != json.MemberEnd()) {
+    for (const auto& barometerJson : json["BaroCalibrations"].GetArray()) {
+      BarometerCalibration barometerCalib = parseBarometerCalibrationFromJson(barometerJson);
+      calib.barometerCalibs_[barometerCalib.label] = barometerCalib;
+    }
+  }
+  if (json.FindMember("MagCalibrations") != json.MemberEnd()) {
+    for (const auto& magnetometerJson : json["MagCalibrations"].GetArray()) {
+      MagnetometerCalibration magnetometerCalib =
+          parseMagnetometerCalibrationFromJson(magnetometerJson);
+      calib.magnetometerCalibs_[magnetometerCalib.label] = magnetometerCalib;
+    }
+  }
+  if (json.FindMember("MicCalibrations") != json.MemberEnd()) {
+    for (const auto& microphoneJson : json["MicCalibrations"].GetArray()) {
+      MicrophoneCalibration microphoneCalib = parseMicrophoneCalibrationFromJson(microphoneJson);
+      calib.microphoneCalibs_[microphoneCalib.label] = microphoneCalib;
     }
   }
   return calib;
@@ -197,6 +261,30 @@ std::vector<std::string> DeviceModel::getImuLabels() const {
     imuLabels.push_back(key);
   }
   return imuLabels;
+}
+
+std::vector<std::string> DeviceModel::getMagnetometerLabels() const {
+  std::vector<std::string> magnetometerLabels;
+  for (const auto& [key, _] : magnetometerCalibs_) {
+    magnetometerLabels.push_back(key);
+  }
+  return magnetometerLabels;
+}
+
+std::vector<std::string> DeviceModel::getBarometerLabels() const {
+  std::vector<std::string> barometerLabels;
+  for (const auto& [key, _] : barometerCalibs_) {
+    barometerLabels.push_back(key);
+  }
+  return barometerLabels;
+}
+
+std::vector<std::string> DeviceModel::getMicrophoneLabels() const {
+  std::vector<std::string> microphoneLabels;
+  for (const auto& [key, _] : microphoneCalibs_) {
+    microphoneLabels.push_back(key);
+  }
+  return microphoneLabels;
 }
 
 namespace {

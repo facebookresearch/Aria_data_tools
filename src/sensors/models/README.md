@@ -38,9 +38,13 @@ can be fetched as:
 ['camera-et-left', 'camera-et-right', 'camera-rgb', 'camera-slam-left', 'camera-slam-right']
 >>> deviceModel.getImuLabels()
 ['imu-left', 'imu-right']
+>>> deviceModel.getMagnetometerLabels()
+['mag0']
+>>> deviceModel.getBarometerLabels()
+['baro0']
+>>> deviceModel.getMicrophoneLabels()
+['mic6', 'mic5', 'mic4', 'mic1', 'mic3', 'mic2', 'mic0']
 ```
-TODO: We should add APIs to query names of other sensors as well for the purpose of streaming and
-other applications.
 
 ## Concepts
 

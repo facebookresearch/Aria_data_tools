@@ -70,6 +70,26 @@ void exportSensors(py::module& m) {
       .def_readwrite("gyro", &ImuCalibration::gyro)
       .def_readonly("T_Device_Imu", &ImuCalibration::T_Device_Imu);
 
+  py::class_<MagnetometerCalibration>(m, "MagnetometerCalibration")
+      .def(py::init<>())
+      .def_readwrite("label", &MagnetometerCalibration::label)
+      .def_readwrite("model", &MagnetometerCalibration::model);
+
+  py::class_<LinearPressureModel>(m, "LinearPressureModel")
+      .def(py::init<>())
+      .def_readwrite("slope", &LinearPressureModel::slope)
+      .def_readwrite("offsetPa", &LinearPressureModel::offsetPa);
+
+  py::class_<BarometerCalibration>(m, "BarometerCalibration")
+      .def(py::init<>())
+      .def_readwrite("label", &BarometerCalibration::label)
+      .def_readwrite("pressure", &BarometerCalibration::pressure);
+
+  py::class_<MicrophoneCalibration>(m, "MicrophoneCalibration")
+      .def(py::init<>())
+      .def_readwrite("label", &MicrophoneCalibration::label)
+      .def_readwrite("dSensitivity1KDbv", &MicrophoneCalibration::dSensitivity1KDbv);
+
   py::class_<DeviceModel>(m, "DeviceModel")
       .def(py::init<>())
       .def_static(
@@ -92,8 +112,38 @@ void exportSensors(py::module& m) {
             }
             return py::object(py::cast(nullptr));
           })
+      .def(
+          "getMagnetometerCalib",
+          [](const DeviceModel& self, const std::string& label) {
+            const auto ret = self.getMagnetometerCalib(label);
+            if (ret.has_value()) {
+              return py::cast(ret.value());
+            }
+            return py::object(py::cast(nullptr));
+          })
+      .def(
+          "getBarometerCalib",
+          [](const DeviceModel& self, const std::string& label) {
+            const auto ret = self.getBarometerCalib(label);
+            if (ret.has_value()) {
+              return py::cast(ret.value());
+            }
+            return py::object(py::cast(nullptr));
+          })
+      .def(
+          "getMicrophoneCalib",
+          [](const DeviceModel& self, const std::string& label) {
+            const auto ret = self.getMicrophoneCalib(label);
+            if (ret.has_value()) {
+              return py::cast(ret.value());
+            }
+            return py::object(py::cast(nullptr));
+          })
       .def("getCameraLabels", &DeviceModel::getCameraLabels)
       .def("getImuLabels", &DeviceModel::getImuLabels)
+      .def("getMagnetometerLabels", &DeviceModel::getMagnetometerLabels)
+      .def("getBarometerLabels", &DeviceModel::getBarometerLabels)
+      .def("getMicrophoneLabels", &DeviceModel::getMicrophoneLabels)
       .def(
           "transform",
           &DeviceModel::transform,

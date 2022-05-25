@@ -68,6 +68,31 @@ struct ImuCalibration {
   Sophus::SE3d T_Device_Imu;
 };
 
+struct MagnetometerCalibration {
+  std::string label;
+  LinearRectificationModel model;
+};
+
+struct LinearPressureModel {
+  // Linear model is a 1-d linear correction to the barometer pressure readings:
+  // corrected_reading = slope * actual_reading + offset.
+  // Slope is unitless, and unit of offset is Pa.
+  double slope;
+  double offsetPa;
+};
+
+struct BarometerCalibration {
+  std::string label;
+  LinearPressureModel pressure;
+};
+
+struct MicrophoneCalibration {
+  std::string label;
+  // Sensitivity difference between this instance and the reference mic at 1kHz,
+  // a.k.a. dutMicSen - refMicSen, in unit of dBV.
+  double dSensitivity1KDbv;
+};
+
 class DeviceModel {
  public:
   static DeviceModel fromJson(const fb_rapidjson::Document& json);
@@ -75,6 +100,9 @@ class DeviceModel {
 
   std::optional<CameraCalibration> getCameraCalib(const std::string& label) const;
   std::optional<ImuCalibration> getImuCalib(const std::string& label) const;
+  std::optional<MagnetometerCalibration> getMagnetometerCalib(const std::string& label) const;
+  std::optional<BarometerCalibration> getBarometerCalib(const std::string& label) const;
+  std::optional<MicrophoneCalibration> getMicrophoneCalib(const std::string& label) const;
 
   bool tryCropAndScaleCameraCalibration(
       const std::string& label,
@@ -83,6 +111,9 @@ class DeviceModel {
 
   std::vector<std::string> getCameraLabels() const;
   std::vector<std::string> getImuLabels() const;
+  std::vector<std::string> getMagnetometerLabels() const;
+  std::vector<std::string> getBarometerLabels() const;
+  std::vector<std::string> getMicrophoneLabels() const;
 
   Eigen::Vector3d transform(
       const Eigen::Vector3d& p_source,
@@ -92,6 +123,9 @@ class DeviceModel {
  private:
   std::unordered_map<std::string, CameraCalibration> cameraCalibs_;
   std::unordered_map<std::string, ImuCalibration> imuCalibs_;
+  std::unordered_map<std::string, MagnetometerCalibration> magnetometerCalibs_;
+  std::unordered_map<std::string, BarometerCalibration> barometerCalibs_;
+  std::unordered_map<std::string, MicrophoneCalibration> microphoneCalibs_;
   std::unordered_set<std::string> updatedCameraCalibs_;
 };
 

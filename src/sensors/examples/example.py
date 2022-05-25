@@ -43,6 +43,9 @@ if __name__ == "__main__":
     device = pyark.DeviceModel.fromJson(calibStr)
     print(f"Cameras: {device.getCameraLabels()}")
     print(f"IMUs: {device.getImuLabels()}")
+    print(f"Magnetometers: {device.getMagnetometerLabels()}")
+    print(f"Barometers: {device.getBarometerLabels()}")
+    print(f"Microphones: {device.getMicrophoneLabels()}")
 
     # Project and unproject points with a camera model.
     camLabel = "camera-slam-left"
