@@ -18,6 +18,7 @@
 
 #include <sophus/se3.hpp>
 #include <vrs/StreamId.h>
+#include <map>
 #include <set>
 #include "models/DeviceModel.h"
 
