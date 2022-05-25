@@ -25,6 +25,15 @@ namespace ark {
 namespace datatools {
 namespace dataprovider {
 
+// Table to map Aria numeric StreamID to calibration label string.
+// Please check our documentation for more details.
+const std::unordered_map<std::string, std::string> kDeviceNumericIdToLabel = {
+    {"1201-1", "camera-slam-left"},
+    {"1201-2", "camera-slam-right"},
+    {"1202-1", "imu-right"},
+    {"1202-2", "imu-left"},
+    {"214-1", "camera-rgb"}};
+
 void getDirContent(const std::string& dirPath, std::vector<std::string>& dirContent);
 
 std::map<uint64_t, Sophus::SE3d> readPosesFromCsvFile(

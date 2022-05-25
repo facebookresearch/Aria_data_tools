@@ -45,6 +45,11 @@ class AriaDataProvider {
   virtual double getFirstTimestampSec() = 0;
   // aria pose side-loading (from csv file) and time-aligned serving
   virtual std::optional<Sophus::SE3d> getPose() const = 0;
+  virtual std::optional<Sophus::SE3d> getLatestPoseOfStream(
+      const vrs::StreamId& streamId) const = 0;
+  virtual std::optional<Sophus::SE3d> getPoseOfStreamAtTimestampNs(
+      const vrs::StreamId& streamId,
+      const uint64_t timestampNs) const = 0;
   virtual bool loadPosesFromCsv(const std::string& posePath) = 0;
   // eyetracking data side-loading (from csv file) and time-aligned serving
   virtual std::optional<Eigen::Vector2f> getEyetracksOnRgbImage() const = 0;

@@ -634,6 +634,7 @@ bool AriaVrsDataProvider::tryCropAndScaleRgbCameraCalibration() {
 
 std::optional<Sophus::SE3d> AriaVrsDataProvider::getPose() const {
   if (!hasPoses_) {
+    fmt::print(stderr, "No poses are loaded. Please check if a valid trajectory file is provided.");
     return {};
   }
 
@@ -641,6 +642,51 @@ std::optional<Sophus::SE3d> AriaVrsDataProvider::getPose() const {
   uint64_t slamCameraLeftTimestampNs = static_cast<uint64_t>(
       1e9 * getNextTimestampSec(vrs::StreamId(vrs::RecordableTypeId::SlamCameraData, 1)));
   return queryPose(slamCameraLeftTimestampNs, imuLeftPoses_);
+}
+
+std::optional<Sophus::SE3d> AriaVrsDataProvider::getPoseOfStreamAtTimestampNs(
+    const vrs::StreamId& streamId,
+    const uint64_t timestampNs) const {
+  if (!hasPoses_) {
+    fmt::print(stderr, "No poses are loaded. Please check if a valid trajectory file is provided.");
+    return {};
+  }
+
+  // transform pose
+  auto T_world_imuleft = queryPose(timestampNs, imuLeftPoses_);
+  if (!T_world_imuleft) {
+    return {};
+  }
+  Sophus::SE3d T_Device_stream;
+
+  if (!kDeviceNumericIdToLabel.count(streamId.getNumericName())) {
+    fmt::print(stderr, "Stream {} not supported", streamId.getName());
+    return {};
+  }
+  const std::string labelName = kDeviceNumericIdToLabel.at(streamId.getNumericName());
+  if (labelName.find("cam") != std::string::npos) {
+    // Camera Calib
+    T_Device_stream = deviceModel_.getCameraCalib(labelName)->T_Device_Camera;
+  } else if (labelName.find("imu") != std::string::npos) {
+    // IMU Calib
+    T_Device_stream = deviceModel_.getImuCalib(labelName)->T_Device_Imu;
+  }
+  auto T_Device_imuleft = deviceModel_.getImuCalib("imu-left")->T_Device_Imu;
+  auto T_imuleft_stream = T_Device_imuleft.inverse() * T_Device_stream;
+  auto T_world_stream = T_world_imuleft.value() * T_imuleft_stream;
+  return T_world_stream;
+}
+
+std::optional<Sophus::SE3d> AriaVrsDataProvider::getLatestPoseOfStream(
+    const vrs::StreamId& streamId) const {
+  if (!hasPoses_) {
+    fmt::print(stderr, "No poses are loaded. Please check if a valid trajectory file is provided.");
+    return {};
+  }
+
+  // get latest timestamp of pose
+  uint64_t currentTimestampNs = static_cast<uint64_t>(1e9 * getNextTimestampSec(streamId));
+  return getPoseOfStreamAtTimestampNs(streamId, currentTimestampNs);
 }
 
 bool AriaVrsDataProvider::loadPosesFromCsv(const std::string& posePath) {
