@@ -28,9 +28,6 @@ if (NOT CMAKE_BUILD_TYPE AND NOT MSVC)
   set(CMAKE_BUILD_TYPE "Release")
 endif (NOT CMAKE_BUILD_TYPE AND NOT MSVC)
 
-# If available, use ccache
-include(${CMAKE_MODULE_PATH}/CCache.cmake)
-
 find_package(vrslib REQUIRED)
 find_package(Eigen3 REQUIRED NO_MODULE)
 find_package(Sophus REQUIRED)

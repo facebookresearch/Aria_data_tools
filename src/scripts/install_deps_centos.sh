@@ -15,7 +15,7 @@
 
 # Install system deps
 # Toolchains
-sudo dnf install cmake ninja-build ccache npm doxygen pip
+sudo dnf install cmake ninja-build npm doxygen pip
 # VRS, Sophus and Pybind11 dependencies
 sudo dnf install cereal-devel gtest-devel gmock-devel glog-devel \
                  fmt-devel lz4-devel libzstd-devel xxhash-devel \

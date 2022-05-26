@@ -17,6 +17,9 @@
 #include "AriaVrsDataProvider.h"
 #include "utils.h"
 
+#include <fmt/core.h>
+#include <fmt/ostream.h>
+
 namespace {
 
 void printDataLayout(const vrs::CurrentRecord& r, vrs::DataLayout& datalayout) {

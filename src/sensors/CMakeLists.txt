@@ -15,7 +15,6 @@
 set(SENSORS_SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}")
 
 find_package(cereal REQUIRED)
-find_package(fmt)
 
 # Build sensors lib.
 file(GLOB_RECURSE SENSORS_SRCS
@@ -34,7 +33,6 @@ target_include_directories(sensors
 target_link_libraries(sensors
     PUBLIC
         Eigen3::Eigen
-        fmt::fmt
         vrs::vrslib
         Sophus::Sophus
         cereal::cereal

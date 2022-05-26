@@ -27,7 +27,7 @@ cd /tmp; git clone https://github.com/fmtlib/fmt.git -b 8.1.1 \
 # Build Sophus
 cd /tmp; git clone https://github.com/strasdat/Sophus.git -b v22.04.1\
     && cd Sophus \
-    && cmake -DCMAKE_BUILD_TYPE=Release  -DBUILD_SOPHUS_TESTS=OFF .; sudo make -j$thread install; rm -rf /tmp/Sophus;
+    && cmake -DCMAKE_BUILD_TYPE=Release -DBUILD_SOPHUS_TESTS=OFF .; sudo make -j$thread install; rm -rf /tmp/Sophus;
 
 # Build Cereal
 cd /tmp; git clone https://github.com/USCiLab/cereal.git -b v1.3.2\

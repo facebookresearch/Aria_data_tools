@@ -15,7 +15,7 @@
 
 # Install system deps
 # Toolchains
-sudo apt-get install -y cmake ninja-build ccache npm doxygen git
+sudo apt-get install -y cmake ninja-build npm doxygen git
 # VRS, Sophus and Pybind11 dependencies
 sudo apt-get install -y \
     libjpeg-dev libeigen3-dev \

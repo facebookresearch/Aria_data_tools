@@ -8,9 +8,11 @@ on:
 
 jobs:
   build:
-    name: Build Aria Data Tools on ubuntu-latest
-    runs-on: ubuntu-latest
-
+    name: Build Aria Data Tools on ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest,  macOS-latest]
     steps:
       - uses: actions/checkout@v2
 
@@ -18,7 +20,14 @@ jobs:
         shell: bash
         run: |
           cd ./src/scripts/
-          sh install_deps_debian.sh
+          if [ "$RUNNER_OS" == "Linux" ]; then
+              sh install_deps_debian.sh
+          elif [ "$RUNNER_OS" == "macOS" ]; then
+              sh install_deps_mac.sh
+          else
+              echo "$RUNNER_OS not supported"
+              exit 1
+          fi
 
       - name: Configure
         shell: bash
