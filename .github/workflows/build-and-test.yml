@@ -1,0 +1,49 @@
+name: Build and Test
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  build:
+    name: Build Aria Data Tools on ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest,  macOS-latest]
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Install dependencies
+        shell: bash
+        run: |
+          cd ./src/scripts/
+          if [ "$RUNNER_OS" == "Linux" ]; then
+              sh install_deps_debian.sh
+          elif [ "$RUNNER_OS" == "macOS" ]; then
+              sh install_deps_mac.sh
+          else
+              echo "$RUNNER_OS not supported"
+              exit 1
+          fi
+
+      - name: Configure
+        shell: bash
+        run: |
+          mkdir build
+          cmake -DCMAKE_BUILD_TYPE=RELEASE -S ./src -B build
+
+      - name: Build and Test
+        shell: bash
+        run: |
+          cd build
+          make -j8
+          ctest -j
+
+      - name: Build Python bindings
+        shell: bash
+        run: |
+          cd ./src
+          pip3 install --global-option=build_ext --global-option="-j8" .;
