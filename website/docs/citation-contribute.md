@@ -61,4 +61,10 @@ If you use the Aria Pilot Dataset in GitHub, please consider starring ⭐ us and
 
 ## Acknowledgements
 
-The Aria Data Tool and Aria Pilot Dataset would not have been possible without the hard work and contributions of David Bui, Thomas Soares, Michael Loudon, Madalyn Bowen, Shiwei Lin, Jiabo Hu, Daisy Lu, Ruihan Shan, Robert Kuo, Mikhail Koslowski and Anton Kastritskiy.
+**Everyday day activity data collection and quality analysis team:** David Bui, Thomas Soares, Michael Loudon, Madalyn Bowen.
+
+**Anonymization labeling:** Shiwei Lin, Jiabo Hu, Daisy Lu, Ruihan Shan, Robert Kuo.
+
+**Desktop activity hardware setup and data collection:** Wilson Dreewes, Cole Wilson, Kevin Harris, Tomas Hodan.
+
+**Data management and web hosting:** Mikhail Koslowski, Anton Kastritskiy.
