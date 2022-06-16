@@ -41,33 +41,33 @@ std::vector<std::string> strSplit(const std::string& s, const char delimiter);
 
 std::string getTimeSyncPath(const std::string& vrsPath);
 
-std::map<uint64_t, Sophus::SE3d> readPosesFromCsvFile(
+std::map<int64_t, Sophus::SE3d> readPosesFromCsvFile(
     const std::string& inputPoseCsv,
     const int firstN = -1);
 
-std::map<uint64_t, Eigen::Vector2f> readEyetrackingFromCsvFile(
+std::map<int64_t, Eigen::Vector2f> readEyetrackingFromCsvFile(
     const std::string& inputEyetrackingCsv,
     const int firstN = -1);
 
-std::map<uint64_t, SpeechToTextDatum> readSpeechToTextFromCsvFile(
+std::map<int64_t, SpeechToTextDatum> readSpeechToTextFromCsvFile(
     const std::string& inputSpeechToTextCsv,
     const int firstN = -1);
 
-std::map<uint64_t, uint64_t> readTimeSyncCsv(
+std::map<int64_t, int64_t> readTimeSyncCsv(
     const std::string& inputTimeSyncCsv,
     const int firstN = -1);
 
 std::optional<Sophus::SE3d> queryPose(
-    const uint64_t timestamp,
-    const std::map<uint64_t, Sophus::SE3d>& timestampToPose);
+    const int64_t timestamp,
+    const std::map<int64_t, Sophus::SE3d>& timestampToPose);
 
 std::optional<Eigen::Vector2f> queryEyetrack(
-    const uint64_t timestamp,
-    const std::map<uint64_t, Eigen::Vector2f>& timestampToEyetrack);
+    const int64_t timestamp,
+    const std::map<int64_t, Eigen::Vector2f>& timestampToEyetrack);
 
 std::optional<SpeechToTextDatum> querySpeechToText(
-    const uint64_t timestamp,
-    const std::map<uint64_t, SpeechToTextDatum>& timestampToSpeechToText);
+    const int64_t timestamp,
+    const std::map<int64_t, SpeechToTextDatum>& timestampToSpeechToText);
 
 } // namespace dataprovider
 } // namespace datatools

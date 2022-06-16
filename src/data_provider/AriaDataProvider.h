@@ -63,7 +63,7 @@ class AriaDataProvider {
       const vrs::StreamId& streamId) const = 0;
   virtual std::optional<Sophus::SE3d> getPoseOfStreamAtTimestampNs(
       const vrs::StreamId& streamId,
-      const uint64_t timestampNs) const = 0;
+      const int64_t timestampNs) const = 0;
   virtual bool loadPosesFromCsv(const std::string& posePath) = 0;
   // eyetracking data side-loading (from csv file) and time-aligned serving
   virtual std::optional<Eigen::Vector2f> getEyetracksOnRgbImage() const = 0;
@@ -100,9 +100,9 @@ class AriaDataProvider {
   bool hasEyetracks_ = false;
   bool hasSpeechToText_ = false;
   std::string sourcePath_;
-  std::map<uint64_t, Sophus::SE3d> imuLeftPoses_;
-  std::map<uint64_t, Eigen::Vector2f> eyetracksOnRgbImage_;
-  std::map<uint64_t, SpeechToTextDatum> speechToText_;
+  std::map<int64_t, Sophus::SE3d> imuLeftPoses_;
+  std::map<int64_t, Eigen::Vector2f> eyetracksOnRgbImage_;
+  std::map<int64_t, SpeechToTextDatum> speechToText_;
 };
 } // namespace dataprovider
 } // namespace datatools

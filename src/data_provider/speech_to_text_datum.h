@@ -24,15 +24,15 @@ namespace dataprovider {
 // seconds).
 struct SpeechToTextDatum {
   // start and end time of the utterance
-  uint64_t tStart_ns = 0;
-  uint64_t tEnd_ns = 0;
+  int64_t tStart_ns = 0;
+  int64_t tEnd_ns = 0;
   // the transcribed text
   std::string text = "";
   // the confidence in the transcription
   float confidence = 0.;
 
   // compute duration in nano seconds of the utterance
-  uint64_t duration_ns() const {
+  int64_t duration_ns() const {
     return tEnd_ns - tStart_ns;
   }
   // compute duration in seconds of the utterance

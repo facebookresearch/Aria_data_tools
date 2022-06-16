@@ -144,7 +144,7 @@ class AriaFolderDataProvider : public AriaDataProvider {
       std::unordered_map<uint16_t, std::unique_ptr<StreamInFolder>>>
       streamsInFolder_;
 
-  std::map<uint64_t, Sophus::SE3d> imuLeftPoses_;
+  std::map<int64_t, Sophus::SE3d> imuLeftPoses_;
   bool hasPoses_ = false;
 };
 } // namespace dataprovider

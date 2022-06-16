@@ -42,7 +42,7 @@ int main(int argc, const char* argv[]) {
   }
 
   std::vector<std::shared_ptr<visualization::AriaViewer>> viewers;
-  std::vector<std::map<uint64_t, u_int64_t>> timeSyncToTimeRecordings;
+  std::vector<std::map<int64_t, int64_t>> timeSyncToTimeRecordings;
   std::vector<std::unique_ptr<dataprovider::AriaVrsDataProvider>> dataProviderVec;
   for (int argi = 1; argi < argc; ++argi) {
     std::string vrsPath = argv[argi];
@@ -62,14 +62,14 @@ int main(int argc, const char* argv[]) {
     auto [currentTimestampSec, fastestNominalRateHz] = viewers.back()->initDataStreams();
   }
   // get joint synced time table across all recordings
-  std::set<uint64_t> baseTimeSet;
+  std::set<int64_t> baseTimeSet;
   for (const auto& timeSyncToTimeRecording : timeSyncToTimeRecordings) {
     for (const auto& [tSync, tRecord] : timeSyncToTimeRecording) {
       baseTimeSet.insert(tSync);
     }
   }
   // the sorted set of all sync time stamps across the recordings.
-  std::vector<uint64_t> baseTime(baseTimeSet.begin(), baseTimeSet.end());
+  std::vector<int64_t> baseTime(baseTimeSet.begin(), baseTimeSet.end());
 
   // start viewer threads
   std::vector<std::thread> threads;
@@ -79,8 +79,8 @@ int main(int argc, const char* argv[]) {
   // start data reading thread
   threads.emplace_back([&viewers, &timeSyncToTimeRecordings, &baseTime]() {
     for (size_t t = 1; t < baseTime.size(); ++t) {
-      uint64_t baseTimeNs = baseTime[t];
-      uint64_t prevBaseTimeNs = baseTime[t - 1];
+      int64_t baseTimeNs = baseTime[t];
+      int64_t prevBaseTimeNs = baseTime[t - 1];
       double waitTimeSec = (baseTimeNs - prevBaseTimeNs) * 1e-9;
       auto start = std::chrono::steady_clock::now();
       // check that all players are in playing mode

@@ -147,7 +147,7 @@ class AriaVrsDataProvider : public AriaDataProvider {
   std::optional<Sophus::SE3d> getLatestPoseOfStream(const vrs::StreamId& streamId) const override;
   std::optional<Sophus::SE3d> getPoseOfStreamAtTimestampNs(
       const vrs::StreamId& streamId,
-      const uint64_t timestampNs) const override;
+      const int64_t timestampNs) const override;
   bool loadPosesFromCsv(const std::string& posePath) override;
   // eye tracking on rgb image data
   std::optional<Eigen::Vector2f> getEyetracksOnRgbImage() const override;

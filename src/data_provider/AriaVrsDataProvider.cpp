@@ -818,14 +818,14 @@ std::optional<Sophus::SE3d> AriaVrsDataProvider::getPose() const {
   }
 
   // Always query using the slam-camera-left timestamp.
-  uint64_t slamCameraLeftTimestampNs = static_cast<uint64_t>(
+  int64_t slamCameraLeftTimestampNs = static_cast<int64_t>(
       1e9 * getNextTimestampSec(vrs::StreamId(vrs::RecordableTypeId::SlamCameraData, 1)));
   return queryPose(slamCameraLeftTimestampNs, imuLeftPoses_);
 }
 
 std::optional<Sophus::SE3d> AriaVrsDataProvider::getPoseOfStreamAtTimestampNs(
     const vrs::StreamId& streamId,
-    const uint64_t timestampNs) const {
+    const int64_t timestampNs) const {
   if (!hasPoses_) {
     fmt::print(stderr, "No poses are loaded. Please check if a valid trajectory file is provided.");
     return {};
@@ -864,7 +864,7 @@ std::optional<Sophus::SE3d> AriaVrsDataProvider::getLatestPoseOfStream(
   }
 
   // get latest timestamp of pose
-  uint64_t currentTimestampNs = static_cast<uint64_t>(1e9 * getNextTimestampSec(streamId));
+  int64_t currentTimestampNs = static_cast<int64_t>(1e9 * getNextTimestampSec(streamId));
   return getPoseOfStreamAtTimestampNs(streamId, currentTimestampNs);
 }
 
@@ -897,7 +897,7 @@ std::optional<Eigen::Vector2f> AriaVrsDataProvider::getEyetracksOnRgbImage() con
   }
 
   // Always query using the rgb camera timestamp.
-  uint64_t rgbTimestampNs = static_cast<uint64_t>(
+  int64_t rgbTimestampNs = static_cast<int64_t>(
       1e9 * getNextTimestampSec(vrs::StreamId(vrs::RecordableTypeId::RgbCameraRecordableClass, 1)));
   return queryEyetrack(rgbTimestampNs, eyetracksOnRgbImage_);
 }
@@ -931,7 +931,7 @@ std::optional<SpeechToTextDatum> AriaVrsDataProvider::getSpeechToText() const {
   }
 
   // Always query using the rgb camera timestamp.
-  uint64_t rgbTimestampNs = static_cast<uint64_t>(
+  int64_t rgbTimestampNs = static_cast<int64_t>(
       1e9 * getNextTimestampSec(vrs::StreamId(vrs::RecordableTypeId::RgbCameraRecordableClass, 1)));
   return querySpeechToText(rgbTimestampNs, speechToText_);
 }

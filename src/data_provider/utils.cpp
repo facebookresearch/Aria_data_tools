@@ -45,10 +45,10 @@ std::string getTimeSyncPath(const std::string& vrsPath) {
   return timeSyncCsvPath;
 }
 
-std::map<uint64_t, Sophus::SE3d> readPosesFromCsvFile(
+std::map<int64_t, Sophus::SE3d> readPosesFromCsvFile(
     const std::string& inputPoseCsv,
     const int firstN) {
-  std::map<uint64_t, Sophus::SE3d> timeToPoseMap;
+  std::map<int64_t, Sophus::SE3d> timeToPoseMap;
   if (!inputPoseCsv.empty()) {
     io::CSVReader<8> in(inputPoseCsv);
     in.read_header(
@@ -61,7 +61,7 @@ std::map<uint64_t, Sophus::SE3d> readPosesFromCsvFile(
         "qx_R_world_left_imu",
         "qy_R_world_left_imu",
         "qz_R_world_left_imu");
-    uint64_t ts;
+    int64_t ts;
     Eigen::Vector3d t;
     Eigen::Quaterniond q;
     int count = 0;
@@ -74,15 +74,15 @@ std::map<uint64_t, Sophus::SE3d> readPosesFromCsvFile(
   return timeToPoseMap;
 }
 
-std::map<uint64_t, Eigen::Vector2f> readEyetrackingFromCsvFile(
+std::map<int64_t, Eigen::Vector2f> readEyetrackingFromCsvFile(
     const std::string& inputEyetrackingCsv,
     const int firstN) {
-  std::map<uint64_t, Eigen::Vector2f> timeToEtMap;
+  std::map<int64_t, Eigen::Vector2f> timeToEtMap;
   if (!inputEyetrackingCsv.empty()) {
     io::CSVReader<3> in(inputEyetrackingCsv);
     in.read_header(
         io::ignore_extra_column, "timestamp_unix_ns", "calib_x [pixel]", "calib_y [pixel]");
-    uint64_t ts;
+    int64_t ts;
     Eigen::Vector2f etCalib_im;
     int count = 0;
     while (in.read_row(ts, etCalib_im(0), etCalib_im(1)) && (firstN < 0 || count++ < firstN)) {
@@ -93,15 +93,15 @@ std::map<uint64_t, Eigen::Vector2f> readEyetrackingFromCsvFile(
   return timeToEtMap;
 }
 
-std::map<uint64_t, SpeechToTextDatum> readSpeechToTextFromCsvFile(
+std::map<int64_t, SpeechToTextDatum> readSpeechToTextFromCsvFile(
     const std::string& inputSpeechToTextCsv,
     const int firstN) {
-  std::map<uint64_t, SpeechToTextDatum> timeToSpeechToTextMap;
+  std::map<int64_t, SpeechToTextDatum> timeToSpeechToTextMap;
   if (!inputSpeechToTextCsv.empty()) {
     io::CSVReader<4, io::trim_chars<' ', '\t'>, io::double_quote_escape<',', '"'>> in(
         inputSpeechToTextCsv);
     in.read_header(io::ignore_extra_column, "startTime_ns", "endTime_ns", "written", "confidence");
-    uint64_t tStart, tEnd;
+    int64_t tStart, tEnd;
     std::string text;
     float confidence;
     int count = 0;
@@ -114,10 +114,8 @@ std::map<uint64_t, SpeechToTextDatum> readSpeechToTextFromCsvFile(
   return timeToSpeechToTextMap;
 }
 
-std::map<uint64_t, uint64_t> readTimeSyncCsv(
-    const std::string& inputTimeSyncCsv,
-    const int firstN) {
-  std::map<uint64_t, uint64_t> timeSyncToTimeRecording;
+std::map<int64_t, int64_t> readTimeSyncCsv(const std::string& inputTimeSyncCsv, const int firstN) {
+  std::map<int64_t, int64_t> timeSyncToTimeRecording;
   if (!inputTimeSyncCsv.empty()) {
     io::CSVReader<2> in(inputTimeSyncCsv);
     in.read_header(io::ignore_extra_column, "deviceTimestampNs", "syncedTimestampNs");
@@ -142,8 +140,8 @@ std::vector<std::string> strSplit(const std::string& s, const char delimiter) {
 }
 
 std::optional<Sophus::SE3d> queryPose(
-    const uint64_t timestamp,
-    const std::map<uint64_t, Sophus::SE3d>& timestampToPose) {
+    const int64_t timestamp,
+    const std::map<int64_t, Sophus::SE3d>& timestampToPose) {
   if (timestamp < timestampToPose.begin()->first || timestamp > timestampToPose.rbegin()->first) {
     return {};
   }
@@ -153,8 +151,8 @@ std::optional<Sophus::SE3d> queryPose(
   // Interpolation
   auto laterPosePtr = timestampToPose.lower_bound(timestamp);
   auto earlyPosePtr = std::prev(laterPosePtr);
-  uint64_t tsEarly = earlyPosePtr->first;
-  uint64_t tsLater = laterPosePtr->first;
+  int64_t tsEarly = earlyPosePtr->first;
+  int64_t tsLater = laterPosePtr->first;
   Sophus::SE3d poseEarly = earlyPosePtr->second;
   Sophus::SE3d poseLater = laterPosePtr->second;
 
@@ -170,8 +168,8 @@ std::optional<Sophus::SE3d> queryPose(
 }
 
 std::optional<Eigen::Vector2f> queryEyetrack(
-    const uint64_t timestamp,
-    const std::map<uint64_t, Eigen::Vector2f>& timestampToEyetrack) {
+    const int64_t timestamp,
+    const std::map<int64_t, Eigen::Vector2f>& timestampToEyetrack) {
   if (timestamp < timestampToEyetrack.begin()->first ||
       timestamp > timestampToEyetrack.rbegin()->first) {
     return {};
@@ -182,8 +180,8 @@ std::optional<Eigen::Vector2f> queryEyetrack(
   // Interpolation
   auto laterEyePtr = timestampToEyetrack.lower_bound(timestamp);
   auto earlyEyePtr = std::prev(laterEyePtr);
-  uint64_t tsEarly = earlyEyePtr->first;
-  uint64_t tsLater = laterEyePtr->first;
+  int64_t tsEarly = earlyEyePtr->first;
+  int64_t tsLater = laterEyePtr->first;
   Eigen::Vector2f eyeEarly = earlyEyePtr->second;
   Eigen::Vector2f eyeLater = laterEyePtr->second;
 
@@ -194,8 +192,8 @@ std::optional<Eigen::Vector2f> queryEyetrack(
 }
 
 std::optional<SpeechToTextDatum> querySpeechToText(
-    const uint64_t timestamp,
-    const std::map<uint64_t, SpeechToTextDatum>& timestampToSpeechToText) {
+    const int64_t timestamp,
+    const std::map<int64_t, SpeechToTextDatum>& timestampToSpeechToText) {
   if (timestamp < timestampToSpeechToText.begin()->first ||
       timestamp > timestampToSpeechToText.rbegin()->second.tEnd_ns) {
     return {};
@@ -206,10 +204,10 @@ std::optional<SpeechToTextDatum> querySpeechToText(
   // Interpolation
   auto laterEyePtr = timestampToSpeechToText.lower_bound(timestamp);
   auto earlyEyePtr = std::prev(laterEyePtr);
-  uint64_t tsEarlyStart = earlyEyePtr->first;
-  uint64_t tsLaterStart = laterEyePtr->first;
-  uint64_t tsEarlyEnd = earlyEyePtr->second.tEnd_ns;
-  uint64_t tsLaterEnd = laterEyePtr->second.tEnd_ns;
+  int64_t tsEarlyStart = earlyEyePtr->first;
+  int64_t tsLaterStart = laterEyePtr->first;
+  int64_t tsEarlyEnd = earlyEyePtr->second.tEnd_ns;
+  int64_t tsLaterEnd = laterEyePtr->second.tEnd_ns;
 
   if (tsEarlyStart <= timestamp && timestamp < tsEarlyEnd) {
     return earlyEyePtr->second;
