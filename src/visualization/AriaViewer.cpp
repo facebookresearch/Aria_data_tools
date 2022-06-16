@@ -38,10 +38,7 @@ const std::vector<vrs::StreamId> kImageStreamIds = {
     kSlamLeftCameraStreamId,
     kSlamRightCameraStreamId,
     kRgbCameraStreamId};
-const std::vector<vrs::StreamId> kImuStreamIds = {
-    vrs::StreamId(vrs::RecordableTypeId::SlamImuData, 1),
-    vrs::StreamId(vrs::RecordableTypeId::SlamImuData, 2),
-};
+const std::vector<vrs::StreamId> kImuStreamIds = {kImuRightStreamId, kImuLeftStreamId};
 const std::vector<vrs::StreamId> kDataStreams = {
     kMagnetometerStreamId,
     kBarometerStreamId,
