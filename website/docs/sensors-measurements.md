@@ -22,11 +22,16 @@ Project Aria sensor data is stored in [VRS](https://facebookresearch.github.io/v
 * 1 x 110 degree HFOV Rolling Shutter High Resolution RGB camera, up to 8MP
 * 2 x 150 HFOV / 120 degree VFOV Global Shutter mono cameras for SLAM & hand tracking, 640 x 480 pix
 * 2 x 80 degree DFOV Eye-tracking Global Shutter mono cameras with IR illumination, 320 x 240 pix
-* 2 x 1KHz and 800Hz IMU, Barometer and Magnetometer
+* 2 x IMU, Barometer and Magnetometer (one IMU is 1KHz and the other is 800Hz)
 * 7 x 48 KHz spatial microphones
 * GPS, Bluetooth and WiFi
 
-Researchers can use different sensor profiles when collecting data. Sensor profiles allow them to choose which sensors to record with and with what settings (for example high or low resolution RGB camera recordings).
+Researchers can use different sensor profiles when collecting data. Sensor profiles allow them to choose which sensors to record with and with what settings (for example setting the resolution of camera recordings or whether to use the 1KHz or 800Hz IMU).
+
+:::note
+Cameras on Project Aria devices are installed sideways. By default, images are reported and viewed as they were provided by cameras and will appear sideways.
+:::
+
 
 ## Naming conventions for all tools
 
@@ -38,7 +43,7 @@ We use the sensor name set as the main query type for each sensor in all tools. 
 * Microphones: mic0, mic1, ..., mic6
 * Barometer: baro0
 
-Each sensor is associated with an instance-invariant name. For example, the left SLAM camera is named as "camera-slam-left". The name set of supported sensors can be fetched in Python with the `deviceModel.getCameraLabels()` command:
+Each sensor is associated with an instance-invariant name. For example, the left SLAM camera is named as "camera-slam-left". The name set of supported sensors can be fetched in Python3 with the `deviceModel.getCameraLabels()` command:
 
 ```
 >>> deviceModel.getCameraLabels()
@@ -59,39 +64,39 @@ Left/Right are relative to the left and right side of the glasses when the user 
 
 |StreamId |Stream |vrs::RecordableTypeId |VRS Instance ID |Calibration labels for coordinate transform |DataProvider API |
 |--- |--- |--- |--- |--- |--- |
-|211-1 |EyeTracking camera |EyeCameraRecordableClass (211) |1 |`camera-et-left` `camera-et-right` |getEyeCameraPlayer() |
+|211-1 |Eye tracking camera |EyeCameraRecordableClass (211) |1 |`camera-et-left` `camera-et-right` |getEyeCameraPlayer() |
 |214-1 |RGB camera |RgbCameraRecordableClass (214) |1 |`camera-rgb` |getRgbCameraPlayer() |
 |231-1 |Microphones |StereoAudioRecordableClass (231) |1 |`mic0`, `mic1`, `mic2`, ..., `mic6` |getAudioPlayer() |
 |247-1 |Barometer |BarometerRecordableClass (247) |1 |`baro0` |getBarometerPlayer() |
 |281-1 |GPS |GpsRecordableClass (281) |1 | |getGpsPlayer() |
 |283-1 |Bluetooth beacon |BluetoothBeaconRecordableClass (283) |1 | |getBluetoothBeaconPlayer() |
 |285-1 |Time domain |TimeRecordableClass (285) |1 | |getTimeSyncPlayer() |
-|1201-1 |Slam Camera Left |SlamCameraData (1201) |1 |`camera-slam-left` |getSlamLeftCameraPlayer() |
-|1201-2 |Slam Camera Right |SlamCameraData (1201) |2 |`camera-slam-right` |getSlamRightCameraPlayer() |
-|1202-1 |IMU sensor 1 |SlamImuData (1202) |1 |`imu-right` |getImuRightPlayer() |
-|1202-2 |IMU sensor 2 |SlamImuData (1202) |2 |`imu-left` |getImuLeftPlayer() |
+|1201-1 |SLAM Camera Left |SlamCameraData (1201) |1 |`camera-slam-left` |getSlamLeftCameraPlayer() |
+|1201-2 |SLAM Camera Right |SlamCameraData (1201) |2 |`camera-slam-right` |getSlamRightCameraPlayer() |
+|1202-1 |IMU sensor 1 (1KHz) |SlamImuData (1202) |1 |`imu-right` |getImuRightPlayer() |
+|1202-2 |IMU sensor 2 (800Hz) |SlamImuData (1202) |2 |`imu-left` |getImuLeftPlayer() |
 |1203-1 |Magnetometer |SlamMagnetometerData (1203) |1 |`mag0` |getMagnetometerPlayer() |
 
 
 ### RecordableTypeId
 
-VRS files contain multiple streams, each associated with a device type, defined by a [`RecordableTypeId`](https://github.com/facebookresearch/vrs/blob/main/vrs/StreamId.h) enum value. For Project Aria, each kind of sensor is defined as a device type. See [Streams](https://facebookresearch.github.io/vrs/docs/FileStructure#streams) in VRS Documentation for more information.
+VRS files contain multiple streams, each associated with a device type, defined by a [`RecordableTypeId`](https://github.com/facebookresearch/vrs/blob/main/vrs/StreamId.h) enum value. For Project Aria, each kind of sensor is defined as a device type. See [Streams](https://facebookresearch.github.io/vrs/docs/FileStructure#streams) in VRS's Documentation for more information.
 
 ### VRS instance ID
 
-A unique ID number for each instance of a sensor type. The first instance of of a sensor type has the number 1, the second sensor number 2, and so on.
+A unique ID number for each instance of a sensor type. The first instance of a sensor type has the number 1, the second sensor number 2, and so on.
 
 ### StreamId
 
 Unique identifier for a stream of data in VRS.
 
-A StreamId identifies each instance of a sensor, device, algorithm, or "something" that produces a stream of records. A StreamId combines a RecordableTypeId that describes the type of sensor device, algorithm, or in general, producer of records, and an instance id, to differentiate streams coming from different sensors of the same type.
+A StreamId identifies each instance of a sensor, device, algorithm, or "something" that produces a stream of records. A StreamId combines a RecordableTypeId that describes the type of sensor device, or other producer of records, and an instance id, to differentiate streams coming from different sensors of the same type.
 
 
 
 ## Coordinate Systems
 
-Applications like stereo vision and navigation usually handle 2D and 3D points in different spaces and transformations need to be conducted between them. With Project Aria data, we attach a local R3 coordinate frame to each sensor.
+Applications like stereo vision and navigation usually handle 2D and 3D points in different spaces, and transformations need to be conducted between them. With Project Aria data, we attach a local R3 coordinate frame to each sensor.
 
 
 ![image of aria device with all the sensors](/img/docs/aria_ref_frames_all_black.png)
@@ -105,8 +110,8 @@ See [Calibration Sensor Data](/howto/calibration.md) for more information and co
 Every signal (or Record in VRS terms) collected by sensors is stamped with a timestamp from a common clock. For Project Aria data, this is usually the local time clock. All records are sorted in monotonically increasing order in a VRS file. We use the following sensor-specific conventions on timestamps:
 
 * For all cameras, the timestamp of a frame is the center of exposure time, a.k.a. the middle point of exposure interval.
-* The RGB camera is a rolling shutter, with a readout time of 5ms (when recording at 1408x1408) / 15ms (when recording at 2880x2880) from first to last line. The recorded timestamp of an RGB frame is the center of exposure timestamp of the middle row of the image. SLAM and eyetracking cameras are global shutter and all of the pixels in the image are exposed simultaneously.
-* For IMUs, accelerometers and gyroscopes may have a time offset from the local time clock. This is due to internal signal processing in the IMU, which introduces a small time delay. These are estimated during calibration and stored in the JSON as `TimeOffsetSec_Device_Gyro` and `TimeOffsetSec_Device_Accel` respectively.
+* The RGB camera is a rolling shutter, with a readout time of 5ms (when recording at 1408x1408) or 15ms (when recording at 2880x2880) from first to last line. The recorded timestamp of an RGB frame is the center of exposure timestamp of the middle row of the image. SLAM and eye tracking cameras are global shutter and all of the pixels in the image are exposed simultaneously.
+* IMUs, accelerometers and gyroscopes may have a time offset from the local time clock. This is due to internal signal processing in the IMU, which introduces a small time delay. These are estimated during calibration and stored in the JSON as `TimeOffsetSec_Device_Gyro` and `TimeOffsetSec_Device_Accel` respectively.
 
 ## Units of Measurement
 
@@ -121,3 +126,4 @@ The units for numerical values in the code and documentation are:
 * Angular velocity: rad/s
 * Pressure: pascal (Pa)
 * Temperature: celsius (°C)
+* Magnetometer: Tesla (T)

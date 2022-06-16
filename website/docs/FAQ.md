@@ -36,7 +36,7 @@ $ sudo apt-get install podman
 
 You do not need to run Podman as a virtual machine, but it is an option. If you use your container as a virtual machine you probably need at least 4 CPUs, 8 GB ram and 200 GB of disk space.
 
-Podman and Docker are very similar. For all the instructions below, replace the word podman with docker to make it work with docker.
+Podman and Docker are very similar. For all the instructions below, replace the word podman with docker to make it work with Docker.
 
 #### Check your container's VM settings
 ```
@@ -106,3 +106,20 @@ Yes we do! Here are a few.
 </video>
 
 *Object Sorting & Tidying Multi-View*
+
+### Visualize Sequences and Pre-Computed Camera Trajectory
+---
+
+<video width="950" controls>
+  <source src={useBaseUrl('video/aria_viewer.m4v')} type="video/mp4"/>
+  Your browser does not support the video tag.
+</video>
+
+*AriaViewer Player*
+
+<video width="950" controls>
+  <source src={useBaseUrl('video/aria_multi_viewer.m4v')} type="video/mp4"/>
+  Your browser does not support the video tag.
+</video>
+
+*AriaViewer Player with Multiple Recordings*

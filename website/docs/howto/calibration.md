@@ -8,7 +8,7 @@ title: Using Calibration Sensor Data
 This page covers:
 
 * General Project Aria device calibration principles
-* Python scripts for extrinsics and intrinsics
+* Python3 scripts for extrinsics and intrinsics
 
 
 ## Project Aria device calibration
@@ -37,12 +37,12 @@ Go to [Sensors and Measurements](sensors-measurements.md) for information about 
 In computer vision, camera calibration is managed by two sets of parameters:
 
 
-* **Intrinsics**: Parameters defining how 3D points project to the image plane (Focal, Principal Point, distortions coefficients, etc.). Intrinsics parameters allow you to *project* 3D points in 2D and *unproject* 2D feature observations to 3D rays (bearing vectors).
+* **Intrinsics**: Parameters defining how 3D points project to the image plane (focal, principal point, distortions coefficients, and so on). Intrinsics parameters allow you to *project* 3D points in 2D and *unproject* 2D feature observations to 3D rays (bearing vectors).
 * **Extrinsics**: Parameters defining where the camera is in space (Rotation|Translation). Extrinsics allow you to move world points to the camera coordinate system.
 
 ### Extrinsics
 
-Extrinsic parameters are represented as a SE(3) matrix, that contains a rotation part (SO(3)) as a unit quaternion and a translation part as an R3 coordinate. To manipulate transformations such as relative pose between sensors, or re-projecting a 3D points from one sensor to another we use the [Sophus library](https://github.com/strasdat/Sophus).
+Extrinsic parameters are represented as a SE(3) matrix, that contains a rotation part (SO(3)) as a unit quaternion and a translation part as an R3 coordinate. To manipulate transformations such as relative pose between sensors, or re-projecting a 3D point from one sensor to another we use the [Sophus library](https://github.com/strasdat/Sophus).
 
 In the code and the documentation throughout this project, we use the following notation:
 
@@ -73,7 +73,7 @@ For Project Aria devices, we use:
 * [Kannala-Brandt model](https://ieeexplore.ieee.org/document/1642666) for eye tracking cameras
 * FisheyeRadTanThinPrism model for SLAM and RGB cameras
 
-You can perform the projection and un-projection operations using the following Python script:
+You can perform the projection and un-projection operations using the following Python3 script:
 
 
 ```
@@ -88,7 +88,7 @@ array([3., 2., 1.]) #return the corresponding bearing_vector (ray)
 
 The IMU sensors use a linear rectification model for both accelerometers and gyroscopes to rectify an R3 point in its local coordinate system. The model includes a 3x3 rectification matrix A (correcting scale and non-orthogonality) and a 3x1 bias vector `b`.
 
-To apply the rectification, use the Python scripts:
+To apply the rectification, use the Python3 scripts:
 
 
 ```

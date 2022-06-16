@@ -43,7 +43,7 @@ Go to the [Project Aria website](https://about.facebook.com/realitylabs/projecta
   Your browser does not support the video tag.
 </video>
 
-*Shared 3D Global Trajectories for Multi-User Activities in the Same Locationn*
+**Figure 1** *Shared 3D Global Trajectories for Multi-User Activities in the Same Locationn*
 
 
 The main dataset contains multiple activity sequences for one to two Project Aria device wearers. Each wearer followed scripts that represented a typical scenario people might encounter throughout their day, which the wearers could use as prompts throughout their data collection.
@@ -103,4 +103,4 @@ All sequences within the Aria Pilot Dataset were captured using fully consented 
 
 ## License
 
-The Aria Pilot Dataset is released by Meta under the Dataset License Agreement.
+The Aria Pilot Dataset is released by Meta under the [Dataset License Agreement](https://about.facebook.com/realitylabs/projectaria/pilot-dataset-privacy-policy/).
