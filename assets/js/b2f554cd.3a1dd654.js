@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkstaticdocs_starter=self.webpackChunkstaticdocs_starter||[]).push([[477],{30010:function(s){s.exports={blogPosts:[]}}}]);
