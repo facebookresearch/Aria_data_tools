@@ -25,11 +25,11 @@ Go to the [Project Aria website](https://about.facebook.com/realitylabs/projecta
 
 ## Getting Started
 
-* [Documentation](https://facebookresearch.github.io/aria_data_tool/docs/overview.md)
-* [Install Aria Data Tools](https://facebookresearch.github.io/aria_data_tool/docs/install.md)
+* [Documentation](https://facebookresearch.github.io/Aria_data_tools/docs/overview/)
+* [Install Aria Data Tools](https://facebookresearch.github.io/Aria_data_tools/docs/Install/)
 * [Aria Pilot Dataset](https://about.facebook.com/realitylabs/projectaria/datasets)
-* [Aria Pilot Dataset Documentation](https://facebookresearch.github.io/aria_data_tool/docs/pilotdata/pilotdata-index/)
-* [Examples of how to use the tools](https://facebookresearch.github.io/aria_data_tool/docs/examples.md)
+* [Aria Pilot Dataset Documentation](https://facebookresearch.github.io/Aria_data_tools/docs/pilotdata/pilotdata-index/)
+* [Examples of how to use the tools](https://facebookresearch.github.io/Aria_data_tools/docs/howto/examples/)
 
 ## How to Contribute
 
@@ -43,7 +43,7 @@ Once the white paper is complete, it will be linked to on this page.
 
 ### Aria Data Tools
 
-If you use Aria Data Tools in your research, please cite the [Aria Data Tools website](https://facebookresearch.github.io/aria_data_tools) or use the white paper when it is released.
+If you use Aria Data Tools in your research, please cite the [Aria Data Tools website](https://facebookresearch.github.io/Aria_data_tools/) or use the white paper when it is released.
 
 If you use the tools in GitHub, please consider starring ⭐ us and citing:
 
