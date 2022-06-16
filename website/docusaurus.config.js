@@ -4,6 +4,7 @@
 
 const lightCodeTheme = require('prism-react-renderer/themes/github');
 const darkCodeTheme = require('prism-react-renderer/themes/dracula');
+const repoUrl = 'https://github.com/facebookresearch/Aria_data_tools';
 
 // With JSDoc @type annotations, IDEs can provide config autocompletion
 /** @type {import('@docusaurus/types').DocusaurusConfig} */
@@ -11,7 +12,7 @@ const darkCodeTheme = require('prism-react-renderer/themes/dracula');
   title: 'Aria Data Tools',
   tagline: 'Open tooling to support researchers expand the horizons of Augmented Reality, Machine Perception and Artificial Intelligence',
   url: 'https://facebookresearch.github.io',
-  baseUrl: '/',
+  baseUrl: '/Aria_data_tools/',
   onBrokenLinks: 'throw',
   onBrokenMarkdownLinks: 'throw',
   trailingSlash: true,
