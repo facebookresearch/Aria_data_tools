@@ -6,13 +6,13 @@ title: Recording Scripts
 
 # Aria Wearer Data Scripts
 
-The following scripts were used by actors to collect data for the Project Aria Open Dataset.
+The following scripts were used by actors to collect data for Everyday Activities.
 
 ## Script 1: Lazy Morning Before the Party
 
-**Activities:** Communication, Media Consumption, Chores, Home Relaxation
+**Activities:** Communication, Media Consumption, Chores and Home Relaxation
 
-**Objects:** Clothes, Vacuum Cleaner, Game Console, Party Decorations, Cell Phone, Food
+**Objects:** Clothes, Vacuum Cleaner, Game Console, Party Decorations, Cell Phone and Food
 
 **Number of Participants:** 1
 
@@ -32,9 +32,9 @@ Guests are coming over for a party later today. Finish up a relaxing morning bef
 
 ## Script 2: Catch Up and Have Some Fun
 
-**Activities**: Social Small Group, Fun and Games, Home Relaxation
+**Activities**: Social Small Group, Home Relaxation, Fun and Games
 
-**Objects**: Coffee, Coffee Maker, Cream and Sugar, Board Game
+**Objects**: Coffee, Coffee Maker, Board Game, Cream and Sugar
 
 **Number of Participants**: 2 (Host & Guest)
 
@@ -53,16 +53,12 @@ One friend is visiting another at their new apartment. They will catch up, share
 7. Share videos. Host and Guest show each other videos on their phones.
 8. Time to go. Guest helps Host tidy a little. Host walks guest to the door.
 
-**Figure 2:** *Play a Board Game*
-
-
-
 
 ## Script 3:  What Do You Want For Dinner?
 
-**Activities** Social Small Group, Chores, Home Relaxation
+**Activities** Social Small Group, Chores and Home Relaxation
 
-**Objects** Groceries, Bags, Pots, Food
+**Objects** Groceries, Bags, Pots and Food
 
 **Number of Participants:** 2 (Actor 1 & Actor 2)
 
@@ -82,9 +78,9 @@ Actor 1 is already at home. Actor 2 returns home with groceries needed for an ea
 
 ## Script 4 : Easy Like Sunday Morning
 
-**Activities:** Chores, Home Relaxation
+**Activities:** Chores and Home Relaxation
 
-**Objects:** Bed, Coffee Maker, Yoga Mat, Pans
+**Objects:** Bed, Coffee Maker, Yoga Mat and Pans
 
 **Number of Participants:** 1
 
@@ -98,7 +94,7 @@ Getting up and having a lazy Sunday morning (with a little bit of exercise).
 1. Waking up. Get out of bed, brush teeth, stretch in the living room, go to the kitchen.
 2. Perk up a bit. Make and pour some coffee.
 3. Exercise. Put an exercise video on the TV and do a short workout.
-4. Breaking the Fast. Take items out of the fridge and freezer and then cook breakfast.
+4. Breaking the fast. Take items out of the fridge and freezer and then cook breakfast.
 5. Eating. Watch a video on YouTube while eating breakfast.
 6. Cleaning up. Put dishes in the sink, brush teeth, do hair.
 7. Play console video game.
@@ -107,7 +103,7 @@ Getting up and having a lazy Sunday morning (with a little bit of exercise).
 
 ## Script 5: Get Home, Then Get Going
 
-**Activities:** Chores, Home Relaxation
+**Activities:** Chores and Home Relaxation
 
 **Objects:** Suitcase, Toiletries Bag, Laundry, Cell Phone, Pen and Paper
 
@@ -115,7 +111,7 @@ Getting up and having a lazy Sunday morning (with a little bit of exercise).
 
 ### Scenario Description
 
-Returning home from a trip. Washing clothes straight away, laying out clothes for the party and planning a shopping list.
+Returning home from a trip. Washing clothes, laying out clothes for a party and planning a shopping list.
 
 ### Sequence
 

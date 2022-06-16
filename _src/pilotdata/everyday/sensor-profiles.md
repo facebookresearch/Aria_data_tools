@@ -15,24 +15,24 @@ Sensor profiles allow researchers to choose which sensors on the Project Aria de
 |SLAM - resolution |640x480 |
 |SLAM - FPS |10 |
 |SLAM - encoding format |JPEG |
-|SLAM - bpp |8 |
-|RGB - Gain, Exposure, Temperature |Yes |
-|ET - Resolution |320x240 |
+|SLAM - bits per pixel (bpp) |8 |
+|RGB - gain, exposure and temperature |Yes |
+|Eyetracking (ET) - resolution |320x240 |
 |ET - FPS |10 |
-|ET - Encoding format |JPEG |
+|ET - encoding format |JPEG |
 |ET - bpp |8 |
-|ET - Gain, Exposure |Yes |
-|RGB - Resolution |1408x1408 |
+|ET - gain and exposure |Yes |
+|RGB - resolution |1408x1408 |
 |RGB - FPS |20 |
-|RGB - Encoding format |JPEG |
+|RGB - encoding format |JPEG |
 |RGB - bpp |8 |
-|RGB - Gain, Exposure, Temperature |Yes |
+|RGB - gain, exposure and temperature |Yes |
 |IMU - RIGHT acc/gyro - rate |1kHz |
 |IMU - RIGHT temperature - rate |~1Hz |
 |IMU - LEFT acc/gyro - rate |800Hz |
 |IMU - LEFT temperature - rate |~1Hz |
-|Mag - Rate |10Hz |
-|Baro - x/y/z rate |50Hz |
-|Baro - Temperature rate |1Hz |
+|Magnetometer - Rate |10Hz |
+|Barometer - x/y/z rate |50Hz |
+|Barometer - temperature rate |1Hz |
 |Audio Sample Rate |48kHz |
 |Audio Channels |7 |

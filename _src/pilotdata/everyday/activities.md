@@ -5,23 +5,21 @@ title: Activities
 ---
 # Everyday Activities
 
-When creating recordings for 1-2 Project Aria device wearers, we created scripts to represent all day long activities with always on sensing. Each script contained multiple scenarios that told a story about people going through their day. The scripts provided general guidance for an improvised scenario, actors did not have specific lines to learn, instead they followed prompts and went with what felt most natural to to them.
+When creating recordings for one to two Project Aria device wearers, we created scripts to represent all day long activities with always on sensing. Each script contained multiple scenarios that told a story about people going through their day. The scripts provided general guidance for an improvised scenario. Actors did not have specific lines to learn, instead they followed prompts and went with what felt most natural to to them.
 
 
 * Script 1: Lazy Morning Before the Party – Single Wearer
 * Script 2: Catch Up and Have Some Fun – Two Wearers
 * Script 3: What Do You Want For Dinner? – Two Wearers
 * Script 4: Easy Like Sunday Morning – Single Wearer
-* Script 5: Get Home then Get Going – Single Wearer
+* Script 5: Get Home Then Get Going – Single Wearer
 
-Data was recorded in multiple locations across the USA and all scripts except for script 10 were recorded multiple times.
-
-See [Recording Scripts](pilotdata/everyday/scripts.md) for details about the scenarios in each script.
+See [Recording Scripts](pilotdata/everyday/scripts.md) for details and sequence numbers.
 
 
 ## Recording Sessions
 
-We collected these scripted activities with multiple users in four indoor location across the USA.
+We collected these scripted activities in five indoor location across the USA.
 
 
 **Table 1:** *Every Day Activity Statistics and Scripts Used Per Recording Location*
@@ -37,56 +35,56 @@ We collected these scripted activities with multiple users in four indoor locati
 
 ## Activity Sequences
 
-Each script contains multiple daily activities recorded in a sequence. Use the list below to identify where scenarios are used in scripts. Numbers are shown when the number of wearers in a scenario is more than one.
+Each script contains multiple daily activities recorded in a sequence. Use the list below to identify where scenarios are used in scripts. Numbers indicate how many wearers were in a sequence.
 
 #### Making coffee
 
 * Script 2: Caffeination (2)
-* Script 4: Perk up
+* Script 4: Perk up (1)
 
 #### Prepare snacks
 
-* Script 1: Set out food and drink
+* Script 1: Set out food and drink (1)
 * Script 2: Grab the cream, sugar, and some snacks (2)
 
 #### Cooking
 
 * Script 3: Cooking (2)
-* Script 4: Breaking the Fast
-* Script 5: Check the provisions
+* Script 4: Breaking the Fast (1)
+* Script 5: Check the provisions (1)
 
 #### Clean the place
 
-* Script 1: Clean the place
+* Script 1: Clean the place (1)
 * Script 2: Clean up spilled coffee (2)
 * Script 2: Time to go (2)
 * Script 3: Clean up (2)
-* Script 4: Cleaning up
+* Script 4: Cleaning up (1)
 
 #### Dining
 
 * Script 3: Set the table (2)
-* Script 4: Eating
+* Script 4: Eating (1)
 
 #### Organization and laundry
 
-* Script 1: Put up decorations
-* Script 5: Get home
-* Script 5: Wash clothes
-* Script 5: Straighten up
-* Script 5: Dry clothes
-* Script 5: Get and fold laundry
+* Script 1: Put up decorations (1)
+* Script 5: Get home (1)
+* Script 5: Wash clothes (1)
+* Script 5: Straighten up (1)
+* Script 5: Dry clothes (1)
+* Script 5: Get and fold laundry (1)
 
 #### Reading, games and exercise
 
-* Script 1: Get the blood pumping
-* Script 1: Watch a TV Show
-* Script 1: Video game break
-* Script 1: Read and wait
-* Script 4: Waking up
-* Script 4: Exercise
-* Script 4: Play console video game
-* Script 5: Catch up on email and social media
+* Script 1: Get the blood pumping (1)
+* Script 1: Watch a TV Show (1)
+* Script 1: Video game break (1)
+* Script 1: Read and wait (1)
+* Script 4: Waking up (1)
+* Script 4: Exercise (1)
+* Script 4: Play console video game (1)
+* Script 5: Catch up on email and social media (1)
 
 #### Touring the room
 
@@ -104,4 +102,4 @@ Each script contains multiple daily activities recorded in a sequence. Use the l
 
 * Script 2: Guest arrives (2)
 * Script 3: Arriving home (2)
-* Script 5: Get home
+* Script 5: Get home (1)

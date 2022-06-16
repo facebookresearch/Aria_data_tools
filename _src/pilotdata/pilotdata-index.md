@@ -9,9 +9,9 @@ import useBaseUrl from '@docusaurus/useBaseUrl'
 
 The Aria Pilot dataset is the first open dataset captured using [Project Aria](https://about.facebook.com/realitylabs/projectaria/), Meta’s research device used for accelerating machine perception and AI research, developed at Reality-Labs Research.
 
-The dataset provides sequences collected with Project Aria devices a variety of egocentric scenarios, including cooking, exercising, playing games and spending time with friends, for researchers to engage with the challenges of always-on egocentric vision.
+The dataset provides sequences collected with Project Aria devices from a variety of egocentric scenarios, including cooking, exercising, playing games and spending time with friends, for researchers to engage with the challenges of always-on egocentric vision.
 
-In addition to providing raw sensor data from Project Aria, the Pilot Dataset also contains derived results from machine perception services which provide additional context to the spatial-temporal reference frames, such as:
+In addition to providing raw sensor data from Project Aria, the Aria Pilot Dataset also contains derived results from machine perception services. This provides additional context to the spatial-temporal reference frames, such as:
 
 * Per-frame eye tracking
 * Accurate 3D trajectories of users across multiple everyday activities in the same location
@@ -46,28 +46,28 @@ Go to the [Project Aria website](https://about.facebook.com/realitylabs/projecta
 **Figure 1** *Shared 3D Global Trajectories for Multi-User Activities in the Same Locationn*
 
 
-The main dataset contains multiple activity sequences for one to two Project Aria device wearers. Each wearer followed scripts that represented a typical scenario people might encounter throughout their day, which the wearers could use as prompts throughout their data collection.
+The main dataset contains multiple activity sequences for one to two Project Aria device wearers. Each wearer followed scripts that represented a typical scenario people might encounter throughout their day. The scripts provided the wearers with prompts they used while collecting data.
 
-* [Activities](/pilotdata/everyday/activities.md) provides details of the scenarios recorded and where specific activities are in a recording sequence
-* [Scripts](/pilotdata/everyday/scripts.md) provides more details about each scenario
-* [Sensor Profiles](/pilotdata/everyday/sensor-profiles.md) provides information about the two recording sensor profiles used to gather data
+* [Activities](/pilotdata/everyday/activities.md) provides details of the scenarios recorded and where specific activities are in the recording sequence
+* [Recording Scripts](/pilotdata/everyday/scripts.md) provides more details about each scenario
+* [Everyday Activities Sensor Profile](/pilotdata/everyday/sensor-profiles.md) provides information about the sensor profile used to gather data
 * [Everyday Activities File Structure](/pilotdata/everyday/everyday.md) provides information about how the data is structured and information about raw sensor data
 
 In addition to the raw sensor data, we’ve provided derived meta-data for:
 
 * High-frequency trajectory in 1KHz - [Location Output Data](/pilotdata/location-output.mdx)
 * High-frequency time-synchronization between multiple users in the same activity - [Timestamps Mapping Data](/pilotdata/timestamps.md)
-* Eye gaze reprojected gaze in the RGB camera stream - [Eye Gaze Data](/pilotdata/reprojected-gaze.mdx)
+* Eye gaze reprojected into the RGB camera stream - [Eye Gaze Data](/pilotdata/reprojected-gaze.mdx)
 * Time-aligned speech to text - [Speech2Text Output Data](/pilotdata/speech2text.md)
 
 The data has been gathered across five indoor locations. Data for each location is [stored in their own folder](/pilotdata/everyday/everyday.md).
 
 ## Desktop Activities
 
-For this subset of the dataset a Project Aria wearer manipulated a set of objects on a desktop while being recorded by a multi-view motion capture system. The Project Aria device’s data is synchronized with the multi-view motion capture system to provide additional viewpoints and ground truth motion. Most objects were selected from the [YCB Object Benchmark](https://www.ycbbenchmarks.com/).
+For this subset of the dataset a Project Aria wearer manipulated a set of objects on a desktop while being recorded by a multi-view motion capture system. The Project Aria device’s data is synchronized with the multi-view motion capture system to provide additional viewpoints and ground truth motion. Most objects were selected from [YCB Object Benchmark](https://www.ycbbenchmarks.com/).
 
 * [Desktop Activities Data Overview](/pilotdata/desk/desktop_overview.mdx) provides an overview of the dataset and the data structure.
-* [Desktop Activities Capture Setup](/pilotdata/desk/desktop_setup.md) provides more information about the capture setup.
+* [Desktop Activities Capture Setup](/pilotdata/desk/desktop_setup.md) provides more information about the capture setup and the sensor provile used.
 
 
 <video width="950" controls>
@@ -82,7 +82,7 @@ For this subset of the dataset a Project Aria wearer manipulated a set of object
 
 The Aria Pilot Dataset has been optimized to work with Aria Research Kit: Aria Data Tools.
 
-* [Install Aria Research Kit: Aria Data Tools](/install.md)
+* [Install Data Tools](/install.md)
 * [Aria Data Tools Examples](howto/examples.md)
 * [Aria Data Tools Documentation](/overview.md)
 * [Sensors and Measurements](/sensors-measurements.md)
@@ -90,8 +90,8 @@ The Aria Pilot Dataset has been optimized to work with Aria Research Kit: Aria D
 
 You can also work with this data using standard VRS commands.
 
-* [How Project Aria uses VRS](aria-vrs.md)
-* [Getting to know and use VRS Data](use-vrs.md)
+* [How Project Aria Uses VRS](aria-vrs.md)
+* [Getting to Know and Use VRS Data](use-vrs.md)
 
 
 ## Privacy

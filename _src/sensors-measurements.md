@@ -26,7 +26,7 @@ Project Aria sensor data is stored in [VRS](https://facebookresearch.github.io/v
 * 7 x 48 KHz spatial microphones
 * GPS, Bluetooth and WiFi
 
-Researchers can use different sensor profiles when collecting data. Sensor profiles allow them to choose which sensors to record with and with what settings (for example setting the resolution of camera recordings or whether to use the 1KHz or 800Hz IMU).
+Researchers can use different sensor profiles when collecting data. Sensor profiles allow them to choose which sensors record as well as what settings to use. Settings options include what camera resolution to use and whether the output is RAW (no encoding) or JPEG (compressed).
 
 :::note
 Cameras on Project Aria devices are installed sideways. By default, images are reported and viewed as they were provided by cameras and will appear sideways.
