@@ -7,7 +7,7 @@ title: Examples
 # Examples
 
 ## Introduction
-The Aria Research Kit: Aria Data Tools provides python code and a C++ library to work with [VRS files](/aria-vrs.md).
+The Aria Research Kit: Aria Data Tools provides Python3 code and a C++ library to work with [VRS files](/aria-vrs.md).
 
 The following examples provide specific scenarios for how to use the Project Aria Data Provider and how to visualize sequences and pre-computed camera trajectory.
 
@@ -165,4 +165,4 @@ Pose, eye tracking and speech2text paths are optional. If they are not provided,
 You will see something like the image below in the viewer after you press the **Play** button.
 ![img image of visualization tool](/img/docs/aria_viewer.png)
 
-For more information, about this tool, go to [Visualizing Project Aria Sequences and Pre-Computed Camera Trajectory](howto/visualizing.md)
+For more information, about this tool, go to [Visualize Sequences and Pre-Computed Camera Trajectory](howto/visualizing.md)

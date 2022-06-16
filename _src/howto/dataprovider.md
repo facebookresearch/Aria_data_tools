@@ -14,7 +14,7 @@ Project Aria data can also be loaded by reading VRS files directly, using [VRS t
 
 ## Instructions
 
-Use the following commands in Python to retrieve and read sensor data from VRS.
+Use the following commands in Python3 to retrieve and read sensor data from VRS.
 
 ### 1. Create an Aria Data Provider instance
 
@@ -85,13 +85,14 @@ Or read a single data record by timestamp:
 ### 6. Access the data stream
 
 Once you’ve read and stored records in the players. All streams have configuration and data records.
+
 You can access:
 
-* `getConfigRecord()` -  one per stream. How sensors are configured
+* `getConfigRecord()` -  one per stream.
 * `getDataRecord()` - All streams use data records to store information
 * `getData()` - Audio and image streams only. This accesses data from content blocks that contain raw image and audio data
 
-To find out what is in a configuration or data record, go to [_vrs/vrs/oss/aria_](https://github.com/facebookresearch/vrs/tree/main/vrs/oss/aria). These definitions provide an overview of what information can be extracted for each stream from a Project Aria sequence.
+To find out what is in a configuration or data record, go to [vrs/vrs/oss/aria](https://github.com/facebookresearch/vrs/tree/main/vrs/oss/aria). These definitions provide an overview of what information can be extracted for each stream from a Project Aria sequence.
 
 In this example, one SLAM left camera data record is accessed. What is read is defined by the records loaded when setting how to read the data stream.
 
@@ -119,7 +120,7 @@ In this example, `getConfigRecord()` is used to read the configuration records f
 >> vrs_data_provider.readFirstConfigurationRecord(slam_left_camera_stream_id)
 ```
 
-### 8. Loading device model
+### 7. Loading device model
 
 There are calibration strings for each image and motion stream. Reading the configuration record for any one of them will load the device model. Load the device model:
 
@@ -152,7 +153,7 @@ To find out more about Calibration go to [Using Project Aria Calibration Sensor 
 
 The Project Aria Data Provider uses  `RecordFileReader` and `StreamPlayer` classes to retrieve and read data from VRS files in an intuitive and effective way.
 
-Through the Project Aria Data Provider, an Aria player is implemented for every Project Aria data stream. This player allows VRS configuration and data records to be stored and retrieved. The configuration and data record structure contents in each player are defined by the Project Aria `DataLayout` definitions.
+Through the Project Aria Data Provider, a player is implemented for every Project Aria data stream. This player allows VRS configuration and data records to be stored and retrieved. The configuration and data record structure contents in each player are defined by the Project Aria `DataLayout` definitions.
 
 Project Aria VRS data provider class exposes the functionality needed to read and access Project Aria data intuitively. It enables:
 
@@ -168,4 +169,4 @@ Each player header file contains configuration and data record structure definit
 
 ## Project Aria `DataLayout` definitions
 
-DataLayout definitions of the metadata blocks in Project Aria VRS files are open sourced under [_vrs/vrs/oss/aria_](https://github.com/facebookresearch/vrs/tree/main/vrs/oss/aria). These definitions provide an overview of what information can be extracted for each stream from an Aria sequence.
+DataLayout definitions of the metadata blocks in Project Aria VRS files are open sourced under [vrs/vrs/oss/aria](https://github.com/facebookresearch/vrs/tree/main/vrs/oss/aria). These definitions provide an overview of what information can be extracted for each stream from a Project Aria sequence.

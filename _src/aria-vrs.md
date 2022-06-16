@@ -6,7 +6,7 @@ title: How Project Aria Uses VRS
 
 # **How Project Aria Uses VRS**
 
-Project Aria chose [VRS](https://facebookresearch.github.io/vrs/) as its data container because it is a file format designed to record & playback streams of XR sensor data and supports huge file sizes. These VRS files contain streams of time-sorted records generated for each sensor, with one set of sensors per stream. Project Aria data uses VRS for features such as:
+Project Aria chose [VRS](https://facebookresearch.github.io/vrs/) as its data container because it is a file format designed to record and playback streams of XR sensor data and supports huge file sizes. These VRS files contain streams of time-sorted records generated for each sensor, with one set of sensors per stream. Project Aria data uses VRS for features such as:
 
 * Records are structured as a succession of typed content blocks.
 * The `DataLayout` definitions of the metadata blocks in Project Aria VRS files are open sourced under [vrs/vrs/oss/aria](https://github.com/facebookresearch/vrs/tree/main/vrs/oss/aria). These definitions provide an overview of what information can be extracted for each stream from a Project Aria sequence.

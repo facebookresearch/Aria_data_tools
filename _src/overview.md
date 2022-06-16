@@ -20,9 +20,9 @@ Go to [Sensors & Measurements](/sensors-measurements.md) for more information ab
 
 ## What is Aria Data Tools?
 
-Aria Data Tools provides C++ and Python tools to interact with [Project Aria](https://about.facebook.com/realitylabs/projectaria/) data to:
+Aria Data Tools provides C++ and Python3 tools to interact with [Project Aria](https://about.facebook.com/realitylabs/projectaria/) data to:
 
-* Read & visualize Project Aria sequences and sensor data
+* Read and visualize Project Aria sequences and sensor data
 * Retrieve calibration data and interact with Project Aria camera models
 
 ## What is the Aria Pilot Dataset?
@@ -44,4 +44,4 @@ The Aria Research Kit provides tooling, documentation and resources to support r
 
 ProjectAriaDataset@fb.com
 
-Meta is building an academic program to enable researchers to use Aria devices for academic research. Academic and industrial research institutions interested in participating in Project Aria can submit their proposals through the [Project Aria: Partnership Interest Form](https://docs.google.com/forms/d/e/1FAIpQLSdA4Rba4nmsr18VkBcBCCwRnWLgBtX7KoCDH-uWfRdrBxTG1A/viewform).
+Meta is building an academic program to enable researchers to use Project Aria devices for academic research. Academic and industrial research institutions interested in participating in Project Aria can submit their proposals through the [Project Aria: Partnership Interest Form](https://docs.google.com/forms/d/e/1FAIpQLSdA4Rba4nmsr18VkBcBCCwRnWLgBtX7KoCDH-uWfRdrBxTG1A/viewform).

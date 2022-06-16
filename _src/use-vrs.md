@@ -18,7 +18,7 @@ Use the following commands to examine, extract and inspect data contained in any
 
 ## Check the VRS file’s validity and integrity
 
-The `check` command decodes every record in the VRS file and prints how many records were decoded successfully. It proves that the VRS file is correct at the VRS level. You can also compute a checksum and ensure you have valid VRS files. For more information see [VRS File Validation](https://facebookresearch.github.io/vrs/docs/VrsCliTool#file-validation).
+The `check` command decodes every record in the VRS file and prints how many records were decoded successfully. It proves that the VRS file is correct at the VRS level. You can also compute a checksum to ensure you have valid VRS files. For more information see [VRS File Validation](https://facebookresearch.github.io/vrs/docs/VrsCliTool#file-validation).
 
 
 ```
@@ -26,12 +26,12 @@ $ vrs check <file.vrs>
 $ vrs checksum <file.vrs>
 ```
 
-If the file is not valid it’s normally because there is missing data that could lead to invalid behavior with the tooling. All files in the Aria Pilot Dataset are valid, so if you encounter that issue with this dataset, re-downloading the file should resolve this issue.
+If the file is not valid, it’s normally because there is missing data that could lead to invalid behavior with the tooling. All files in the [Aria Pilot Dataset](https://about.facebook.com/realitylabs/projectaria/datasets) are valid, so if you encounter that issue with this dataset, re-downloading the file should resolve this issue.
 
 
-## Extract image (jpg) or audio (wav) content to folders
+## Extract image or audio content to folders
 
-Use the following commands to extract images or audio files.  Use the `--to <folder_path>` to specify a destination folder where the data will be extracted, or it will be added to the current working directory.
+Use the following commands to extract .jpg or .wav files.  Use the `--to <folder_path>` to specify a destination folder where the data will be extracted, or it will be added to the current working directory.
 
 
 ```
@@ -40,7 +40,7 @@ $ vrs extract-audio <file.vrs> --to <audiofolder>
 ```
 
 
-To extract RAW image files, use
+To extract RAW image files, use:
 
 
 ```
@@ -51,7 +51,7 @@ $ vrs extract-images <file.vrs> --raw-images --to <imagefolder>
 
 ## Extract all content to folders and JSONs
 
-This command lets you extract all images, audio, and metadata into files
+This command lets you extract all images, audio, and metadata into files:
 
 
 ```
@@ -59,7 +59,7 @@ $ vrs extract-all <file.vrs> --to <folder>
 ```
 
 
-The metadata is extracted into a single .jsons file that contains a succession of json messages, one per line. Each line corresponds to a single record, in timestamp order, so it is possible to parse it even if the number of records is huge. Saving all the data in a single file prevents saturating your disk with possibly millions of small files.
+The metadata is extracted into a single `.jsons` file that contains a succession of json messages, one per line. Each line corresponds to a single record, in timestamp order, so it is possible to parse it even if the number of records is huge. Saving all the data in a single file prevents saturating your disk with possibly millions of small files.
 
 Once extracted, your file will look like this:
 
@@ -92,6 +92,7 @@ $ vrs <file.vrs> | grep "] records."
 
 
 Will get you a return like this:
+
 |Number of data recordings| Type of sensor | first or second data stream - device type [[Stream ID number](https://facebookresearch.github.io/vrs/docs/FileStructure)]|
 
 

@@ -16,6 +16,11 @@ The AriaViewer allows users to visualize time-synced recordings for one or more 
 * Speech-to-text derived data
 * Eye-tracking information overlayed on the RGB video stream
 
+:::note
+Cameras on Project Aria devices are installed sideways. By default, images are reported and viewed as they were provided by cameras and will appear sideways.
+:::
+
+
 ## How to use AriaViewer
 ### Single Recording
 
@@ -58,6 +63,8 @@ You will see something like the video below when you press the **Play** button.
   Your browser does not support the video tag.
 </video>
 
+**Figure 1:** *AriaViewer Player*
+
 
 ### Multiple Recordings
 
@@ -76,6 +83,7 @@ You will see multiple AriaViewer UIs showing all provided recordings played back
   Your browser does not support the video tag.
 </video>
 
+**Figure 2:** *AriaViewer Player with Multiple Recordings*
 
 ## Features of the AriaViewer UI
 
@@ -121,10 +129,10 @@ The menu bar’s features include:
 
 * The playback speed mimics the real recording speed times the playback_speed factor.
 * The SLAM cameras and the RGB cameras may have different frame-rates.
-* The provided poses in `trajectory.csv` have 1k Hz frequency and express the `imu-left` poses. The visualized poses are based on the timestamps of the `slam-left-cam` and are obtained by interpolating the provided 1k Hz poses. Please refer to `utils.cpp` in `data_provider` in this tool kit for details about the interpolation. The poses of different sensors are visualized using the calibration parameters between `imu-left` and the other sensors.
+* The provided poses in `trajectory.csv` have 1kHz frequency and express the `imu-left` poses. The visualized poses are based on the timestamps of the `slam-left-cam` and are obtained by interpolating the provided 1kHz poses. Please refer to `utils.cpp` in `data_provider` in this tool kit for details about the interpolation. The poses of different sensors are visualized using the calibration parameters between `imu-left` and the other sensors.
 * The eye-tracking results are directly visualized in the RGB camera stream as a red cross.
 * The speech-to-text transcription of the audio signals is shown overlayed onto the RGB video stream formatted as `transcribed text (confidence %, duration of utterance in seconds).`
 
 
 
-If you want to know more about accessing Project Aria data go to [Accessing Project Aria Sensor Data](dataprovider.md)
+If you want to know more about accessing Project Aria data go to [Accessing Sensor Data](dataprovider.md)
