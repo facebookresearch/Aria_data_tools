@@ -31,7 +31,7 @@ If the file is not valid, it’s normally because there is missing data that cou
 
 ## Extract image or audio content to folders
 
-Use the following commands to extract .jpg or .wav files.  Use the `--to <folder_path>` to specify a destination folder where the data will be extracted, or it will be added to the current working directory.
+Use the following commands to extract JPEG or WAV files.  Use the `--to <folder_path>` to specify a destination folder where the data will be extracted, or it will be added to the current working directory.
 
 
 ```

@@ -4,20 +4,20 @@
 
 Project Aria makes open data and open tooling available to support researchers expand the horizons of Augmented Reality, Machine Perception and Artificial Intelligence by releasing the Aria Pilot Dataset and Aria Research Kit: Aria Data Tools.
 
-### What is Project Aria?
+### What's Project Aria?
 
 [Project Aria](https://about.facebook.com/realitylabs/projectaria/) is a research device that collects first-person view (egocentric) data to accelerate machine perception and AI research for future AR glasses. Sensors on Project Aria capture egocentric video and audio, in addition to eye-gaze, inertial, and location information. On-device compute power is used to encrypt and store information that, when uploaded to separate designated back-end storage, helps researchers build the capabilities necessary for AR to work in the real world.
 
 
-### What is Aria Data Tools?
+### What's Aria Data Tools?
 
-Aria Data Tools provides C++ and Python tools to interact with [Project Aria](https://about.facebook.com/realitylabs/projectaria/) data to:
+Aria Data Tools provides C++ and Python3 tools to interact with [Project Aria](https://about.facebook.com/realitylabs/projectaria/) data to:
 
-* Read & visualize Project Aria sequences and sensor data
+* Read and visualize Project Aria sequences and sensor data
 * Retrieve calibration data and interact with Aria camera models
 
 
-### What is the Aria Pilot Dataset?
+### What's the Aria Pilot Dataset?
 
 The Aria Pilot Dataset provides data from a variety of egocentric scenarios, including cooking, exercising, playing games and spending time with friends. This release also provides egocentric Project Aria data time-synched with a multi-view camera recording rig. We believe these datasets can enable researchers to build and foster reproducible research on Computer Vision and AI/ML algorithms for scene perception, reconstruction and user surrounding understanding.
 
@@ -84,7 +84,14 @@ If you use the Aria Pilot Dataset in GitHub, please consider starring ⭐ us and
 
 ## Acknowledgements
 
-The Aria Data Tool and Aria Pilot Dataset would not have been possible without the hard work and contributions of David Bui, Thomas Soares, Michael Loudon, Madalyn Bowen, Shiwei Lin, Jiabo Hu, Daisy Lu, Ruihan Shan, Robert Kuo, Mikhail Koslowski and Anton Kastritskiy.
+**Everyday day activity data collection and quality analysis team:** David Bui, Thomas Soares, Michael Louden and Madalyn Bowen.
+
+**Anonymization labeling:** Shiwei Lin, Jiabo Hu, Daisy Lu, Ruihan Shan and Robert Kuo.
+
+**Desktop activity hardware setup and data collection:** Wilson Dreewes, Cole Wilson, Kevin Harris and Tomas Hodan.
+
+**Data management and web hosting:** Mikhail Koslowski and Anton Kastritskiy.
+
 
 ## Contact
 
