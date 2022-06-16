@@ -23,7 +23,7 @@ In addition to providing raw sensor data from Project Aria, the Pilot Dataset al
 The dataset is extensive, providing:
 
 * 143 recordings for Everyday Activities
-* 13 Recordings for Desktop Activities
+* 16 Recordings for Desktop Activities
 * Over 2.1 million images
 * Over 7.5 accumulated hours
 
@@ -32,7 +32,7 @@ The dataset is split into two subsets:
 * Everyday Activities - Multiple activity sequences where 1-2 users wearing Project Aria devices participate in scenarios to capture time synchronized data in a shared world location.
 * Desktop Activities: Multiple object tracking sequences using one Project Aria device synchronized with a multi-view motion capture system
 
-A further subset is planned for release in the near future that will include outdoor activities.
+A further subset is planned for release in the near future that will include outdoor activities. This subset will also include data recorded using Sensor Profile 10, which includes GPS, WiFi and BT data.
 
 Go to the [Project Aria website](https://about.facebook.com/realitylabs/projectaria/datasets) to access the Aria Pilot Dataset.
 
