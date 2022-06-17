@@ -27,6 +27,6 @@ To translate the local timestamp of an arbitrary piece of data recorded by the d
 
 
 <video width="950" controls>
-  <source src={useBaseUrl('video/2wearers_synched.mp4')} type="video/mp4"/>
+  <source src={useBaseUrl('video/2wearers_synched.m4v')} type="video/mp4"/>
   Your browser does not support the video tag.
 </video>

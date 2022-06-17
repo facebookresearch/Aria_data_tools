@@ -61,7 +61,7 @@ Yes we do! Here are a few.
 ---
 
 <video width="950" controls>
-  <source src={useBaseUrl('video/et_visualization.mp4')} type="video/mp4"/>
+  <source src={useBaseUrl('video/et_visualization.m4v')} type="video/mp4"/>
   Your browser does not support the video tag.
 </video>
 
@@ -71,28 +71,47 @@ Yes we do! Here are a few.
 
 
 <video width="950" controls>
-  <source src={useBaseUrl('video/map_merge.mp4')} type="video/mp4"/>
+  <source src={useBaseUrl('video/map_merge.m4v')} type="video/mp4"/>
   Your browser does not support the video tag.
 </video>
 
-*Shared 3D Global Trajectories for Multi-User Activities in the Same Locationn*
+*Shared 3D Global Trajectories for Multi-User Activities in the Same Location*
 
 ---
 
 <video width="950" controls>
-  <source src={useBaseUrl('video/2wearers_synched.mp4')} type="video/mp4"/>
+  <source src={useBaseUrl('video/location_all_activities.m4v')} type="video/mp4"/>
+  Your browser does not support the video tag.
+</video>
+
+*Shared 3D Global Trajectories for Multi-User Activities in the Same Location*
+
+---
+
+<video width="950" controls>
+  <source src={useBaseUrl('video/2wearers_synched.m4v')} type="video/mp4"/>
   Your browser does not support the video tag.
 </video>
 
 
 *Synchronized Recording of Two Wearers in the One Location*
 
+---
+
+
+<video width="950" controls>
+  <source src={useBaseUrl('video/2wearers_location_inSync.m4v')} type="video/mp4"/>
+  Your browser does not support the video tag.
+</video>
+
+
+*Synchronized Recording location of Two Wearers in the One Location*
 
 ### Desktop Activities Multi-View
 ---
 
 <video width="950" controls>
-  <source src={useBaseUrl('video/desk_activity.mp4')} type="video/mp4"/>
+  <source src={useBaseUrl('video/desk_activity.m4v')} type="video/mp4"/>
   Your browser does not support the video tag.
 </video>
 
@@ -101,7 +120,7 @@ Yes we do! Here are a few.
 ---
 
 <video width="950" controls>
-  <source src={useBaseUrl('video/desk_12-demo.mp4')} type="video/mp4"/>
+  <source src={useBaseUrl('video/desk_12-demo.m4v')} type="video/mp4"/>
   Your browser does not support the video tag.
 </video>
 
