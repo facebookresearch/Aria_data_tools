@@ -8,6 +8,8 @@ Project Aria makes open data and open tooling available to support researchers e
 
 [Project Aria](https://about.facebook.com/realitylabs/projectaria/) is a research device that collects first-person view (egocentric) data to accelerate machine perception and AI research for future AR glasses. Sensors on Project Aria capture egocentric video and audio, in addition to eye-gaze, inertial, and location information. On-device compute power is used to encrypt and store information that, when uploaded to separate designated back-end storage, helps researchers build the capabilities necessary for AR to work in the real world.
 
+![Aria multi modal sensors preview](data/aria_sensors.jpg?raw=true "Title")
+
 
 ### What's Aria Data Tools?
 
