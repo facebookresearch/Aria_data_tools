@@ -105,7 +105,7 @@ Yes we do! Here are a few.
 </video>
 
 
-*Synchronized Recording location of Two Wearers in the One Location*
+*Synchronized Recording Location: Two Wearers in the One Location (Script 2)*
 
 ### Desktop Activities Multi-View
 ---

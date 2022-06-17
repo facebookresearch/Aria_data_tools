@@ -3,6 +3,7 @@ sidebar_position: 20
 id: pilotdata-scripts
 title: Recording Scripts
 ---
+import useBaseUrl from '@docusaurus/useBaseUrl'
 
 # Aria Wearer Data Scripts
 
@@ -52,6 +53,14 @@ One friend is visiting another at their new apartment. They will catch up, share
 6. Clean up spilled coffee.
 7. Share videos. Host and Guest show each other videos on their phones.
 8. Time to go. Guest helps Host tidy a little. Host walks guest to the door.
+
+
+<video width="950" controls>
+  <source src={useBaseUrl('video/2wearers_location_inSync.m4v')} type="video/mp4"/>
+  Your browser does not support the video tag.
+</video>
+
+**Figure 1:** *Script 2, Catch Up and Have Some Fun*
 
 
 ## Script 3:  What Do You Want For Dinner?

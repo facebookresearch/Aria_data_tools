@@ -86,7 +86,7 @@ If you use the Aria Pilot Dataset in GitHub, please consider starring ⭐ us and
 
 ## Acknowledgements
 
-**Everyday day activity data collection and quality analysis team:** David Bui, Thomas Soares, Michael Louden and Madalyn Bowen.
+**Everyday day activity data collection and quality analysis team:** David Bui, Thomas Soares, Michael Loudon and Madalyn Bowen.
 
 **Anonymization labeling:** Shiwei Lin, Jiabo Hu, Daisy Lu, Ruihan Shan and Robert Kuo.
 

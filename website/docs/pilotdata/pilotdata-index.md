@@ -39,11 +39,11 @@ Go to the [Project Aria website](https://about.facebook.com/realitylabs/projecta
 ## Everyday Activities
 
 <video width="950" controls>
-  <source src={useBaseUrl('video/map_merge.m4v')} type="video/mp4"/>
+  <source src={useBaseUrl('video/location_all_activities.m4v')} type="video/mp4"/>
   Your browser does not support the video tag.
 </video>
 
-**Figure 1** *Shared 3D Global Trajectories for Multi-User Activities in the Same Location*
+**Figure 1:** *Shared 3D Global Trajectories for Multi-User Activities in the Same Location*
 
 
 The main dataset contains multiple activity sequences for one to two Project Aria device wearers. Each wearer followed scripts that represented a typical scenario people might encounter throughout their day. The scripts provided the wearers with prompts they used while collecting data.
