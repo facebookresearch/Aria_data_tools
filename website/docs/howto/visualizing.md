@@ -100,7 +100,7 @@ The visualization tool’s layout varies depending on which sensor streams are s
 
 ### Menu bar
 
-The menu bar’s features include:
+The menu bar’s features are:
 
 * **Play:** Play and pause the recording
 * **playback_speed:** change the playback speed factor (0.1 means slowdown by a factor of 10, 1.0 means realtime, 10. means speed up by a factor of 10)
