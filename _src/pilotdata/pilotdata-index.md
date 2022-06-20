@@ -67,7 +67,7 @@ The data has been gathered across five indoor locations. Data for each location 
 For this subset of the dataset a Project Aria wearer manipulated a set of objects on a desktop while being recorded by a multi-view motion capture system. The Project Aria device’s data is synchronized with the multi-view motion capture system to provide additional viewpoints and ground truth motion. Most objects were selected from [YCB Object Benchmark](https://www.ycbbenchmarks.com/).
 
 * [Desktop Activities Data Overview](/pilotdata/desk/desktop_overview.mdx) provides an overview of the dataset and the data structure.
-* [Desktop Activities Capture Setup](/pilotdata/desk/desktop_setup.md) provides more information about the capture setup and the sensor provile used.
+* [Desktop Activities Capture Setup](/pilotdata/desk/desktop_setup.md) provides more information about the capture setup and sensor profile used.
 
 
 <video width="950" controls>
