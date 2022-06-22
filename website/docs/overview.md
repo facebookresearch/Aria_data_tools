@@ -7,7 +7,7 @@ title: Overview
 
 Project Aria makes open data and open tooling available to support researchers expand the horizons of Augmented Reality, Machine Perception and Artificial Intelligence by releasing the Aria Pilot Dataset and Aria Research Kit: Aria Data Tools.
 
-On June 19 2022, Meta will present a tutorial at CVPR: [Towards always-on egocentric vision research using Meta’s Aria glasses](https://ariatutorial2022.github.io/), which will go over Aria Data Tools and the Aria Pilot Dataset in detail.
+On June 19 2022, Meta presented a tutorial at CVPR: [Towards always-on egocentric vision research using Meta’s Aria glasses](https://ariatutorial2022.github.io/), which went over Aria Data Tools and the Aria Pilot Dataset in detail.
 
 ## What is Project Aria?
 
