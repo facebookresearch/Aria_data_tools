@@ -16,15 +16,15 @@ Calibration data can be used to determine the 6DoF transformation between any pa
 
 Project Aria devices contain multiple types of sensors that are all calibrated when each device is manufactured. The calibration process derives intrinsic and extrinsic parameters (relative poses between sensors). This information is stored on every device and inserted into every [VRS](/aria-vrs.md) data file it records.
 
-In Python, you can fetch this information from VRS and parse it into a data structure using the following code snippet:
+In Python3, you can fetch this information from VRS and parse it into a data structure using the following code snippet:
 
 
 ```
 >>> import pyark
->>> reader = pyark.RecordFileReader()
+>>> reader = pyark.datatools.sensors.RecordFileReader()
 >>> reader.openFile('./data/aria_unit_test_sequence_calib.vrs')
 [ProgressLogger][INFO]: 26881.515: Opening diskfile file...0
->>> deviceModel = pyark.DeviceModel.fromJson(pyark.getCalibrationFromVrsFile(reader))
+>>> deviceModel = pyark.datatools.sensors.DeviceModel.fromJson(pyark.datatools.sensors.getCalibrationFromVrsFile(reader))
 ```
 
 ## Sensors
