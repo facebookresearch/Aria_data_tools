@@ -153,11 +153,13 @@ TEST(DeviceModelTest, ParseJsonAndRectifyImu) {
   const auto imuLeft = model.getImuCalib("imu-left").value();
 
   Eigen::Vector3d p_imuLeft{1.0, 2.0, 3.0};
-  Eigen::Vector3d p_imuLeft_gyroRectified = imuLeft.gyro.rectify(p_imuLeft);
+  Eigen::Vector3d p_imuLeft_gyroRectified =
+      imuLeft.gyro.compensateForSystematicErrorFromMeasurement(p_imuLeft);
   Eigen::Vector3d p_imuLeft_gyroRectified_actual{1.3, 2.2, 3.1};
   EXPECT_TRUE((p_imuLeft_gyroRectified - p_imuLeft_gyroRectified_actual).norm() < 1e-6);
 
-  Eigen::Vector3d p_imuLeft_accelRectified = imuLeft.accel.rectify(p_imuLeft);
+  Eigen::Vector3d p_imuLeft_accelRectified =
+      imuLeft.accel.compensateForSystematicErrorFromMeasurement(p_imuLeft);
   Eigen::Vector3d p_imuLeft_accelRectified_actual{0.9, 1.8, 2.7};
   EXPECT_TRUE((p_imuLeft_accelRectified - p_imuLeft_accelRectified_actual).norm() < 1e-6);
 }

@@ -368,7 +368,15 @@ Eigen::Vector3d CameraProjectionModel::unproject(const Eigen::Vector2d& uv) cons
 }
 
 Eigen::Vector3d LinearRectificationModel::rectify(const Eigen::Vector3d& v_raw) const {
+  return compensateForSystematicErrorFromMeasurement(v_raw);
+}
+
+Eigen::Vector3d compensateForSystematicErrorFromMeasurement(const Eigen::Vector3d& v_raw) const {
   return rectificationMatrix.inverse() * (v_raw - bias);
+}
+
+Eigen::Vector3d distortWithSystematicError(const Eigen::Vector3d& v_compensated) const {
+  return rectificationMatrix * v_raw + bias;
 }
 
 std::optional<CameraCalibration> DeviceModel::getCameraCalib(const std::string& label) const {

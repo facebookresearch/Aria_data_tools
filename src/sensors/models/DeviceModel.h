@@ -68,8 +68,14 @@ struct LinearRectificationModel {
 
   // Compensates the input vector (acceleration for accelerator, or angular
   // velocity for gyroscope) with a linear model:
-  // v_compensated = A.inv() * (v_raw - b)
-  Eigen::Vector3d rectify(const Eigen::Vector3d& v_raw) const;
+  // v_compensated = rectificationMatrix.inv() * (v_raw - bias)
+  [[deprecated("Use compensateForSystematicErrorFromMeasurement() instead.")]] Eigen::Vector3d
+  rectify(const Eigen::Vector3d& v_raw) const;
+
+  Eigen::Vector3d compensateForSystematicErrorFromMeasurement(const Eigen::Vector3d& v_raw) const;
+  // inverse function of compensateForSystematicErrorFromMeasurement
+  // v_compensated = rectificationMatrix * v_raw + bias
+  Eigen::Vector3d distortWithSystematicError(const Eigen::Vector3d& v_compensated) const;
 };
 
 struct ImuCalibration {

@@ -61,7 +61,15 @@ void exportSensors(py::module& m) {
       .def(py::init<>())
       .def_readwrite("rectificationMatrix", &LinearRectificationModel::rectificationMatrix)
       .def_readwrite("bias", &LinearRectificationModel::bias)
-      .def("rectify", &LinearRectificationModel::rectify, "v"_a);
+      .def("rectify", &LinearRectificationModel::rectify, "v"_a)
+      .def(
+          "compensateForSystematicErrorFromMeasurement",
+          &LinearRectificationModel::compensateForSystematicErrorFromMeasurement,
+          "v_raw"_a)
+      .def(
+          "distortWithSystematicError",
+          &LinearRectificationModel::distortWithSystematicError,
+          "v_compensated"_a);
 
   py::class_<ImuCalibration>(m, "ImuCalibration")
       .def(py::init<>())
