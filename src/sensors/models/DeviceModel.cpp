@@ -371,12 +371,14 @@ Eigen::Vector3d LinearRectificationModel::rectify(const Eigen::Vector3d& v_raw) 
   return compensateForSystematicErrorFromMeasurement(v_raw);
 }
 
-Eigen::Vector3d compensateForSystematicErrorFromMeasurement(const Eigen::Vector3d& v_raw) const {
+Eigen::Vector3d LinearRectificationModel::compensateForSystematicErrorFromMeasurement(
+    const Eigen::Vector3d& v_raw) const {
   return rectificationMatrix.inverse() * (v_raw - bias);
 }
 
-Eigen::Vector3d distortWithSystematicError(const Eigen::Vector3d& v_compensated) const {
-  return rectificationMatrix * v_raw + bias;
+Eigen::Vector3d LinearRectificationModel::distortWithSystematicError(
+    const Eigen::Vector3d& v_compensated) const {
+  return rectificationMatrix * v_compensated + bias;
 }
 
 std::optional<CameraCalibration> DeviceModel::getCameraCalib(const std::string& label) const {
