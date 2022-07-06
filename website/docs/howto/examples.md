@@ -34,7 +34,7 @@ $ python
 Either through a high-level API:
 
 ```
->> vrs_data_provider.setSlamLeftCameraPlayer()
+vrs_data_provider.setSlamLeftCameraPlayer()
 ```
 
 or with a StreamID:
@@ -51,12 +51,12 @@ or with a StreamID:
 By default, data layouts are not printed while reading records. Set the verbosity to True to print data layouts and False to not print data layouts:
 
 ```
->> vrs_data_provider.setVerbose(True)
+vrs_data_provider.setVerbose(True)
 ```
 
-#### 4. Set how you want to read the data stream
+#### 4. Read the data stream
 
-All records in timestamp order
+All records in timestamp order, example command and output.
 
 ```
 >> vrs_data_provider.readAllRecords()
@@ -66,11 +66,18 @@ All records in timestamp order
 4832.386 Camera Data (SLAM) #1 [1201-1]: jpg, 64174 bytes.
 ```
 
-Or read a single data record by timestamp:
+Read a single data record by timestamp:
 
 ```
->> vrs_data_provider.readDataRecordByTime(slam_left_camera_stream_id, someTimestamp)
+vrs_data_provider.readDataRecordByTime(slam_left_camera_stream_id, someTimestamp)
 ```
+
+You can also use a higher level API that reads a data record in a specific stream and proceeds next timestamp in the player internally.
+
+```
+vrs_data_provider.tryFetchNextData(slam_left_camera_stream_id)
+```
+
 
 #### 5. Access the data stream
 
@@ -92,7 +99,7 @@ Or read a single data record by timestamp:
 #### 6. Read the first configuration record of a stream:
 
 ```
->> vrs_data_provider.readFirstConfigurationRecord(slam_left_camera_stream_id)
+vrs_data_provider.readFirstConfigurationRecord(slam_left_camera_stream_id)
 ```
 
 #### 7. Load the device model

@@ -28,7 +28,7 @@ Use the following commands in Python3 to retrieve and read sensor data from VRS.
 Enter the name (and path if you are in a different directory) for the VRS file you wish to read. Here it is represented as ‘recording.vrs’.
 
 ```
->> vrs_data_provider.openFile(‘recording.vrs’)
+vrs_data_provider.openFile(‘recording.vrs’)
 ```
 
 ### 3. Set which sensor data the Project Aria Data Provider should read
@@ -42,7 +42,7 @@ Use `vrs_data_provider` to set which sensor stream/s the Aria Data Provider shou
 This example is for SLAM left camera:
 
 ```
->> vrs_data_provider.setSlamLeftCameraPlayer()
+vrs_data_provider.setSlamLeftCameraPlayer()
 ```
 
 #### Or by StreamId
@@ -61,10 +61,10 @@ Use the following commands if you wish to set this directly using the VRS [Strea
 By default data layouts are not printed while reading records. Set the verbosity to True to print data layouts and False to not print data layouts:
 
 ```
->> vrs_data_provider.setVerbose(True)
+vrs_data_provider.setVerbose(True)
 ```
 
-### 5. Set how you want to read the data stream
+### 5. Read the data stream
 
 All records in timestamp order:
 
@@ -76,10 +76,16 @@ All records in timestamp order:
 4832.386 Camera Data (SLAM) #1 [1201-1]: jpg, 64174 bytes.
 ```
 
-Or read a single data record by timestamp:
+Read a single data record by timestamp:
 
 ```
->> vrs_data_provider.readDataRecordByTime(slam_left_camera_stream_id, someTimestamp)
+vrs_data_provider.readDataRecordByTime(slam_left_camera_stream_id, someTimestamp)
+```
+
+You can also use a higher level API that reads a data record in a specific stream and proceeds next timestamp in the player internally.
+
+```
+vrs_data_provider.tryFetchNextData(slam_left_camera_stream_id)
 ```
 
 ### 6. Access the data stream
@@ -117,7 +123,7 @@ In this example  `getData()`  is used to get raw SLAM left camera data. Raw data
 In this example, `getConfigRecord()` is used to read the configuration records for the SLAM left Camera.
 
 ```
->> vrs_data_provider.readFirstConfigurationRecord(slam_left_camera_stream_id)
+vrs_data_provider.readFirstConfigurationRecord(slam_left_camera_stream_id)
 ```
 
 ### 7. Loading device model

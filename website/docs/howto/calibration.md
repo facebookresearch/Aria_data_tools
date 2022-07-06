@@ -86,23 +86,23 @@ array([3., 2., 1.]) #return the corresponding bearing_vector (ray)
 ```
 
 
-The IMU sensors use a linear rectification model for both accelerometers and gyroscopes to rectify an R3 point in its local coordinate system. The model includes a 3x3 rectification matrix A (correcting scale and non-orthogonality) and a 3x1 bias vector `b`.
+The IMU sensors use a linear rectification model for both accelerometers and gyroscopes to compensate the measurement for factory-estimated systematic errors. The model includes a 3x3 rectification matrix A (correcting scale and non-orthogonality) and a 3x1 bias vector `b`.
 
 To apply the rectification, use the Python3 scripts:
 
 
 ```
 >>> p_imuLeft = np.array([3.0, 2.0, 1.0])
->>> deviceModel.getImuCalib('imu-left').accel.rectify(p_imuLeft)
+>>> deviceModel.getImuCalib('imu-left').accel.compensateForSystematicErrorFromMeasurement(p_imuLeft)
 array([2.93735023, 2.02130446, 0.87514154])`
 ```
 
 
-This rectification process applies this formula:
+This rectification process applies the formula:
 
 
 ```
-p_real = A.inv() * (p_raw - b)
+p_compensated = A.inv() * (p_raw - b)
 ```
 
 
