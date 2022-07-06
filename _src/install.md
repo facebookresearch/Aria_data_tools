@@ -17,11 +17,11 @@ Aria Data Tools can be built and used in a container (Docker/Podman) or as a loc
 
 ## Get the code
 
-Download the code by checking out this Github repository by running these commands.
+Download the code by checking out this Github repository with git clone.
 
 
 ```
-$ git clone https://github.com/facebookresearch/Aria_data_tools.git
+git clone https://github.com/facebookresearch/Aria_data_tools.git
 ```
 
 
@@ -29,24 +29,25 @@ $ git clone https://github.com/facebookresearch/Aria_data_tools.git
 ## Build (Container)
 It’s easiest to install Aria Data Tools through [Docker](https://www.docker.com/resources/what-container/) or [Podman](https://podman.io/) containers. [Containers](https://en.wikipedia.org/wiki/OS-level_virtualization) allow developers to package an application together with libraries and other dependencies, allowing them to provide a self contained environment for running software services. Once Docker or Podman containers are set up, you can install Aria Data Tools with two commands.
 
+* [Get started with Docker](https://www.docker.com/products/docker-desktop/)
 * [About Podman](https://podman.io/getting-started/)
     * [Quick installation instructions](/FAQ.md)
-* [Get started with Docker](https://www.docker.com/products/docker-desktop/)
 
+The following terminal commands are given for Docker. If you are using Podman, replace Docker with Podman in the commands below.
 
-The following terminal commands are given for Podman. If you are using Docker, replace Podman with Docker in the commands below.
-
-Use these commands to install the Aria Data Tools, C++ library and Python3 code.
+Use these commands to install the Aria Data Tools, C++ library and Python3 code in a container, and then run a shell inside of that container.
 
 
 ```
-$ podman build . -t aria_data_tools
-$ podman run -it --volume <your_local_data>:/data aria_data_tools:latest
+$ docker build . --network=host -t aria_data_tools
+$ docker run -it --volume <your_local_data>:/data aria_data_tools:latest
 ```
 
-If you are using a Unix machine and need to forward the X11 display between the container and the host machine, please use the following command:
+If you would like to run the visualization tools inside the container, you'll need to enable X11 forwarding between the host and the container.  To do so, run your container shell with the following commands:
+
 ```
-$ podman run --rm -e DISPLAY -v /tmp/.X11-unix:/tmp/.X11-unix --security-opt label=type:container_runtime_t -it localhost/aria_data_tools:latest
+% sudo xhost +
+$ docker run -it -e DISPLAY  --volume /data:/data --network=host aria_data_tools_base:latest
 ```
 
 
@@ -69,5 +70,5 @@ The following dependencies are used by Aria Data Tools and are automatically ins
 Some unit tests are compiled by default with the CMake `BUILD_ARK_TESTS` preprocessor.
 
 ```
-$ ctest -j8
+ctest -j8
 ```

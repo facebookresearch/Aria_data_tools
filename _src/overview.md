@@ -25,6 +25,8 @@ Aria Data Tools provides C++ and Python3 tools to interact with [Project Aria](h
 * Read and visualize Project Aria sequences and sensor data
 * Retrieve calibration data and interact with Project Aria camera models
 
+These tools provide additional functions when used with the Aria Pilot Dataset’s derived data.
+
 ## What is the Aria Pilot Dataset?
 
 The Aria Pilot Dataset provides data from a variety of egocentric scenarios, including cooking, exercising, playing games and spending time with friends. This release also provides egocentric Project Aria data time synched with a multi-view camera recording rig. We believe these datasets can enable researchers to build and foster reproducible research on Computer Vision and AI/ML algorithms for scene perception, reconstruction and user surrounding understanding.

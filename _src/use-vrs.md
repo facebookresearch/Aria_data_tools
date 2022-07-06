@@ -44,7 +44,7 @@ To extract RAW image files, use:
 
 
 ```
-$ vrs extract-images <file.vrs> --raw-images --to <imagefolder>
+vrs extract-images <file.vrs> --raw-images --to <imagefolder>
 ```
 
 
@@ -55,7 +55,7 @@ This command lets you extract all images, audio, and metadata into files:
 
 
 ```
-$ vrs extract-all <file.vrs> --to <folder>
+vrs extract-all <file.vrs> --to <folder>
 ```
 
 
@@ -87,7 +87,7 @@ For more information, see [VRS Data Extraction](https://facebookresearch.github.
 ## Inspect how many data recordings there are by type
 
 ```
-$ vrs <file.vrs> | grep "] records."
+vrs <file.vrs> | grep "] records."
 ```
 
 
