@@ -95,8 +95,8 @@ void AriaViewer::run() {
   auto rgbCameraImageWidth = dataProvider_->getImageWidth(kRgbCameraStreamId);
   auto rgbCameraImageHeight = dataProvider_->getImageHeight(kRgbCameraStreamId);
 
-  pangolin::ImageView cameraSlamLeftView = pangolin::ImageView("slam left");
-  pangolin::ImageView cameraSlamRightView = pangolin::ImageView("slam right");
+  pangolin::ImageView cameraSlamLeftView = pangolin::ImageView(); //"slam left");
+  pangolin::ImageView cameraSlamRightView = pangolin::ImageView(); //"slam right");
   // no tag for this one since we want to render text-to-speech
   pangolin::ImageView cameraRgbView = pangolin::ImageView();
 
@@ -173,12 +173,16 @@ void AriaViewer::run() {
   pangolin::Var<bool> showLeftCamImg(prefix + ".LeftImg", true, true);
   pangolin::Var<bool> showRightCamImg(prefix + ".RightImg", true, true);
   pangolin::Var<bool> showRgbCamImg(prefix + ".RgbImg", true, true);
+  pangolin::Var<bool> showEyetracking(prefix + ".Eyetracking", true, true);
+  pangolin::Var<bool> showSpeechToText(prefix + ".SpeechToText", true, true);
+  // 3D visualization
   pangolin::Var<bool> showLeftCam3D(prefix + ".LeftCam", true, true);
   pangolin::Var<bool> showRightCam3D(prefix + ".RightCam", true, true);
   pangolin::Var<bool> showRgbCam3D(prefix + ".RgbCam", true, true);
   pangolin::Var<bool> showRig3D(prefix + ".Rig", true, true);
   pangolin::Var<bool> showTraj(prefix + ".Trajectory", true, true);
   pangolin::Var<bool> showWorldCoordinateSystem(prefix + ".World Coord.", true, true);
+  // IMU
   pangolin::Var<bool> showLeftImu(prefix + ".LeftImu", true, true);
   pangolin::Var<bool> showRightImu(prefix + ".RightImu", true, true);
   pangolin::Var<bool> showMagnetometer(prefix + ".Magnetometer", true, true);
@@ -208,27 +212,32 @@ void AriaViewer::run() {
   cameraRgbView.extern_draw_function = [this,
                                         rgbCameraImageWidth,
                                         rgbCameraImageHeight,
+                                        &showSpeechToText,
+                                        &showEyetracking,
                                         &glFontSpeechToText](pangolin::View& v) {
     v.ActivatePixelOrthographic();
     v.ActivateAndScissor();
-    std::stringstream text;
-    if (speechToText_) {
-      // show formatted as "text (confidence, duration)"
-      text << speechToText_->text << " (" << std::fixed << std::setprecision(0)
-           << 100 * speechToText_->confidence << "%, " << std::fixed << std::setw(5)
-           << std::setprecision(3) << speechToText_->duration_s() << "s)";
+    if (showSpeechToText) {
+      std::stringstream text;
+      if (speechToText_) {
+        // show formatted as "text (confidence, duration)"
+        text << speechToText_->text << " (" << std::fixed << std::setprecision(0)
+             << 100 * speechToText_->confidence << "%, " << std::fixed << std::setw(5)
+             << std::setprecision(3) << speechToText_->duration_s() << "s)";
+      }
+      glFontSpeechToText.Text(text.str()).DrawWindow(v.v.l, v.v.t() - glFontSpeechToText.Height());
     }
-    glFontSpeechToText.Text(text.str()).DrawWindow(v.v.l, v.v.t() - glFontSpeechToText.Height());
-
-    glLineWidth(3);
-    glColor3f(1.0, 0.0, 0.0);
-    if (eyetracksOnRgbImage_.size()) {
-      // scale to the current display size
-      const float scale = (float)v.v.w / (float)rgbCameraImageWidth;
-      pangolin::glDrawCross(
-          scale * eyetracksOnRgbImage_.back()(0),
-          scale * (rgbCameraImageHeight - eyetracksOnRgbImage_.back()(1)),
-          10);
+    if (showEyetracking) {
+      glLineWidth(3);
+      glColor3f(1.0, 0.0, 0.0);
+      if (eyetracksOnRgbImage_.size()) {
+        // scale to the current display size
+        const float scale = (float)v.v.w / (float)rgbCameraImageWidth;
+        pangolin::glDrawCross(
+            scale * eyetracksOnRgbImage_.back()(0),
+            scale * (rgbCameraImageHeight - eyetracksOnRgbImage_.back()(1)),
+            10);
+      }
     }
     v.GetBounds().DisableScissor();
   };
