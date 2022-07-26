@@ -16,15 +16,26 @@ Calibration data can be used to determine the 6DoF transformation between any pa
 
 Project Aria devices contain multiple types of sensors that are all calibrated when each device is manufactured. The calibration process derives intrinsic and extrinsic parameters (relative poses between sensors). This information is stored on every device and inserted into every [VRS](/aria-vrs.md) data file it records.
 
-In Python3, you can fetch this information from VRS and parse it into a data structure using the following code snippet:
+In Python3, you can fetch this information from VRS using Aria Data Provider and parse it into a data structure using the following code snippet:
 
 
 ```
->>> import pyark
->>> reader = pyark.datatools.sensors.RecordFileReader()
->>> reader.openFile('./data/aria_unit_test_sequence_calib.vrs')
-[ProgressLogger][INFO]: 26881.515: Opening diskfile file...0
->>> deviceModel = pyark.datatools.sensors.DeviceModel.fromJson(pyark.datatools.sensors.getCalibrationFromVrsFile(reader))
+>>> import pyark.datatools as datatools
+>>> vrs_data_provider = datatools.dataprovider.AriaVrsDataProvider()
+>>> vrs_data_provider.openFile('./data/aria_unit_test_sequence_calib.vrs')
+# There are calibration strings for each image and motion stream
+# Reading the configuration record for any one of them will load the device model
+>>> slam_camera_recordable_type_id = 1201
+>>> slam_left_camera_instance_id = 1
+>>> slam_left_camera_stream_id = datatools.dataprovider.StreamId(slam_camera_recordable_type_id, slam_left_camera_instance_id)
+>>> vrs_data_provider.setStreamPlayer(slam_left_camera_stream_id)
+>>> vrs_data_provider.readFirstConfigurationRecord(slam_left_camera_stream_id)
+True
+>>> vrs_data_provider.loadDeviceModel()
+True
+>>> device_model = vrs_data_provider.getDeviceModel()
+>>> device_model
+<pyark.datatools.sensors.DeviceModel object at 0x7f955808c2b0>
 ```
 
 ## Sensors
@@ -56,10 +67,10 @@ You can transform a 3D point from one sensor to the another one using the `trans
 ```
 >>> import numpy as np
 >>> p_slamLeft = np.array([3.0, 2.0, 1.0])
->>> p_imuRight = deviceModel.transform(p_slamLeft, 'camera-slam-left', 'imu-right')
+>>> p_imuRight = device_model.transform(p_slamLeft, 'camera-slam-left', 'imu-right')
 >>> p_imuRight
 array([ 3.33343274, -1.41484796,  1.20512771])
->>> deviceModel.transform(p_imuRight, 'imu-right', 'camera-slam-left')
+>>> device_model.transform(p_imuRight, 'imu-right', 'camera-slam-left')
 array([3., 2., 1.]) # as you see we retrieve the initial 3D point
 ```
 
@@ -78,10 +89,10 @@ You can perform the projection and un-projection operations using the following 
 
 ```
 >>> p_slamLeft = np.array([3.0, 2.0, 1.0])
->>> uv_slamLeft = deviceModel.getCameraCalib('camera-slam-left').projectionModel.project(p_slamLeft)
+>>> uv_slamLeft = device_model.getCameraCalib('camera-slam-left').projectionModel.project(p_slamLeft)
 >>> uv_slamLeft
 array([583.48105528, 411.98136675])
->>> deviceModel.getCameraCalib('camera-slam-left').projectionModel.unproject(uv_slamLeft)
+>>> device_model.getCameraCalib('camera-slam-left').projectionModel.unproject(uv_slamLeft)
 array([3., 2., 1.]) #return the corresponding bearing_vector (ray)
 ```
 
@@ -93,7 +104,7 @@ To apply the rectification, use the Python3 scripts:
 
 ```
 >>> p_imuLeft = np.array([3.0, 2.0, 1.0])
->>> deviceModel.getImuCalib('imu-left').accel.compensateForSystematicErrorFromMeasurement(p_imuLeft)
+>>> device_model.getImuCalib('imu-left').accel.compensateForSystematicErrorFromMeasurement(p_imuLeft)
 array([2.93735023, 2.02130446, 0.87514154])`
 ```
 
