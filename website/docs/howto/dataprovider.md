@@ -19,8 +19,8 @@ Use the following commands in Python3 to retrieve and read sensor data from VRS.
 ### 1. Create an Aria Data Provider instance
 
 ```
->> import pyark.datatools as datatools
->> vrs_data_provider = datatools.dataprovider.AriaVrsDataProvider()
+>>> import pyark.datatools as datatools
+>>> vrs_data_provider = datatools.dataprovider.AriaVrsDataProvider()
 ```
 
 ### 2. Select your VRS file
@@ -50,10 +50,10 @@ vrs_data_provider.setSlamLeftCameraPlayer()
 Use the following commands if you wish to set this directly using the VRS [StreamId](https://github.com/facebookresearch/vrs/tree/main/vrs).
 
 ```
->> slam_camera_recordable_type_id = 1201
->> slam_left_camera_instance_id = 1
->> slam_left_camera_stream_id = datatools.dataprovider.StreamId(slam_camera_recordable_type_id, slam_left_camera_instance_id)
->> vrs_data_provider.setStreamPlayer(slam_left_camera_stream_id)
+>>> slam_camera_recordable_type_id = 1201
+>>> slam_left_camera_instance_id = 1
+>>> slam_left_camera_stream_id = datatools.dataprovider.StreamId(slam_camera_recordable_type_id, slam_left_camera_instance_id)
+>>> vrs_data_provider.setStreamPlayer(slam_left_camera_stream_id)
 ```
 
 ### 4.  Set whether to print data layouts (optional)
@@ -69,7 +69,7 @@ vrs_data_provider.setVerbose(True)
 All records in timestamp order:
 
 ```
->> vrs_data_provider.readAllRecords()
+>>> vrs_data_provider.readAllRecords()
 4822.486 Camera Data (SLAM) #1 [1201-1]: jpg, 44338 bytes. # JPEG compressed image data size before decompression
 ...
 4832.286 Camera Data (SLAM) #1 [1201-1]: jpg, 64148 bytes.

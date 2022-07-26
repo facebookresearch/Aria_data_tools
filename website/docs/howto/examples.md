@@ -24,9 +24,9 @@ For more information about the Project Aria Data Provider go to [Accessing Senso
 
 ```
 $ python
->> import pyark.datatools as datatools
->> vrs_data_provider = datatools.dataprovider.AriaVrsDataProvider()
->> vrs_data_provider.openFile(‘recording.vrs’)
+>>> import pyark.datatools as datatools
+>>> vrs_data_provider = datatools.dataprovider.AriaVrsDataProvider()
+>>> vrs_data_provider.openFile(‘recording.vrs’)
 ```
 
 #### 2. Select which sensor information to extract
@@ -40,10 +40,10 @@ vrs_data_provider.setSlamLeftCameraPlayer()
 or with a StreamID:
 
 ```
->> slam_camera_recordable_type_id = 1201
->> slam_left_camera_instance_id = 1
->> slam_left_camera_stream_id = datatools.dataprovider.StreamId(slam_camera_recordable_type_id, slam_left_camera_instance_id)
->> vrs_data_provider.setStreamPlayer(slam_left_camera_stream_id)
+>>> slam_camera_recordable_type_id = 1201
+>>> slam_left_camera_instance_id = 1
+>>> slam_left_camera_stream_id = datatools.dataprovider.StreamId(slam_camera_recordable_type_id, slam_left_camera_instance_id)
+>>> vrs_data_provider.setStreamPlayer(slam_left_camera_stream_id)
 ```
 
 #### 3.  Set whether to print data layouts (optional)
@@ -59,7 +59,7 @@ vrs_data_provider.setVerbose(True)
 All records in timestamp order, example command and output.
 
 ```
->> vrs_data_provider.readAllRecords()
+>>> vrs_data_provider.readAllRecords()
 4822.486 Camera Data (SLAM) #1 [1201-1]: jpg, 44338 bytes. # JPEG compressed image data size before decompression
 ...
 4832.286 Camera Data (SLAM) #1 [1201-1]: jpg, 64148 bytes.

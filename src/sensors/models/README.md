@@ -5,14 +5,24 @@ Aria devices include multiple types of sensors, all of which are calibrated at m
 stage for every device. The calibration process derives intrinsic and extrinsic parameters
 (relative poses between sensors) between some sensors. These information
 is stored on every device and stamped on every VRS data file it records. One can fetch this
-info from VRS and parse it into a structured representation as:
+info from VRS using Aria Data Provider and parse it into a structured representation as:
 ```
->>> import pyark
->>> reader = pyark.RecordFileReader()
->>> reader.openFile('./data/aria_unit_test_sequence_calib.vrs')
-[ProgressLogger][INFO]: 26881.515: Opening diskfile file...
-0
->>> deviceModel = pyark.DeviceModel.fromJson(pyark.getCalibrationFromVrsFile(reader))
+>>> import pyark.datatools as datatools
+>>> vrs_data_provider = datatools.dataprovider.AriaVrsDataProvider()
+>>> vrs_data_provider.openFile('./data/aria_unit_test_sequence_calib.vrs')
+# There are calibration strings for each image and motion stream
+# Reading the configuration record for any one of them will load the device model
+>>> slam_camera_recordable_type_id = 1201
+>>> slam_left_camera_instance_id = 1
+>>> slam_left_camera_stream_id = datatools.dataprovider.StreamId(slam_camera_recordable_type_id, slam_left_camera_instance_id)
+>>> vrs_data_provider.setStreamPlayer(slam_left_camera_stream_id)
+>>> vrs_data_provider.readFirstConfigurationRecord(slam_left_camera_stream_id)
+True
+>>> vrs_data_provider.loadDeviceModel()
+True
+>>> device_model = vrs_data_provider.getDeviceModel()
+>>> device_model
+<pyark.datatools.sensors.DeviceModel object at 0x7f955808c2b0>
 ```
 
 ## Sensors
@@ -34,15 +44,15 @@ In calibration and other applications, a sensor is associated with an instance-i
 For example, the left SLAM camera is named as "camera-slam-left". The name set of supported sensors
 can be fetched as:
 ```
->>> deviceModel.getCameraLabels()
+>>> device_model.getCameraLabels()
 ['camera-et-left', 'camera-et-right', 'camera-rgb', 'camera-slam-left', 'camera-slam-right']
->>> deviceModel.getImuLabels()
+>>> device_model.getImuLabels()
 ['imu-left', 'imu-right']
->>> deviceModel.getMagnetometerLabels()
+>>> device_model.getMagnetometerLabels()
 ['mag0']
->>> deviceModel.getBarometerLabels()
+>>> device_model.getBarometerLabels()
 ['baro0']
->>> deviceModel.getMicrophoneLabels()
+>>> device_model.getMicrophoneLabels()
 ['mic6', 'mic5', 'mic4', 'mic1', 'mic3', 'mic2', 'mic0']
 ```
 
@@ -76,10 +86,10 @@ One can transform a point from one frame to the other with the `transform()` API
 ```
 >>> import numpy as np
 >>> p_slamLeft = np.array([3.0, 2.0, 1.0])
->>> p_imuRight = deviceModel.transform(p_slamLeft, 'camera-slam-left', 'imu-right')
+>>> p_imuRight = device_model.transform(p_slamLeft, 'camera-slam-left', 'imu-right')
 >>> p_imuRight
 array([ 3.33343274, -1.41484796,  1.20512771])
->>> deviceModel.transform(p_imuRight, 'imu-right', 'camera-slam-left')
+>>> device_model.transform(p_imuRight, 'imu-right', 'camera-slam-left')
 array([3., 2., 1.])
 ```
 
@@ -100,10 +110,10 @@ One can perform the projection and unprojection operations as follows:
 
 ```
 >>> p_slamLeft = np.array([3.0, 2.0, 1.0])
->>> uv_slamLeft = deviceModel.getCameraCalib('camera-slam-left').projectionModel.project(p_slamLeft)
+>>> uv_slamLeft = device_model.getCameraCalib('camera-slam-left').projectionModel.project(p_slamLeft)
 >>> uv_slamLeft
 array([583.48105528, 411.98136675])
->>> deviceModel.getCameraCalib('camera-slam-left').projectionModel.unproject(uv_slamLeft)
+>>> device_model.getCameraCalib('camera-slam-left').projectionModel.unproject(uv_slamLeft)
 array([3., 2., 1.])
 ```
 
@@ -119,7 +129,7 @@ One can perform the rectification as follows:
 
 ```
 >>> p_imuLeft = np.array([3.0, 2.0, 1.0])
->>> deviceModel.getImuCalib('imu-left').accel.rectify(p_imuLeft)
+>>> device_model.getImuCalib('imu-left').accel.rectify(p_imuLeft)
 array([2.93735023, 2.02130446, 0.87514154])
 ```
 
