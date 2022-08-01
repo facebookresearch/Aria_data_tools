@@ -72,17 +72,20 @@ int main(int argc, const char* argv[]) {
   double fastestNominalRateHz = initDataStreams.second;
   // read and visualize datastreams at desired speed
   const double waitTimeSec = (1. / fastestNominalRateHz) / 10.;
-  std::thread readerThread([&viewer, &currentTimestampSec, &waitTimeSec]() {
+  std::thread readerThread([&viewer, &dataProvider, &currentTimestampSec, &waitTimeSec]() {
     auto start = std::chrono::steady_clock::now();
-    while (viewer->readData(currentTimestampSec)) {
-      currentTimestampSec += waitTimeSec;
-      // subtract time it took to load data from wait time
-      double thisWaitTimeSec = waitTimeSec - since<std::chrono::microseconds>(start).count() * 1e-6;
-      if (thisWaitTimeSec > 0.) {
-        std::this_thread::sleep_for(std::chrono::nanoseconds(
-            static_cast<int64_t>(thisWaitTimeSec * 1e9 / viewer->getPlaybackSpeedFactor())));
+    while (!dataProvider->atLastRecords()) {
+      if (viewer->readData(currentTimestampSec)) {
+        currentTimestampSec += waitTimeSec;
+        // subtract time it took to load data from wait time
+        double thisWaitTimeSec =
+            waitTimeSec - since<std::chrono::microseconds>(start).count() * 1e-6;
+        if (thisWaitTimeSec > 0.) {
+          std::this_thread::sleep_for(std::chrono::nanoseconds(
+              static_cast<int64_t>(thisWaitTimeSec * 1e9 / viewer->getPlaybackSpeedFactor())));
+        }
+        start = std::chrono::steady_clock::now();
       }
-      start = std::chrono::steady_clock::now();
     }
     std::cout << "Finished reading records" << std::endl;
   });

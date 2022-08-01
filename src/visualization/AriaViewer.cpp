@@ -560,64 +560,62 @@ std::pair<double, double> AriaViewer::initDataStreams() {
 }
 
 bool AriaViewer::readData(double currentTimestampSec) {
-  if (!dataProvider_->atLastRecords()) {
-    if (isPlaying()) {
-      {
-        std::unique_lock<std::mutex> dataLock(dataMutex_);
-        // Handle image streams
-        for (auto& streamId : kImageStreamIds) {
-          if (dataProvider_->tryFetchNextData(streamId, currentTimestampSec)) {
-            setDataChanged(true, streamId);
-            setCameraImageBuffer(dataProvider_->getImageBufferVector(streamId), streamId);
+  if (isPlaying()) {
+    {
+      std::unique_lock<std::mutex> dataLock(dataMutex_);
+      // Handle image streams
+      for (auto& streamId : kImageStreamIds) {
+        if (dataProvider_->tryFetchNextData(streamId, currentTimestampSec)) {
+          setDataChanged(true, streamId);
+          setCameraImageBuffer(dataProvider_->getImageBufferVector(streamId), streamId);
+        }
+      }
+      // Handle left and right imu streams
+      for (auto& streamId : kImuStreamIds) {
+        std::vector<Eigen::Vector3f> accMSec2, gyroRadSec;
+        while (dataProvider_->tryFetchNextData(streamId, currentTimestampSec)) {
+          accMSec2.push_back(dataProvider_->getMotionAccelData(streamId));
+          gyroRadSec.push_back(dataProvider_->getMotionGyroData(streamId));
+        }
+        setImuDataChunk(streamId, accMSec2, gyroRadSec);
+      }
+      // handle magnetometer stream
+      std::vector<Eigen::Vector3f> magTesla;
+      while (dataProvider_->tryFetchNextData(kMagnetometerStreamId, currentTimestampSec)) {
+        auto magnetometerData = dataProvider_->getMagnetometerData();
+        magTesla.emplace_back(magnetometerData[0], magnetometerData[1], magnetometerData[2]);
+      }
+      setMagnetometerChunk(kMagnetometerStreamId, magTesla);
+      // handle barometer stream
+      std::vector<float> temperature, pressure;
+      while (dataProvider_->tryFetchNextData(kBarometerStreamId, currentTimestampSec)) {
+        temperature.emplace_back(dataProvider_->getBarometerTemperature());
+        pressure.emplace_back(dataProvider_->getBarometerPressure());
+      }
+      setBarometerChunk(kBarometerStreamId, temperature, pressure);
+      // handle audio stream
+      std::vector<std::vector<float>> audio;
+      while (dataProvider_->tryFetchNextData(kAudioStreamId, currentTimestampSec)) {
+        auto audioData = dataProvider_->getAudioData();
+        const size_t C = dataProvider_->getAudioNumChannels();
+        const auto N = audioData.size() / C;
+        assert(audioData.size() % C == 0);
+        for (size_t i = 0; i < N; ++i) {
+          audio.emplace_back();
+          for (size_t c = 0; c < C; ++c) {
+            // Audio samples are 32bit; convert to float for visualization
+            audio.back().emplace_back(
+                (float)(audioData[i * C + c] / (double)std::numeric_limits<int32_t>::max()));
           }
         }
-        // Handle left and right imu streams
-        for (auto& streamId : kImuStreamIds) {
-          std::vector<Eigen::Vector3f> accMSec2, gyroRadSec;
-          while (dataProvider_->tryFetchNextData(streamId, currentTimestampSec)) {
-            accMSec2.push_back(dataProvider_->getMotionAccelData(streamId));
-            gyroRadSec.push_back(dataProvider_->getMotionGyroData(streamId));
-          }
-          setImuDataChunk(streamId, accMSec2, gyroRadSec);
-        }
-        // handle magnetometer stream
-        std::vector<Eigen::Vector3f> magTesla;
-        while (dataProvider_->tryFetchNextData(kMagnetometerStreamId, currentTimestampSec)) {
-          auto magnetometerData = dataProvider_->getMagnetometerData();
-          magTesla.emplace_back(magnetometerData[0], magnetometerData[1], magnetometerData[2]);
-        }
-        setMagnetometerChunk(kMagnetometerStreamId, magTesla);
-        // handle barometer stream
-        std::vector<float> temperature, pressure;
-        while (dataProvider_->tryFetchNextData(kBarometerStreamId, currentTimestampSec)) {
-          temperature.emplace_back(dataProvider_->getBarometerTemperature());
-          pressure.emplace_back(dataProvider_->getBarometerPressure());
-        }
-        setBarometerChunk(kBarometerStreamId, temperature, pressure);
-        // handle audio stream
-        std::vector<std::vector<float>> audio;
-        while (dataProvider_->tryFetchNextData(kAudioStreamId, currentTimestampSec)) {
-          auto audioData = dataProvider_->getAudioData();
-          const size_t C = dataProvider_->getAudioNumChannels();
-          const auto N = audioData.size() / C;
-          assert(audioData.size() % C == 0);
-          for (size_t i = 0; i < N; ++i) {
-            audio.emplace_back();
-            for (size_t c = 0; c < C; ++c) {
-              // Audio samples are 32bit; convert to float for visualization
-              audio.back().emplace_back(
-                  (float)(audioData[i * C + c] / (double)std::numeric_limits<int32_t>::max()));
-            }
-          }
-        }
-        setAudioChunk(kAudioStreamId, audio);
-        // Make sure we fetch next data for wifi, bluetooth, and gps so that
-        // callbacks can printout sensor information to the terminal.
-        const std::array<const vrs::StreamId, 3> callbackStreamIds = {
-            kWifiStreamId, kBluetoothStreamId, kGpsStreamId};
-        for (const auto& streamId : callbackStreamIds) {
-          while (dataProvider_->tryFetchNextData(streamId, currentTimestampSec)) {
-          }
+      }
+      setAudioChunk(kAudioStreamId, audio);
+      // Make sure we fetch next data for wifi, bluetooth, and gps so that
+      // callbacks can printout sensor information to the terminal.
+      const std::array<const vrs::StreamId, 3> callbackStreamIds = {
+          kWifiStreamId, kBluetoothStreamId, kGpsStreamId};
+      for (const auto& streamId : callbackStreamIds) {
+        while (dataProvider_->tryFetchNextData(streamId, currentTimestampSec)) {
         }
       }
     }

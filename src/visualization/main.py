@@ -28,12 +28,13 @@ def read_records(data_provider, viewer):
     start = time.time()
     [current_timestamp_sec, fastest_nominal_rate_hz] = viewer.initDataStreams()
     wait_time_sec = (1.0 / fastest_nominal_rate_hz) / 10
-    while viewer.readData(current_timestamp_sec):
-        current_timestamp_sec += wait_time_sec
-        this_wait_time_sec = wait_time_sec - since(start)
-        if this_wait_time_sec > 0:
-            time.sleep(this_wait_time_sec / viewer.getPlaybackSpeedFactor())
-        start = time.time()
+    while not data_provider.atLastRecords():
+        if viewer.readData(current_timestamp_sec):
+            current_timestamp_sec += wait_time_sec
+            this_wait_time_sec = wait_time_sec - since(start)
+            if this_wait_time_sec > 0:
+                time.sleep(this_wait_time_sec / viewer.getPlaybackSpeedFactor())
+            start = time.time()
     print("Finished reading records")
 
 

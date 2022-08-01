@@ -43,11 +43,11 @@ int main(int argc, const char* argv[]) {
 
   std::vector<std::shared_ptr<visualization::AriaViewer>> viewers;
   std::vector<std::map<int64_t, int64_t>> timeSyncToTimeRecordings;
-  std::vector<std::unique_ptr<dataprovider::AriaVrsDataProvider>> dataProviderVec;
+  std::vector<std::unique_ptr<dataprovider::AriaVrsDataProvider>> dataProviders;
   for (int argi = 1; argi < argc; ++argi) {
     std::string vrsPath = argv[argi];
-    dataProviderVec.emplace_back(std::make_unique<dataprovider::AriaVrsDataProvider>());
-    auto& dataProvider = dataProviderVec.back();
+    dataProviders.emplace_back(std::make_unique<dataprovider::AriaVrsDataProvider>());
+    auto& dataProvider = dataProviders.back();
     if (!dataProvider->open(vrsPath)) {
       fmt::print(stderr, "Failed to open '{}'.\n", vrsPath);
       return 0;
@@ -77,7 +77,7 @@ int main(int argc, const char* argv[]) {
     threads.push_back(std::move(viewer->runInThread()));
   }
   // start data reading thread
-  threads.emplace_back([&viewers, &timeSyncToTimeRecordings, &baseTime]() {
+  threads.emplace_back([&viewers, &dataProviders, &timeSyncToTimeRecordings, &baseTime]() {
     for (size_t t = 1; t < baseTime.size(); ++t) {
       int64_t baseTimeNs = baseTime[t];
       int64_t prevBaseTimeNs = baseTime[t - 1];
