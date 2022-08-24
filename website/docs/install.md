@@ -47,7 +47,12 @@ If you would like to run the visualization tools inside the container, you'll ne
 
 ```
 % sudo xhost +
-$ docker run -it -e DISPLAY  --volume /data:/data --network=host aria_data_tools_base:latest
+$ docker run -it -e DISPLAY  --volume <your_local_data>/data --network=host aria_data_tools:latest
+```
+
+For Podman on linux you can run:
+```
+podman run --rm -it -e DISPLAY --volume <your_local_data>/data -v /tmp/.X11-unix:/tmp/.X11-unix --security-opt label=type:container_runtime_t  localhost/aria_data_tools:latest
 ```
 
 
