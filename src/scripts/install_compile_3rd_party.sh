@@ -42,7 +42,6 @@ cd /tmp; git clone https://github.com/stevenlovegrove/Pangolin.git -b v0.8 --rec
 
 # Build VRS
 cd /tmp; git clone https://github.com/facebookresearch/vrs.git \
-    && cd vrs; git checkout 65b732260f3333d299d6f6cff2c4eb656ad92aba; cd .. \
     && mkdir vrs_Build && cd vrs_Build \
     && cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_POSITION_INDEPENDENT_CODE=TRUE ../vrs/ . \
     && sudo make -j$thread install; rm -rf /tmp/vrs /tmp/vrs_Build;

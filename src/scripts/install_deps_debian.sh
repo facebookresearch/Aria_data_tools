@@ -27,7 +27,7 @@ sudo apt-get install -y \
     libpython3-dev python3-pip;
 sudo apt-get clean;
 # Installing pybind11
-sudo pip3 install pybind11 numpy pyopengl;
+sudo pip3 install pybind11[global] numpy pyopengl;
 
 # Install and compile libraries
 sh ./install_compile_3rd_party.sh

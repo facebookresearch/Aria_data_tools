@@ -17,48 +17,42 @@
 #pragma once
 
 #include <vrs/RecordFormatStreamPlayer.h>
-#include <vrs/oss/aria/WifiBeaconMetadata.h>
+#include <vrs/oss/aria/PoseMetadata.h>
 
 namespace ark {
 namespace datatools {
 namespace dataprovider {
 
-using WifiBeaconCallback =
+using PoseCallback =
     std::function<bool(const vrs::CurrentRecord& r, vrs::DataLayout& dataLayout, bool verbose)>;
 
-struct AriaWifiBeaconConfigRecord {
+struct AriaPoseConfigRecord {
   uint32_t streamId;
 };
 
-struct AriaWifiBeaconDataRecord {
-  int64_t systemTimestampNs;
-  int64_t boardTimestampNs;
-  int64_t boardScanRequestStartTimestampNs;
-  int64_t boardScanRequestCompleteTimestampNs;
-  std::string ssid;
-  std::string bssidMac;
-  float rssi;
-  float freqMhz;
-  std::vector<float> rssiPerAntenna;
+struct AriaPoseDataRecord {
+  int64_t captureTimestampNs;
+  std::vector<float> T_World_ImuLeft_translation = {0, 0, 0};
+  std::vector<float> T_World_ImuLeft_quaternion = {0, 0, 0, 1};
 };
 
-class AriaWifiBeaconPlayer : public vrs::RecordFormatStreamPlayer {
+class AriaPosePlayer : public vrs::RecordFormatStreamPlayer {
  public:
-  explicit AriaWifiBeaconPlayer(vrs::StreamId streamId) : streamId_(streamId) {}
-  AriaWifiBeaconPlayer(const AriaWifiBeaconPlayer&) = delete;
-  AriaWifiBeaconPlayer& operator=(const AriaWifiBeaconPlayer&) = delete;
-  AriaWifiBeaconPlayer(AriaWifiBeaconPlayer&&) = default;
-  AriaWifiBeaconPlayer& operator=(AriaWifiBeaconPlayer&&) = default;
+  explicit AriaPosePlayer(vrs::StreamId streamId) : streamId_(streamId) {}
+  AriaPosePlayer(const AriaPosePlayer&) = delete;
+  AriaPosePlayer& operator=(const AriaPosePlayer&) = delete;
+  AriaPosePlayer(AriaPosePlayer&&) = default;
+  AriaPosePlayer& operator=(AriaPosePlayer&&) = default;
 
-  void setCallback(WifiBeaconCallback callback) {
+  void setCallback(PoseCallback callback) {
     callback_ = callback;
   }
 
-  const AriaWifiBeaconConfigRecord& getConfigRecord() const {
+  const AriaPoseConfigRecord& getConfigRecord() const {
     return configRecord_;
   }
 
-  const AriaWifiBeaconDataRecord& getDataRecord() const {
+  const AriaPoseDataRecord& getDataRecord() const {
     return dataRecord_;
   }
 
@@ -79,12 +73,10 @@ class AriaWifiBeaconPlayer : public vrs::RecordFormatStreamPlayer {
       override;
 
   const vrs::StreamId streamId_;
-  WifiBeaconCallback callback_ = [](const vrs::CurrentRecord&, vrs::DataLayout&, bool) {
-    return true;
-  };
+  PoseCallback callback_ = [](const vrs::CurrentRecord&, vrs::DataLayout&, bool) { return true; };
 
-  AriaWifiBeaconConfigRecord configRecord_;
-  AriaWifiBeaconDataRecord dataRecord_;
+  AriaPoseConfigRecord configRecord_;
+  AriaPoseDataRecord dataRecord_;
 
   double nextTimestampSec_ = 0;
   bool verbose_ = false;

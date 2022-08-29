@@ -24,7 +24,7 @@ namespace datatools {
 namespace dataprovider {
 
 using MotionCallback =
-    std::function<bool(const vrs::CurrentRecord& r, vrs::DataLayout& datalayout, bool verbose)>;
+    std::function<bool(const vrs::CurrentRecord& r, vrs::DataLayout& dataLayout, bool verbose)>;
 
 struct AriaMotionConfigRecord {
   uint32_t streamIndex;

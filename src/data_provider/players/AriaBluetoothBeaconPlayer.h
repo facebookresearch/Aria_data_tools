@@ -24,7 +24,7 @@ namespace datatools {
 namespace dataprovider {
 
 using BluetoothBeaconCallback =
-    std::function<bool(const vrs::CurrentRecord& r, vrs::DataLayout& datalayout, bool verbose)>;
+    std::function<bool(const vrs::CurrentRecord& r, vrs::DataLayout& dataLayout, bool verbose)>;
 
 struct AriaBluetoothBeaconConfigRecord {
   uint32_t streamId;
@@ -78,11 +78,11 @@ class AriaBluetoothBeaconPlayer : public vrs::RecordFormatStreamPlayer {
   bool onDataLayoutRead(const vrs::CurrentRecord& r, size_t blockIndex, vrs::DataLayout& dl)
       override;
 
+  const vrs::StreamId streamId_;
   BluetoothBeaconCallback callback_ = [](const vrs::CurrentRecord&, vrs::DataLayout&, bool) {
     return true;
   };
 
-  const vrs::StreamId streamId_;
   AriaBluetoothBeaconConfigRecord configRecord_;
   AriaBluetoothBeaconDataRecord dataRecord_;
 

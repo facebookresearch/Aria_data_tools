@@ -24,7 +24,7 @@ namespace datatools {
 namespace dataprovider {
 
 using BarometerCallback =
-    std::function<bool(const vrs::CurrentRecord& r, vrs::DataLayout& datalayout, bool verbose)>;
+    std::function<bool(const vrs::CurrentRecord& r, vrs::DataLayout& dataLayout, bool verbose)>;
 
 struct AriaBarometerConfigRecord {
   uint32_t streamId;
