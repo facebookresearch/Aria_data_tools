@@ -59,11 +59,10 @@ class AriaDataProvider {
   virtual uint8_t getAudioNumChannels() const = 0;
   // aria pose side-loading (from csv file) and time-aligned serving
   virtual std::optional<Sophus::SE3d> getPose() const = 0;
-  virtual std::optional<Sophus::SE3d> getLatestPoseOfStream(
-      const vrs::StreamId& streamId) const = 0;
+  virtual std::optional<Sophus::SE3d> getLatestPoseOfStream(const vrs::StreamId& streamId) = 0;
   virtual std::optional<Sophus::SE3d> getPoseOfStreamAtTimestampNs(
       const vrs::StreamId& streamId,
-      const int64_t timestampNs) const = 0;
+      const int64_t timestampNs) = 0;
   virtual bool loadPosesFromCsv(const std::string& posePath) = 0;
   // eyetracking data side-loading (from csv file) and time-aligned serving
   virtual std::optional<Eigen::Vector2f> getEyetracksOnRgbImage() const = 0;
@@ -74,6 +73,7 @@ class AriaDataProvider {
 
   virtual bool atLastRecords() = 0;
   virtual bool loadDeviceModel() = 0;
+  virtual bool streamExistsInSource(const vrs::StreamId& streamId) = 0;
 
   virtual void setImagePlayerVerbose(const vrs::StreamId& streamId, bool verbose) = 0;
   virtual void setMotionPlayerVerbose(const vrs::StreamId& streamId, bool verbose) = 0;
@@ -83,6 +83,7 @@ class AriaDataProvider {
   virtual void setGpsPlayerVerbose(bool verbose) = 0;
   virtual void setBarometerPlayerVerbose(bool verbose) = 0;
   virtual void setTimeSyncPlayerVerbose(bool verbose) = 0;
+  virtual void setPosePlayerVerbose(bool verbose) = 0;
 
   const datatools::sensors::DeviceModel& getDeviceModel() const {
     return deviceModel_;

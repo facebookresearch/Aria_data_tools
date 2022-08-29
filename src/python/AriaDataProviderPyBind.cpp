@@ -34,7 +34,9 @@ void exportDataProvider(py::module& m) {
 
   // AriaDataProvider bindings
   py::class_<AriaDataProvider>(m, "AriaDataProvider")
-      .def("getDeviceModel", &AriaDataProvider::getDeviceModel, py::return_value_policy::reference);
+      .def("getDeviceModel", &AriaDataProvider::getDeviceModel, py::return_value_policy::reference)
+      .def("hasPoses", &AriaDataProvider::hasPoses)
+      .def("streamExistsInSource", &AriaDataProvider::streamExistsInSource, py::arg("streamId"));
 
   // AriaVrsDataProvider bindings
   py::class_<AriaVrsDataProvider, AriaDataProvider>(m, "AriaVrsDataProvider")
@@ -116,6 +118,7 @@ void exportDataProvider(py::module& m) {
       .def("setGpsPlayer", &AriaVrsDataProvider::setGpsPlayer)
       .def("setBarometerPlayer", &AriaVrsDataProvider::setBarometerPlayer)
       .def("setTimeSyncPlayer", &AriaVrsDataProvider::setTimeSyncPlayer)
+      .def("setPosePlayer", &AriaVrsDataProvider::setPosePlayer)
       .def("setStreamPlayer", &AriaVrsDataProvider::setStreamPlayer, py::arg("streamId"))
 
       .def(
@@ -163,8 +166,10 @@ void exportDataProvider(py::module& m) {
           "getTimeSyncPlayer",
           &AriaVrsDataProvider::getTimeSyncPlayer,
           py::return_value_policy::reference)
+      .def("getPosePlayer", &AriaVrsDataProvider::getPosePlayer, py::return_value_policy::reference)
 
       .def("setVerbose", &AriaVrsDataProvider::setVerbose, py::arg("verbose"))
+      .def("hasLivePoses", &AriaVrsDataProvider::hasLivePoses)
 
       // AriaDataProvider override functions
       .def(
@@ -195,7 +200,9 @@ void exportDataProvider(py::module& m) {
       .def(
           "getDeviceModel",
           &AriaVrsDataProvider::getDeviceModel,
-          py::return_value_policy::reference);
+          py::return_value_policy::reference)
+      .def("hasPoses", &AriaVrsDataProvider::hasPoses)
+      .def("streamExistsInSource", &AriaVrsDataProvider::streamExistsInSource, py::arg("streamId"));
 }
 
 } // namespace dataprovider

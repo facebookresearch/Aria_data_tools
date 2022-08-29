@@ -26,6 +26,7 @@
 #include "players/AriaGpsPlayer.h"
 #include "players/AriaImageSensorPlayer.h"
 #include "players/AriaMotionSensorPlayer.h"
+#include "players/AriaPosePlayer.h"
 #include "players/AriaTimeSyncPlayer.h"
 #include "players/AriaWifiBeaconPlayer.h"
 
@@ -80,6 +81,7 @@ class AriaVrsDataProvider : public AriaDataProvider {
   void setGpsPlayer();
   void setBarometerPlayer();
   void setTimeSyncPlayer();
+  void setPosePlayer();
   void setStreamPlayer(const vrs::StreamId& streamId) override;
 
   const AriaImageSensorPlayer* getSlamLeftCameraPlayer() const;
@@ -95,6 +97,7 @@ class AriaVrsDataProvider : public AriaDataProvider {
   const AriaGpsPlayer* getGpsPlayer() const;
   const AriaBarometerPlayer* getBarometerPlayer() const;
   const AriaTimeSyncPlayer* getTimeSyncPlayer() const;
+  const AriaPosePlayer* getPosePlayer() const;
   const AriaImageSensorPlayer* getImageSensorPlayer(const vrs::StreamId& streamId) const;
   const AriaMotionSensorPlayer* getMotionSensorPlayer(const vrs::StreamId& streamId) const;
   double getNextTimestampSec(const vrs::StreamId& streamId) const;
@@ -144,10 +147,10 @@ class AriaVrsDataProvider : public AriaDataProvider {
   uint8_t getAudioNumChannels() const override;
   // pose data
   std::optional<Sophus::SE3d> getPose() const override;
-  std::optional<Sophus::SE3d> getLatestPoseOfStream(const vrs::StreamId& streamId) const override;
+  std::optional<Sophus::SE3d> getLatestPoseOfStream(const vrs::StreamId& streamId) override;
   std::optional<Sophus::SE3d> getPoseOfStreamAtTimestampNs(
       const vrs::StreamId& streamId,
-      const int64_t timestampNs) const override;
+      const int64_t timestampNs) override;
   bool loadPosesFromCsv(const std::string& posePath) override;
   // eye tracking on rgb image data
   std::optional<Eigen::Vector2f> getEyetracksOnRgbImage() const override;
@@ -158,6 +161,7 @@ class AriaVrsDataProvider : public AriaDataProvider {
 
   bool atLastRecords() override;
   bool loadDeviceModel() override;
+  bool streamExistsInSource(const vrs::StreamId& streamId) override;
   void setImagePlayerVerbose(const vrs::StreamId& streamId, bool verbose) override;
   void setMotionPlayerVerbose(const vrs::StreamId& streamId, bool verbose) override;
   void setWifiBeaconPlayerVerbose(bool verbose) override;
@@ -166,6 +170,11 @@ class AriaVrsDataProvider : public AriaDataProvider {
   void setGpsPlayerVerbose(bool verbose) override;
   void setBarometerPlayerVerbose(bool verbose) override;
   void setTimeSyncPlayerVerbose(bool verbose) override;
+  void setPosePlayerVerbose(bool verbose) override;
+
+  bool hasLivePoses() const {
+    return hasLivePoses_;
+  }
 
  private:
   void createImagePlayer(const vrs::StreamId& streamId);
@@ -176,6 +185,7 @@ class AriaVrsDataProvider : public AriaDataProvider {
   void createGpsPlayer(const vrs::StreamId& streamId);
   void createBarometerPlayer(const vrs::StreamId& streamId);
   void createTimeSyncPlayer(const vrs::StreamId& streamId);
+  void createPosePlayer(const vrs::StreamId& streamId);
 
   bool tryCropAndScaleRgbCameraCalibration();
   bool tryScaleEtCameraCalibration();
@@ -197,9 +207,12 @@ class AriaVrsDataProvider : public AriaDataProvider {
   std::unique_ptr<AriaGpsPlayer> gpsPlayer_;
   std::unique_ptr<AriaBarometerPlayer> barometerPlayer_;
   std::unique_ptr<AriaTimeSyncPlayer> timeSyncPlayer_;
+  std::unique_ptr<AriaPosePlayer> posePlayer_;
 
   std::unordered_map<vrs::RecordableTypeId, std::unordered_map<uint16_t, bool>>
       isFirstConfigRecordRead_;
+
+  bool hasLivePoses_ = false;
 };
 } // namespace dataprovider
 } // namespace datatools

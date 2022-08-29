@@ -109,6 +109,7 @@ class AriaFolderDataProvider : public AriaDataProvider {
   bool loadPosesFromCsv(const std::string& posePath) override;
   // Load device model by parsing metadata file
   bool loadDeviceModel() override;
+  bool streamExistsInSource(const vrs::StreamId& streamId) override;
 
   void setImagePlayerVerbose(const vrs::StreamId& streamId, bool verbose) override {
     std::cout << "setImagePlayerVerbose is not implemented yet!" << std::endl;

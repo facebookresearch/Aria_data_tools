@@ -33,6 +33,7 @@ const vrs::StreamId kAudioStreamId(vrs::RecordableTypeId::StereoAudioRecordableC
 const vrs::StreamId kWifiStreamId(vrs::RecordableTypeId::WifiBeaconRecordableClass, 1);
 const vrs::StreamId kBluetoothStreamId(vrs::RecordableTypeId::BluetoothBeaconRecordableClass, 1);
 const vrs::StreamId kGpsStreamId(vrs::RecordableTypeId::GpsRecordableClass, 1);
+const vrs::StreamId kPoseStreamId(vrs::RecordableTypeId::PoseRecordableClass, 1);
 
 const std::vector<vrs::StreamId> kImageStreamIds = {
     kSlamLeftCameraStreamId,
@@ -45,7 +46,8 @@ const std::vector<vrs::StreamId> kDataStreams = {
     kAudioStreamId,
     kWifiStreamId,
     kBluetoothStreamId,
-    kGpsStreamId};
+    kGpsStreamId,
+    kPoseStreamId};
 pangolin::GlFont kGlFontSpeechToText(AnonymousPro_ttf, 24);
 } // namespace
 
@@ -63,11 +65,7 @@ AriaViewer::AriaViewer(
       width_(width),
       height_(height),
       name_(name + std::to_string(id)),
-      id_(id) {
-  if (!dataProvider->hasPoses()) {
-    fmt::print("Not visualizing poses\n");
-  }
-}
+      id_(id) {}
 
 void AriaViewer::run() {
   std::cout << "Start " << name_ << "!" << std::endl;
@@ -556,6 +554,9 @@ std::pair<double, double> AriaViewer::initDataStreams() {
       vrsDataProvider->readFirstConfigurationRecord(streamId);
     }
   }
+  if (!dataProvider_->hasPoses() && (!vrsDataProvider || !vrsDataProvider->hasLivePoses())) {
+    fmt::print("Not visualizing poses\n");
+  }
   return {currentTimestampSec, fastestNominalRateHz};
 }
 
@@ -612,8 +613,8 @@ bool AriaViewer::readData(double currentTimestampSec) {
       setAudioChunk(kAudioStreamId, audio);
       // Make sure we fetch next data for wifi, bluetooth, and gps so that
       // callbacks can printout sensor information to the terminal.
-      const std::array<const vrs::StreamId, 3> callbackStreamIds = {
-          kWifiStreamId, kBluetoothStreamId, kGpsStreamId};
+      const std::array<const vrs::StreamId, 4> callbackStreamIds = {
+          kWifiStreamId, kBluetoothStreamId, kGpsStreamId, kPoseStreamId};
       for (const auto& streamId : callbackStreamIds) {
         while (dataProvider_->tryFetchNextData(streamId, currentTimestampSec)) {
         }

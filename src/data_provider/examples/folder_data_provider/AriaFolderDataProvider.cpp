@@ -139,6 +139,12 @@ bool AriaFolderDataProvider::atLastRecords() {
   return true;
 }
 
+bool AriaFolderDataProvider::streamExistsInSource(const vrs::StreamId& streamId) {
+  return streamsInFolder_.find(streamId.getTypeId()) != streamsInFolder_.end() &&
+      streamsInFolder_.at(streamId.getTypeId()).find(streamId.getInstanceId()) !=
+      streamsInFolder_.at(streamId.getTypeId()).end();
+}
+
 bool AriaFolderDataProvider::loadDeviceModel() {
   std::ifstream fin(metadataPath_);
   if (!fin) {

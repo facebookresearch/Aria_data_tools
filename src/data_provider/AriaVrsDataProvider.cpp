@@ -22,58 +22,64 @@
 
 namespace {
 
-void printDataLayout(const vrs::CurrentRecord& r, vrs::DataLayout& datalayout) {
+void printDataLayout(const vrs::CurrentRecord& r, vrs::DataLayout& dataLayout) {
   fmt::print(
       "{:.3f} {} record, {} [{}]\n",
       r.timestamp,
       toString(r.recordType),
       r.streamId.getName(),
       r.streamId.getNumericName());
-  datalayout.printLayoutCompact(std::cout, "  ");
+  dataLayout.printLayoutCompact(std::cout, "  ");
 }
 
 auto kAudioCallback = [](const vrs::CurrentRecord&, std::vector<int32_t>&, bool) { return true; };
 auto kBarometerCallback =
-    [](const vrs::CurrentRecord& r, vrs::DataLayout& datalayout, bool verbose) {
+    [](const vrs::CurrentRecord& r, vrs::DataLayout& dataLayout, bool verbose) {
       if (verbose) {
-        printDataLayout(r, datalayout);
+        printDataLayout(r, dataLayout);
       }
       return true;
     };
 auto kBluetoothBeaconCallback =
-    [](const vrs::CurrentRecord& r, vrs::DataLayout& datalayout, bool verbose) {
+    [](const vrs::CurrentRecord& r, vrs::DataLayout& dataLayout, bool verbose) {
       if (verbose) {
-        printDataLayout(r, datalayout);
+        printDataLayout(r, dataLayout);
       }
       return true;
     };
-auto kGpsCallback = [](const vrs::CurrentRecord& r, vrs::DataLayout& datalayout, bool verbose) {
+auto kGpsCallback = [](const vrs::CurrentRecord& r, vrs::DataLayout& dataLayout, bool verbose) {
   if (verbose) {
-    printDataLayout(r, datalayout);
+    printDataLayout(r, dataLayout);
   }
   return true;
 };
 auto kImageCallback = [](const vrs::CurrentRecord&, std::vector<uint8_t>&, bool) { return true; };
-auto kMotionCallback = [](const vrs::CurrentRecord& r, vrs::DataLayout& datalayout, bool verbose) {
+auto kMotionCallback = [](const vrs::CurrentRecord& r, vrs::DataLayout& dataLayout, bool verbose) {
   if (verbose) {
-    printDataLayout(r, datalayout);
+    printDataLayout(r, dataLayout);
   }
   return true;
 };
 auto kTimeSyncCallback =
-    [](const vrs::CurrentRecord& r, vrs::DataLayout& datalayout, bool verbose) {
+    [](const vrs::CurrentRecord& r, vrs::DataLayout& dataLayout, bool verbose) {
       if (verbose) {
-        printDataLayout(r, datalayout);
+        printDataLayout(r, dataLayout);
       }
       return true;
     };
 auto kWifiBeaconCallback =
-    [](const vrs::CurrentRecord& r, vrs::DataLayout& datalayout, bool verbose) {
+    [](const vrs::CurrentRecord& r, vrs::DataLayout& dataLayout, bool verbose) {
       if (verbose) {
-        printDataLayout(r, datalayout);
+        printDataLayout(r, dataLayout);
       }
       return true;
     };
+auto kPoseCallback = [](const vrs::CurrentRecord& r, vrs::DataLayout& dataLayout, bool verbose) {
+  if (verbose) {
+    printDataLayout(r, dataLayout);
+  }
+  return true;
+};
 constexpr const char* kTrajectoryPathSuffix = "location/trajectory.csv";
 constexpr const char* kEyetrackingPathSuffix = "eyetracking/et_in_rgb_stream.csv";
 constexpr const char* kSpeechToTextPathSuffix = "speech2text/speech_aria_domain.csv";
@@ -174,6 +180,9 @@ bool AriaVrsDataProvider::readRecordsByTime(const vrs::Record::Type& type, doubl
   if (!readRecordByTime(timeSyncPlayer_->getStreamId(), type, timestampSec)) {
     return false;
   }
+  if (!readRecordByTime(posePlayer_->getStreamId(), type, timestampSec)) {
+    return false;
+  }
   return true;
 }
 
@@ -213,7 +222,13 @@ const vrs::IndexRecord::RecordInfo* AriaVrsDataProvider::getLastDataRecord(vrs::
 }
 
 bool AriaVrsDataProvider::readRecord(const vrs::IndexRecord::RecordInfo& record) {
+  std::unique_lock<std::mutex> readerLock(readerMutex_);
   return reader_.readRecord(record) == vrs::SUCCESS;
+}
+
+bool AriaVrsDataProvider::streamExistsInSource(const vrs::StreamId& streamId) {
+  auto streamsInFile = getStreamsInFile();
+  return streamsInFile.find(streamId) != streamsInFile.end();
 }
 
 void AriaVrsDataProvider::createImagePlayer(const vrs::StreamId& streamId) {
@@ -258,6 +273,11 @@ void AriaVrsDataProvider::createBarometerPlayer(const vrs::StreamId& streamId) {
 void AriaVrsDataProvider::createTimeSyncPlayer(const vrs::StreamId& streamId) {
   timeSyncPlayer_ = std::make_unique<AriaTimeSyncPlayer>(streamId);
   timeSyncPlayer_->setCallback(kTimeSyncCallback);
+}
+
+void AriaVrsDataProvider::createPosePlayer(const vrs::StreamId& streamId) {
+  posePlayer_ = std::make_unique<AriaPosePlayer>(streamId);
+  posePlayer_->setCallback(kPoseCallback);
 }
 
 void AriaVrsDataProvider::setSlamLeftCameraPlayer() {
@@ -312,6 +332,10 @@ void AriaVrsDataProvider::setTimeSyncPlayer() {
   setStreamPlayer(vrs::StreamId(vrs::RecordableTypeId::TimeRecordableClass, 1));
 }
 
+void AriaVrsDataProvider::setPosePlayer() {
+  setStreamPlayer(vrs::StreamId(vrs::RecordableTypeId::PoseRecordableClass, 1));
+}
+
 void AriaVrsDataProvider::setStreamPlayer(const vrs::StreamId& streamId) {
   std::unique_lock<std::mutex> readerLock(readerMutex_);
   vrs::StreamPlayer* streamPlayer = nullptr;
@@ -351,8 +375,15 @@ void AriaVrsDataProvider::setStreamPlayer(const vrs::StreamId& streamId) {
       createTimeSyncPlayer(streamId);
       streamPlayer = timeSyncPlayer_.get();
       break;
+    case vrs::RecordableTypeId::PoseRecordableClass:
+      createPosePlayer(streamId);
+      streamPlayer = posePlayer_.get();
+      break;
     default:
-      fmt::print("Unexpected stream: {}, {}.\n", streamId.getNumericName(), streamId.getName());
+      fmt::print(
+          "setStreamPlayer: Unexpected stream: {}, {}.\n",
+          streamId.getNumericName(),
+          streamId.getName());
       break;
   }
   if (streamPlayer != nullptr) {
@@ -414,6 +445,10 @@ const AriaTimeSyncPlayer* AriaVrsDataProvider::getTimeSyncPlayer() const {
   return timeSyncPlayer_.get();
 }
 
+const AriaPosePlayer* AriaVrsDataProvider::getPosePlayer() const {
+  return posePlayer_.get();
+}
+
 const AriaImageSensorPlayer* AriaVrsDataProvider::getImageSensorPlayer(
     const vrs::StreamId& streamId) const {
   const auto& recordableTypeId = streamId.getTypeId();
@@ -461,6 +496,7 @@ void AriaVrsDataProvider::setVerbose(bool verbose) {
   setGpsPlayerVerbose(verbose);
   setBarometerPlayerVerbose(verbose);
   setTimeSyncPlayerVerbose(verbose);
+  setPosePlayerVerbose(verbose);
 }
 
 void AriaVrsDataProvider::setImagePlayerVerbose(const vrs::StreamId& streamId, bool verbose) {
@@ -513,6 +549,12 @@ void AriaVrsDataProvider::setTimeSyncPlayerVerbose(bool verbose) {
   }
 }
 
+void AriaVrsDataProvider::setPosePlayerVerbose(bool verbose) {
+  if (posePlayer_) {
+    posePlayer_->setVerbose(verbose);
+  }
+}
+
 bool AriaVrsDataProvider::open(
     const std::string& vrsPath,
     const std::string& posePath,
@@ -522,7 +564,13 @@ bool AriaVrsDataProvider::open(
   hasPoses_ = loadPosesFromCsv(posePath);
   hasEyetracks_ = loadEyetrackingFromCsv(eyetrackingPath);
   hasSpeechToText_ = loadSpeechToTextFromCsv(speechToTextPath);
-  return openFile(vrsPath);
+  bool success = openFile(vrsPath);
+  // Try loading poses from VRS file
+  if (!hasPoses_ &&
+      streamExistsInSource(vrs::StreamId(vrs::RecordableTypeId::PoseRecordableClass, 1))) {
+    hasLivePoses_ = true;
+  }
+  return success;
 }
 
 double AriaVrsDataProvider::getNextTimestampSec(const vrs::StreamId& streamId) const {
@@ -559,8 +607,14 @@ double AriaVrsDataProvider::getNextTimestampSec(const vrs::StreamId& streamId) c
     case vrs::RecordableTypeId::TimeRecordableClass:
       nextTimestampSec = timeSyncPlayer_->getNextTimestampSec();
       break;
+    case vrs::RecordableTypeId::PoseRecordableClass:
+      nextTimestampSec = posePlayer_->getNextTimestampSec();
+      break;
     default:
-      fmt::print("Unexpected stream: {}, {}.\n", streamId.getNumericName(), streamId.getName());
+      fmt::print(
+          "getNextTimestampSec: Unexpected stream: {}, {}.\n",
+          streamId.getNumericName(),
+          streamId.getName());
       break;
   }
   return nextTimestampSec;
@@ -720,7 +774,10 @@ double AriaVrsDataProvider::getFastestNominalRateHz() {
         }
         break;
       default:
-        fmt::print("Unexpected stream: {}, {}.\n", streamId.getNumericName(), streamId.getName());
+        fmt::print(
+            "getFastestNominalRateHz: Unexpected stream: {}, {}.\n",
+            streamId.getNumericName(),
+            streamId.getName());
         break;
     }
     if (nominalRateHz > fastestNominalRateHz) {
@@ -812,27 +869,40 @@ bool AriaVrsDataProvider::tryScaleEtCameraCalibration() {
 }
 
 std::optional<Sophus::SE3d> AriaVrsDataProvider::getPose() const {
-  if (!hasPoses_) {
-    fmt::print(stderr, "No poses are loaded. Please check if a valid trajectory file is provided.");
-    return {};
+  if (hasPoses_) {
+    // Always query using the slam-camera-left timestamp.
+    int64_t slamCameraLeftTimestampNs = static_cast<int64_t>(
+        1e9 * getNextTimestampSec(vrs::StreamId(vrs::RecordableTypeId::SlamCameraData, 1)));
+    return queryPose(slamCameraLeftTimestampNs, imuLeftPoses_);
+  } else if (hasLivePoses_) {
+    const auto& dataRecord = posePlayer_->getDataRecord();
+    Eigen::Vector3d t(
+        dataRecord.T_World_ImuLeft_translation[0],
+        dataRecord.T_World_ImuLeft_translation[1],
+        dataRecord.T_World_ImuLeft_translation[2]);
+    Eigen::Quaterniond q(
+        dataRecord.T_World_ImuLeft_quaternion[0],
+        dataRecord.T_World_ImuLeft_quaternion[1],
+        dataRecord.T_World_ImuLeft_quaternion[2],
+        dataRecord.T_World_ImuLeft_quaternion[3]);
+    return Sophus::SE3d(Sophus::SO3d(q), t);
   }
 
-  // Always query using the slam-camera-left timestamp.
-  int64_t slamCameraLeftTimestampNs = static_cast<int64_t>(
-      1e9 * getNextTimestampSec(vrs::StreamId(vrs::RecordableTypeId::SlamCameraData, 1)));
-  return queryPose(slamCameraLeftTimestampNs, imuLeftPoses_);
+  fmt::print(stderr, "No poses are loaded. Please check if a valid trajectory file is provided.");
+  return {};
 }
 
 std::optional<Sophus::SE3d> AriaVrsDataProvider::getPoseOfStreamAtTimestampNs(
     const vrs::StreamId& streamId,
-    const int64_t timestampNs) const {
-  if (!hasPoses_) {
-    fmt::print(stderr, "No poses are loaded. Please check if a valid trajectory file is provided.");
-    return {};
+    const int64_t timestampNs) {
+  std::optional<Sophus::SE3d> T_world_imuleft;
+  if (hasPoses_) {
+    T_world_imuleft = queryPose(timestampNs, imuLeftPoses_);
+  } else if (hasLivePoses_) {
+    double timestampSec = static_cast<double>(timestampNs) / 1e9;
+    tryFetchNextData(vrs::StreamId(vrs::RecordableTypeId::PoseRecordableClass, 1), timestampSec);
+    T_world_imuleft = getPose();
   }
-
-  // transform pose
-  auto T_world_imuleft = queryPose(timestampNs, imuLeftPoses_);
   if (!T_world_imuleft) {
     return {};
   }
@@ -857,9 +927,8 @@ std::optional<Sophus::SE3d> AriaVrsDataProvider::getPoseOfStreamAtTimestampNs(
 }
 
 std::optional<Sophus::SE3d> AriaVrsDataProvider::getLatestPoseOfStream(
-    const vrs::StreamId& streamId) const {
-  if (!hasPoses_) {
-    fmt::print(stderr, "No poses are loaded. Please check if a valid trajectory file is provided.");
+    const vrs::StreamId& streamId) {
+  if (!hasPoses_ && !hasLivePoses_) {
     return {};
   }
 

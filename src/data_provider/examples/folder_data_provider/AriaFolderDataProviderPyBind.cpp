@@ -53,7 +53,8 @@ void exportFolderDataProvider(py::module& m) {
       .def(
           "getDeviceModel",
           &AriaFolderDataProvider::getDeviceModel,
-          py::return_value_policy::reference);
+          py::return_value_policy::reference)
+      .def("streamExistsInSource", &AriaDataProvider::streamExistsInSource, py::arg("streamId"));
 }
 
 } // namespace dataprovider

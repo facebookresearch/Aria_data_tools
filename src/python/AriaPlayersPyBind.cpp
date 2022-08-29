@@ -20,6 +20,7 @@
 #include <players/AriaGpsPlayer.h>
 #include <players/AriaImageSensorPlayer.h>
 #include <players/AriaMotionSensorPlayer.h>
+#include <players/AriaPosePlayer.h>
 #include <players/AriaTimeSyncPlayer.h>
 #include <players/AriaWifiBeaconPlayer.h>
 
@@ -231,6 +232,21 @@ void exportPlayers(py::module& m) {
       .def(py::init<>())
       .def_readwrite("monotonicTimestampNs", &AriaTimeSyncDataRecord::monotonicTimestampNs)
       .def_readwrite("realTimestampNs", &AriaTimeSyncDataRecord::realTimestampNs);
+
+  py::class_<AriaPosePlayer>(m, "AriaPosePlayer")
+      .def("getConfigRecord", &AriaPosePlayer::getConfigRecord)
+      .def("getDataRecord", &AriaPosePlayer::getDataRecord)
+      .def("getStreamId", &AriaPosePlayer::getStreamId)
+      .def("getNextTimestampSec", &AriaPosePlayer::getNextTimestampSec);
+  py::class_<AriaPoseConfigRecord>(m, "AriaPoseConfigRecord")
+      .def(py::init<>())
+      .def_readwrite("streamId", &AriaPoseConfigRecord::streamId);
+  py::class_<AriaPoseDataRecord>(m, "AriaPoseDataRecord")
+      .def(py::init<>())
+      .def_readwrite("captureTimestampNs", &AriaPoseDataRecord::captureTimestampNs)
+      .def_readwrite(
+          "T_World_ImuLeft_translation", &AriaPoseDataRecord::T_World_ImuLeft_translation)
+      .def_readwrite("T_World_ImuLeft_quaternion", &AriaPoseDataRecord::T_World_ImuLeft_quaternion);
 }
 
 } // namespace dataprovider
