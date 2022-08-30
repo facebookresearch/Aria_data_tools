@@ -22,7 +22,7 @@ sudo dnf install cereal-devel gtest-devel gmock-devel glog-devel \
                  boost-devel eigen3-devel python3-devel glew-devel \
                  libpng-devel libjpeg-devel
 # Installing pybind11
-pip install pybind11 numpy
+pip install pybind11[global] numpy
 
 # Install and compile libraries
 sh ./install_compile_3rd_party.sh
