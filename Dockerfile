@@ -24,7 +24,7 @@ RUN if type sudo 2>/dev/null; then \
     fi
 
 # Get dependencies
-RUN apt-get update --fix-missing && DEBIAN_FRONTEND="noninteractive" TZ="America/New_York" apt-get install -y tzdata
+RUN apt-get update --fix-missing && DEBIAN_FRONTEND="noninteractive" TZ="America/New_York" apt-get install -y tzdata; sudo apt upgrade -y
 
 # Code
 ADD ./ /opt/aria_data_tools
