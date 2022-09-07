@@ -12,6 +12,7 @@ This page provides an overview of the sensors and measurements we use for Projec
 * Naming conventions for all the tools and IDs used for sensors
 * Coordinate systems
 * Time (inc time stamping and camera shutter types)
+* GPS
 * Units of measurement
 
 
@@ -92,8 +93,6 @@ Unique identifier for a stream of data in VRS.
 
 A StreamId identifies each instance of a sensor, device, algorithm, or "something" that produces a stream of records. A StreamId combines a RecordableTypeId that describes the type of sensor device, or other producer of records, and an instance id, to differentiate streams coming from different sensors of the same type.
 
-
-
 ## Coordinate Systems
 
 Applications like stereo vision and navigation usually handle 2D and 3D points in different spaces, and transformations need to be conducted between them. With Project Aria data, we attach a local R3 coordinate frame to each sensor.
@@ -112,6 +111,9 @@ Every signal (or Record in VRS terms) collected by sensors is stamped with a tim
 * For all cameras, the timestamp of a frame is the center of exposure time, a.k.a. the middle point of exposure interval.
 * The RGB camera is a rolling shutter, with a readout time of 5ms (when recording at 1408x1408) or 15ms (when recording at 2880x2880) from first to last line. The recorded timestamp of an RGB frame is the center of exposure timestamp of the middle row of the image. SLAM and eye tracking cameras are global shutter and all of the pixels in the image are exposed simultaneously.
 * IMUs, accelerometers and gyroscopes may have a time offset from the local time clock. This is due to internal signal processing in the IMU, which introduces a small time delay. These are estimated during calibration and stored in the JSON as `TimeOffsetSec_Device_Gyro` and `TimeOffsetSec_Device_Accel` respectively.
+
+## GPS
+Horizontal and vertical accuracy are calculated using [Android definitions](https://developer.android.com/reference/android/location/Location#getAccuracy).
 
 ## Units of Measurement
 
