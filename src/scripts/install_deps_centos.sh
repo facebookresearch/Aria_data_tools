@@ -20,7 +20,7 @@ sudo dnf install cmake ninja-build npm doxygen pip
 sudo dnf install cereal-devel gtest-devel gmock-devel glog-devel \
                  fmt-devel lz4-devel libzstd-devel xxhash-devel \
                  boost-devel eigen3-devel python3-devel glew-devel \
-                 libpng-devel libjpeg-devel
+                 libpng-devel turbojpeg-devel
 # Installing pybind11
 pip install pybind11[global] numpy
 

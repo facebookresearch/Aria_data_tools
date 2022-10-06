@@ -18,7 +18,7 @@
 sudo apt-get install -y cmake ninja-build npm doxygen git
 # VRS, Sophus and Pybind11 dependencies
 sudo apt-get install -y \
-    libjpeg-dev libeigen3-dev \
+    libturbojpeg-dev libeigen3-dev \
     libpng-dev liblz4-dev libzstd-dev libxxhash-dev \
     libboost-system-dev libboost-filesystem-dev libboost-thread-dev libboost-chrono-dev libboost-date-time-dev \
     libgtest-dev libgmock-dev libgoogle-glog-dev \

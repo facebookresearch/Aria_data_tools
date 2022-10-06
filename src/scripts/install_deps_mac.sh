@@ -18,7 +18,7 @@
 # Toolchains
 brew install cmake doxygen
 # VRS and Pybind11 dependencies
-brew install boost sophus cereal googletest glog glew lz4 zstd xxhash libpng jpeg
+brew install boost sophus cereal googletest glog glew lz4 zstd xxhash libpng jpeg-turbo
 # Installing pybind11
 pip3 install pybind11[global] numpy
 
