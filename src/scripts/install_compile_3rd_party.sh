@@ -19,18 +19,20 @@ else
     thread=$(nproc)
 fi
 
+vrs_commit_sha=afa85d113410a3678a02bc8eb0798dc948cae5c5
+
 # Build Fmt
 cd /tmp; git clone https://github.com/fmtlib/fmt.git -b 8.1.1 \
     && cd fmt \
     && cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_POSITION_INDEPENDENT_CODE=TRUE -DFMT_TEST=OFF .; sudo make -j$thread install; rm -rf /tmp/fmt;
 
 # Build Sophus
-cd /tmp; git clone https://github.com/strasdat/Sophus.git -b v22.04.1\
+cd /tmp; git clone https://github.com/strasdat/Sophus.git -b v22.04.1 \
     && cd Sophus \
     && cmake -DCMAKE_BUILD_TYPE=Release -DBUILD_SOPHUS_TESTS=OFF .; sudo make -j$thread install; rm -rf /tmp/Sophus;
 
 # Build Cereal
-cd /tmp; git clone https://github.com/USCiLab/cereal.git -b v1.3.2\
+cd /tmp; git clone https://github.com/USCiLab/cereal.git -b v1.3.2 \
     && cd cereal \
     && cmake -DSKIP_PORTABILITY_TEST=1 -DJUST_INSTALL_CEREAL=ON .; sudo make -j$thread install; rm -rf /tmp/cereal;
 
@@ -40,8 +42,11 @@ cd /tmp; git clone https://github.com/stevenlovegrove/Pangolin.git -b v0.8 --rec
     && cmake -DCMAKE_BUILD_TYPE=Release  ../Pangolin/ . \
     && sudo make -j$thread install; sudo cmake --build . -t pypangolin_pip_install;
 
-# Build VRS
+# Build VRS from specific commit SHA
 cd /tmp; git clone https://github.com/facebookresearch/vrs.git \
+    && cd vrs \
+    && git reset --hard $vrs_commit_sha \
+    && cd ../ \
     && mkdir vrs_Build && cd vrs_Build \
     && cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_POSITION_INDEPENDENT_CODE=TRUE ../vrs/ . \
     && sudo make -j$thread install; rm -rf /tmp/vrs /tmp/vrs_Build;
