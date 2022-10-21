@@ -19,7 +19,7 @@ else
     thread=$(nproc)
 fi
 
-vrs_commit_sha=afa85d113410a3678a02bc8eb0798dc948cae5c5
+vrs_commit_sha=0c9144952560048e78c61af872385e4d7464960f
 
 # Build Fmt
 cd /tmp; git clone https://github.com/fmtlib/fmt.git -b 8.1.1 \
