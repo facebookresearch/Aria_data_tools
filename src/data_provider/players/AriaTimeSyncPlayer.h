@@ -42,7 +42,6 @@ class AriaTimeSyncPlayer : public vrs::RecordFormatStreamPlayer {
   AriaTimeSyncPlayer(const AriaTimeSyncPlayer&) = delete;
   AriaTimeSyncPlayer& operator=(const AriaTimeSyncPlayer&) = delete;
   AriaTimeSyncPlayer(AriaTimeSyncPlayer&&) = default;
-  AriaTimeSyncPlayer& operator=(AriaTimeSyncPlayer&&) = default;
 
   void setCallback(TimeSyncCallback callback) {
     callback_ = callback;

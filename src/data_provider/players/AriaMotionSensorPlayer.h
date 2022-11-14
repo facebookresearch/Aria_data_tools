@@ -60,7 +60,6 @@ class AriaMotionSensorPlayer : public vrs::RecordFormatStreamPlayer {
   AriaMotionSensorPlayer(const AriaMotionSensorPlayer&) = delete;
   AriaMotionSensorPlayer& operator=(const AriaMotionSensorPlayer&) = delete;
   AriaMotionSensorPlayer(AriaMotionSensorPlayer&&) = default;
-  AriaMotionSensorPlayer& operator=(AriaMotionSensorPlayer&&) = default;
 
   void setCallback(MotionCallback callback) {
     callback_ = callback;

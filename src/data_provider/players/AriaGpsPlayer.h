@@ -49,7 +49,6 @@ class AriaGpsPlayer : public vrs::RecordFormatStreamPlayer {
   AriaGpsPlayer(const AriaGpsPlayer&) = delete;
   AriaGpsPlayer& operator=(const AriaGpsPlayer&) = delete;
   AriaGpsPlayer(AriaGpsPlayer&&) = default;
-  AriaGpsPlayer& operator=(AriaGpsPlayer&&) = default;
 
   void setCallback(GpsCallback callback) {
     callback_ = callback;

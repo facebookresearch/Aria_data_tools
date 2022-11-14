@@ -48,7 +48,6 @@ class AriaAudioPlayer : public vrs::RecordFormatStreamPlayer {
   AriaAudioPlayer(const AriaAudioPlayer&) = delete;
   AriaAudioPlayer& operator=(const AriaAudioPlayer&) = delete;
   AriaAudioPlayer(AriaAudioPlayer&&) = default;
-  AriaAudioPlayer& operator=(AriaAudioPlayer&&) = default;
 
   void setCallback(AudioCallback callback) {
     callback_ = callback;

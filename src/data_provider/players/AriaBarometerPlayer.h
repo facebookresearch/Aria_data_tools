@@ -45,7 +45,6 @@ class AriaBarometerPlayer : public vrs::RecordFormatStreamPlayer {
   AriaBarometerPlayer(const AriaBarometerPlayer&) = delete;
   AriaBarometerPlayer& operator=(const AriaBarometerPlayer&) = delete;
   AriaBarometerPlayer(AriaBarometerPlayer&&) = default;
-  AriaBarometerPlayer& operator=(AriaBarometerPlayer&&) = default;
 
   void setCallback(BarometerCallback callback) {
     callback_ = callback;

@@ -674,11 +674,13 @@ Eigen::Vector3f AriaVrsDataProvider::getMagnetometerData() const {
   return {};
 }
 
+static const std::vector<int32_t> emptyAudioDataVector;
+
 const std::vector<int32_t>& AriaVrsDataProvider::getAudioData() const {
   if (audioPlayer_) {
     return audioPlayer_->getData().data;
   }
-  return {};
+  return emptyAudioDataVector;
 }
 
 uint8_t AriaVrsDataProvider::getAudioNumChannels() const {
@@ -689,13 +691,15 @@ uint8_t AriaVrsDataProvider::getAudioNumChannels() const {
   return 0;
 }
 
+static const std::vector<uint8_t> emptyImageBufferVector;
+
 const std::vector<uint8_t>& AriaVrsDataProvider::getImageBufferVector(
     const vrs::StreamId& streamId) const {
   const auto imagePlayer = getImageSensorPlayer(streamId);
   if (imagePlayer) {
     return imagePlayer->getData().pixelFrame->getBuffer();
   }
-  return {};
+  return emptyImageBufferVector;
 }
 
 void* AriaVrsDataProvider::getImageBuffer(const vrs::StreamId& streamId) const {
@@ -726,7 +730,7 @@ double AriaVrsDataProvider::getFastestNominalRateHz() {
   double fastestNominalRateHz = -1;
   for (const auto& streamId : providerStreamIds_) {
     readFirstConfigurationRecord(streamId);
-    double nominalRateHz;
+    double nominalRateHz = fastestNominalRateHz;
     switch (streamId.getTypeId()) {
       case vrs::RecordableTypeId::SlamCameraData:
       case vrs::RecordableTypeId::RgbCameraRecordableClass:

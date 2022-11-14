@@ -42,7 +42,6 @@ class AriaPosePlayer : public vrs::RecordFormatStreamPlayer {
   AriaPosePlayer(const AriaPosePlayer&) = delete;
   AriaPosePlayer& operator=(const AriaPosePlayer&) = delete;
   AriaPosePlayer(AriaPosePlayer&&) = default;
-  AriaPosePlayer& operator=(AriaPosePlayer&&) = default;
 
   void setCallback(PoseCallback callback) {
     callback_ = callback;

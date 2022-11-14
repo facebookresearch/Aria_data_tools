@@ -48,7 +48,6 @@ class AriaWifiBeaconPlayer : public vrs::RecordFormatStreamPlayer {
   AriaWifiBeaconPlayer(const AriaWifiBeaconPlayer&) = delete;
   AriaWifiBeaconPlayer& operator=(const AriaWifiBeaconPlayer&) = delete;
   AriaWifiBeaconPlayer(AriaWifiBeaconPlayer&&) = default;
-  AriaWifiBeaconPlayer& operator=(AriaWifiBeaconPlayer&&) = default;
 
   void setCallback(WifiBeaconCallback callback) {
     callback_ = callback;
