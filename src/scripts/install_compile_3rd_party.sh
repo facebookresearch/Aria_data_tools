@@ -37,7 +37,7 @@ cd /tmp; git clone https://github.com/USCiLab/cereal.git -b v1.3.2 \
     && cmake -DSKIP_PORTABILITY_TEST=1 -DJUST_INSTALL_CEREAL=ON .; sudo make -j$thread install; rm -rf /tmp/cereal;
 
 # Build Pangolin
-cd /tmp; git clone https://github.com/stevenlovegrove/Pangolin.git -b v0.8 --recursive \
+cd /tmp; git clone https://github.com/stevenlovegrove/Pangolin.git -b v0.8 \
     && mkdir Pangolin_Build && cd Pangolin_Build \
     && cmake -DCMAKE_BUILD_TYPE=Release  ../Pangolin/ . \
     && sudo make -j$thread install; sudo cmake --build . -t pypangolin_pip_install;
