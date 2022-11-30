@@ -1,5 +1,4 @@
 #!/bin/bash
-
 # Copyright (c) Meta Platforms, Inc. and affiliates.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,12 +13,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+
 # Install system deps with Homebrew
 # Toolchains
 brew install cmake doxygen
-# VRS and Pybind11 dependencies
+# VRS dependencies
 brew install boost sophus cereal googletest glog glew lz4 zstd xxhash libpng jpeg-turbo
-# Installing pybind11
+# Installing Python and dependencies
 pip3 install pybind11[global] numpy
 
 # Install and compile libraries
