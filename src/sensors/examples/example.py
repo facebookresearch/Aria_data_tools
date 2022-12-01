@@ -72,7 +72,10 @@ if __name__ == "__main__":
     )
 
     # Rectifying points with the IMU accelerometer model.
-    p_imuLeft_rect = device.getImuCalib(imuLabel).accel.rectify(p_imuLeft)
+    p_imuLeft_rect = device.getImuCalib(
+        imuLabel
+    ).accel.compensateForSystematicErrorFromMeasurement(p_imuLeft)
+
     print(
         f"Point {p_imuLeft} is rectified by the accelerometer model "
         + f"of {imuLabel} as: {p_imuLeft_rect}"

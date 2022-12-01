@@ -61,7 +61,6 @@ void exportSensors(py::module& m) {
       .def(py::init<>())
       .def_readwrite("rectificationMatrix", &LinearRectificationModel::rectificationMatrix)
       .def_readwrite("bias", &LinearRectificationModel::bias)
-      .def("rectify", &LinearRectificationModel::rectify, "v"_a)
       .def(
           "compensateForSystematicErrorFromMeasurement",
           &LinearRectificationModel::compensateForSystematicErrorFromMeasurement,

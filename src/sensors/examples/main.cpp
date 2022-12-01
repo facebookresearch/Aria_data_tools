@@ -90,7 +90,9 @@ int main(int argc, char** argv) {
   std::cout << fmt::format("Original vector in imu-left frame: {}.", p_imuLeft.transpose())
             << std::endl;
   Eigen::Vector3d p_imuLeft_gyroRectified =
-      model.getImuCalib("imu-left").value().gyro.rectify(p_imuLeft);
+      model.getImuCalib("imu-left")
+          .value()
+          .gyro.compensateForSystematicErrorFromMeasurement(p_imuLeft);
   std::cout << fmt::format("Rectified gyro vector: {}.", p_imuLeft_gyroRectified.transpose())
             << std::endl;
 

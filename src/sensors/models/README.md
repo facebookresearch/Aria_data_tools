@@ -129,7 +129,7 @@ One can perform the rectification as follows:
 
 ```
 >>> p_imuLeft = np.array([3.0, 2.0, 1.0])
->>> device_model.getImuCalib('imu-left').accel.rectify(p_imuLeft)
+>>> device_model.getImuCalib('imu-left').accel.compensateForSystematicErrorFromMeasurement(p_imuLeft)
 array([2.93735023, 2.02130446, 0.87514154])
 ```
 
