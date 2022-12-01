@@ -568,7 +568,10 @@ bool AriaViewer::readData(double currentTimestampSec) {
       for (auto& streamId : kImageStreamIds) {
         if (dataProvider_->tryFetchNextData(streamId, currentTimestampSec)) {
           setDataChanged(true, streamId);
-          setCameraImageBuffer(dataProvider_->getImageBufferVector(streamId), streamId);
+          auto imageBufferVector = dataProvider_->getImageBufferVector(streamId);
+          if (imageBufferVector) {
+            setCameraImageBuffer(*imageBufferVector, streamId);
+          }
         }
       }
       // Handle left and right imu streams
@@ -597,16 +600,21 @@ bool AriaViewer::readData(double currentTimestampSec) {
       // handle audio stream
       std::vector<std::vector<float>> audio;
       while (dataProvider_->tryFetchNextData(kAudioStreamId, currentTimestampSec)) {
-        auto audioData = dataProvider_->getAudioData();
-        const size_t C = dataProvider_->getAudioNumChannels();
-        const auto N = audioData.size() / C;
-        assert(audioData.size() % C == 0);
-        for (size_t i = 0; i < N; ++i) {
-          audio.emplace_back();
-          for (size_t c = 0; c < C; ++c) {
-            // Audio samples are 32bit; convert to float for visualization
-            audio.back().emplace_back(
-                (float)(audioData[i * C + c] / (double)std::numeric_limits<int32_t>::max()));
+        auto audioStreamData = dataProvider_->getAudioData();
+        if (audioStreamData) {
+          // get the audio data chunk
+          const auto& audioData = audioStreamData->get();
+          // Get property of the local data chunk
+          const size_t C = dataProvider_->getAudioNumChannels();
+          const auto N = audioData.size() / C;
+          assert(audioData.size() % C == 0);
+          for (size_t i = 0; i < N; ++i) {
+            audio.emplace_back();
+            for (size_t c = 0; c < C; ++c) {
+              // Audio samples are 32bit; convert to float for visualization
+              audio.back().emplace_back(
+                  (float)(audioData[i * C + c] / (double)std::numeric_limits<int32_t>::max()));
+            }
           }
         }
       }

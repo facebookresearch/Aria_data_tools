@@ -19,6 +19,7 @@
 #include <sophus/se3.hpp>
 #include <vrs/StreamId.h>
 #include <map>
+#include <optional>
 #include <set>
 #include "models/DeviceModel.h"
 #include "speech_to_text_datum.h"
@@ -28,6 +29,12 @@ namespace datatools {
 namespace dataprovider {
 
 class AriaDataProvider {
+ protected:
+  using optional_audio_reference_vector =
+      std::optional<std::reference_wrapper<const std::vector<int32_t>>>;
+  using optional_img_buffer_reference_vector =
+      std::optional<std::reference_wrapper<const std::vector<uint8_t>>>;
+
  public:
   AriaDataProvider() = default;
   virtual ~AriaDataProvider() = default;
@@ -41,7 +48,8 @@ class AriaDataProvider {
       const vrs::StreamId& streamId,
       double currentTimestampSec = std::numeric_limits<double>::max()) = 0;
   virtual void* getImageBuffer(const vrs::StreamId& streamId) const = 0;
-  virtual const std::vector<uint8_t>& getImageBufferVector(const vrs::StreamId& streamId) const = 0;
+  virtual optional_img_buffer_reference_vector getImageBufferVector(
+      const vrs::StreamId& streamId) const = 0;
   virtual uint32_t getImageWidth(const vrs::StreamId& streamId) const = 0;
   virtual uint32_t getImageHeight(const vrs::StreamId& streamId) const = 0;
   virtual double getFastestNominalRateHz() = 0;
@@ -55,7 +63,7 @@ class AriaDataProvider {
   // magnetometer data
   virtual Eigen::Vector3f getMagnetometerData() const = 0;
   // audio data
-  virtual const std::vector<int32_t>& getAudioData() const = 0;
+  virtual optional_audio_reference_vector getAudioData() const = 0;
   virtual uint8_t getAudioNumChannels() const = 0;
   // aria pose side-loading (from csv file) and time-aligned serving
   virtual std::optional<Sophus::SE3d> getPose() const = 0;

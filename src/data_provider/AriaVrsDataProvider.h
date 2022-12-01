@@ -129,7 +129,8 @@ class AriaVrsDataProvider : public AriaDataProvider {
       double currentTimestampSec = std::numeric_limits<double>::max()) override;
   // image data
   void* getImageBuffer(const vrs::StreamId& streamId) const override;
-  const std::vector<uint8_t>& getImageBufferVector(const vrs::StreamId& streamId) const override;
+  AriaDataProvider::optional_img_buffer_reference_vector getImageBufferVector(
+      const vrs::StreamId& streamId) const override;
   uint32_t getImageWidth(const vrs::StreamId& streamId) const override;
   uint32_t getImageHeight(const vrs::StreamId& streamId) const override;
   double getFastestNominalRateHz() override;
@@ -143,7 +144,7 @@ class AriaVrsDataProvider : public AriaDataProvider {
   // magnetometer data
   Eigen::Vector3f getMagnetometerData() const override;
   // audio data
-  const std::vector<int32_t>& getAudioData() const override;
+  AriaDataProvider::optional_audio_reference_vector getAudioData() const override;
   uint8_t getAudioNumChannels() const override;
   // pose data
   std::optional<Sophus::SE3d> getPose() const override;

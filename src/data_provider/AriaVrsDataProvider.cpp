@@ -674,13 +674,11 @@ Eigen::Vector3f AriaVrsDataProvider::getMagnetometerData() const {
   return {};
 }
 
-static const std::vector<int32_t> emptyAudioDataVector;
-
-const std::vector<int32_t>& AriaVrsDataProvider::getAudioData() const {
+AriaDataProvider::optional_audio_reference_vector AriaVrsDataProvider::getAudioData() const {
   if (audioPlayer_) {
-    return audioPlayer_->getData().data;
+    return {std::cref(audioPlayer_->getData().data)};
   }
-  return emptyAudioDataVector;
+  return {};
 }
 
 uint8_t AriaVrsDataProvider::getAudioNumChannels() const {
@@ -691,15 +689,13 @@ uint8_t AriaVrsDataProvider::getAudioNumChannels() const {
   return 0;
 }
 
-static const std::vector<uint8_t> emptyImageBufferVector;
-
-const std::vector<uint8_t>& AriaVrsDataProvider::getImageBufferVector(
+AriaVrsDataProvider::optional_img_buffer_reference_vector AriaVrsDataProvider::getImageBufferVector(
     const vrs::StreamId& streamId) const {
   const auto imagePlayer = getImageSensorPlayer(streamId);
   if (imagePlayer) {
-    return imagePlayer->getData().pixelFrame->getBuffer();
+    return {std::cref(imagePlayer->getData().pixelFrame->getBuffer())};
   }
-  return emptyImageBufferVector;
+  return {};
 }
 
 void* AriaVrsDataProvider::getImageBuffer(const vrs::StreamId& streamId) const {
