@@ -192,7 +192,7 @@ void AriaViewer::run() {
   pangolin::Var<bool> printGps(prefix + ".print GPS log", true, true);
   pangolin::Var<bool> printWifi(prefix + ".print Wifi log", true, true);
   pangolin::Var<bool> printBluetooth(prefix + ".print Bluetooth log", true, true);
-  // temperature and pressure display on the side of the menue
+  // temperature and pressure display on the side of the menu
   pangolin::Var<float> temperatureDisplay(prefix + ".temp [C]", 0., 0.0, 0., false);
   pangolin::Var<float> pressureDisplay(prefix + ".pres [kPa]", 0., 0.0, 0., false);
   // keys 0-9 are used to toggle the different views

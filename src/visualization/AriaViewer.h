@@ -150,7 +150,7 @@ class AriaViewer {
   // current audio chunks.
   std::vector<std::vector<float>> audio_;
 
-  // current baromter chunks.
+  // current barometer chunks.
   std::vector<float> temperature_;
   std::vector<float> pressure_;
 
