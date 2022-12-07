@@ -61,11 +61,11 @@ AriaViewer::AriaViewer(
     int height,
     const std::string& name,
     int id)
-    : dataProvider_(dataProvider),
-      width_(width),
+    : width_(width),
       height_(height),
       name_(name + std::to_string(id)),
-      id_(id) {}
+      id_(id),
+      dataProvider_(dataProvider) {}
 
 void AriaViewer::run() {
   std::cout << "Start " << name_ << "!" << std::endl;
@@ -165,9 +165,14 @@ void AriaViewer::run() {
   pangolin::Var<float> playbackSlide(
       prefix + ".playback_speed", playbackSpeedFactor_, 0.1, 10, false);
   pangolin::Var<int> sparsitySlide(prefix + ".camSparsity", 1, 1, 10, false);
+#if (PANGOLIN_VERSION_MAJOR == 0) && (PANGOLIN_VERSION_MINOR >= 7)
   pangolin::Var<std::function<void(void)>> save_window(prefix + ".Snapshot UI", [&container]() {
     pangolin::SaveWindowOnRender("snapshot", container.v);
   });
+#else
+  pangolin::Var<std::function<void(void)>> save_window(
+      prefix + ".Snapshot UI", []() { pangolin::SaveWindowOnRender("snapshot"); });
+#endif
   pangolin::Var<bool> showLeftCamImg(prefix + ".LeftImg", true, true);
   pangolin::Var<bool> showRightCamImg(prefix + ".RightImg", true, true);
   pangolin::Var<bool> showRgbCamImg(prefix + ".RgbImg", true, true);

@@ -128,7 +128,6 @@ class AriaViewer {
   std::optional<ark::datatools::dataprovider::SpeechToTextDatum> speechToText_;
   Sophus::SE3d T_Viewer_World_;
   bool hasFirstPose_ = false;
-  bool hasPose_ = false;
   std::mutex dataMutex_;
 
   std::unordered_map<vrs::RecordableTypeId, std::unordered_map<uint16_t, bool>> dataChangedMap_;
