@@ -21,6 +21,10 @@ jobs:
         run: |
           cd ./src/scripts/
           if [ "$RUNNER_OS" == "Linux" ]; then
+              # Updates the package lists
+              sudo apt-get update -y
+              # https://github.com/actions/runner-images/issues/6399#issuecomment-1285011525
+              sudo apt install -y libunwind-dev
               sh install_deps_debian.sh
           elif [ "$RUNNER_OS" == "macOS" ]; then
               sh install_deps_mac.sh
