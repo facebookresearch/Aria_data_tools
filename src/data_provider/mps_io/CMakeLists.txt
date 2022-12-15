@@ -12,8 +12,10 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-add_library(mps_ios trajectoryReader.h trajectoryReader.cpp)
-target_link_libraries(mps_ios PUBLIC Sophus::Sophus)
+add_library(mps_io
+    trajectoryReader.h trajectoryReader.cpp
+    eyeGazeReader.h eyeGazeReader.cpp)
+target_link_libraries(mps_io PUBLIC Sophus::Sophus)
 target_include_directories(mps_io
     PUBLIC
         ${CMAKE_CURRENT_SOURCE_DIR} "../"

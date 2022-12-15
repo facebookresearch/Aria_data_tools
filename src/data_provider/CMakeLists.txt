@@ -31,4 +31,5 @@ target_include_directories(vrsdataprovider PUBLIC dataprovider ${CMAKE_CURRENT_S
 
 add_subdirectory(examples)
 add_subdirectory(mps_io)
+add_subdirectory(mps_visualization)
 add_subdirectory(players)
