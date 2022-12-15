@@ -14,8 +14,10 @@
  * limitations under the License.
  */
 
+#include <functional>
 #include <iostream>
 
+#include <cereal/external/rapidjson/document.h>
 #include <models/DeviceModel.h>
 
 #include <camera/projection/FisheyeRadTanThinPrism.h>
@@ -414,40 +416,93 @@ std::optional<MicrophoneCalibration> DeviceModel::getMicrophoneCalib(
   return microphoneCalibs_.at(label);
 }
 
+namespace utils {
+// Provide an alternative to std::regex_replace
+void ReplaceStringInPlace(
+    std::string& subject,
+    const std::string& search,
+    const std::string& replace) {
+  size_t pos = 0;
+  while ((pos = subject.find(search, pos)) != std::string::npos) {
+    subject.replace(pos, search.length(), replace);
+    pos += replace.length();
+  }
+}
+
+// Replace Document json with an array version if we have a string
+// Note: Online calibration data is saved with a string,
+//  we can convert it to an array with this code.
+// See DeviceModelTests.cpp to know more about the JSON message format.
+fb_rapidjson::Value& NormalizeToArrayIfString(
+    fb_rapidjson::Value& value,
+    fb_rapidjson::Document& doc) {
+  if (value.IsString()) {
+    // Convert substring to Json object
+    std::string temp = value.GetString();
+    // Adjust string to be a valid JSON
+    std::replace(temp.begin(), temp.end(), '\'', '\"');
+    ReplaceStringInPlace(temp, "True", "true");
+    ReplaceStringInPlace(temp, "False", "false");
+    fb_rapidjson::Document doc_temp;
+    doc_temp.Parse(temp.c_str());
+    value.CopyFrom(doc_temp, doc.GetAllocator());
+  }
+  return value;
+}
+} // namespace utils
+
 DeviceModel DeviceModel::fromJson(const fb_rapidjson::Document& json) {
   DeviceModel calib;
-  if (json.FindMember("CameraCalibrations") != json.MemberEnd()) {
-    for (const auto& camJson : json["CameraCalibrations"].GetArray()) {
-      CameraCalibration camCalib = parseCameraCalibFromJson(camJson);
-      calib.cameraCalibs_[camCalib.label] = camCalib;
+  {
+    // Use a local Json Document copy if we need to overwrite some fields
+    fb_rapidjson::Document jsonCpy;
+    jsonCpy.CopyFrom(json, jsonCpy.GetAllocator());
+
+    if (json.FindMember("CameraCalibrations") != json.MemberEnd()) {
+      const fb_rapidjson::Value& v =
+          utils::NormalizeToArrayIfString(jsonCpy["CameraCalibrations"], jsonCpy);
+      for (const auto& camJson : v.GetArray()) {
+        CameraCalibration camCalib = parseCameraCalibFromJson(camJson);
+        auto& ref = calib.cameraCalibs_[camCalib.label];
+        ref = std::move(camCalib);
+      }
+    }
+    if (json.FindMember("ImuCalibrations") != json.MemberEnd()) {
+      const fb_rapidjson::Value& v =
+          utils::NormalizeToArrayIfString(jsonCpy["ImuCalibrations"], jsonCpy);
+      for (const auto& imuJson : v.GetArray()) {
+        ImuCalibration imuCalib = parseImuCalibFromJson(imuJson);
+        auto& ref = calib.imuCalibs_[imuCalib.label];
+        ref = std::move(imuCalib);
+      }
     }
   }
-  if (json.FindMember("ImuCalibrations") != json.MemberEnd()) {
-    for (const auto& imuJson : json["ImuCalibrations"].GetArray()) {
-      ImuCalibration imuCalib = parseImuCalibFromJson(imuJson);
-      calib.imuCalibs_[imuCalib.label] = imuCalib;
+
+  if (json.FindMember("DeviceClassInfo") != json.MemberEnd()) {
+    std::string deviceSubtype = json["DeviceClassInfo"]["BuildVersion"].GetString();
+    if (json.FindMember("MagCalibrations") != json.MemberEnd()) {
+      for (const auto& magnetometerJson : json["MagCalibrations"].GetArray()) {
+        MagnetometerCalibration magnetometerCalib =
+            parseMagnetometerCalibrationFromJson(magnetometerJson, calib, deviceSubtype);
+        auto& ref = calib.magnetometerCalibs_[magnetometerCalib.label];
+        ref = std::move(magnetometerCalib);
+      }
     }
-  }
-  std::string deviceSubtype = json["DeviceClassInfo"]["BuildVersion"].GetString();
-  if (json.FindMember("MagCalibrations") != json.MemberEnd()) {
-    for (const auto& magnetometerJson : json["MagCalibrations"].GetArray()) {
-      MagnetometerCalibration magnetometerCalib =
-          parseMagnetometerCalibrationFromJson(magnetometerJson, calib, deviceSubtype);
-      calib.magnetometerCalibs_[magnetometerCalib.label] = magnetometerCalib;
+    if (json.FindMember("BaroCalibrations") != json.MemberEnd()) {
+      for (const auto& barometerJson : json["BaroCalibrations"].GetArray()) {
+        BarometerCalibration barometerCalib =
+            parseBarometerCalibrationFromJson(barometerJson, calib, deviceSubtype);
+        auto& ref = calib.barometerCalibs_[barometerCalib.label];
+        ref = std::move(barometerCalib);
+      }
     }
-  }
-  if (json.FindMember("BaroCalibrations") != json.MemberEnd()) {
-    for (const auto& barometerJson : json["BaroCalibrations"].GetArray()) {
-      BarometerCalibration barometerCalib =
-          parseBarometerCalibrationFromJson(barometerJson, calib, deviceSubtype);
-      calib.barometerCalibs_[barometerCalib.label] = barometerCalib;
-    }
-  }
-  if (json.FindMember("MicCalibrations") != json.MemberEnd()) {
-    for (const auto& microphoneJson : json["MicCalibrations"].GetArray()) {
-      MicrophoneCalibration microphoneCalib =
-          parseMicrophoneCalibrationFromJson(microphoneJson, calib, deviceSubtype);
-      calib.microphoneCalibs_[microphoneCalib.label] = microphoneCalib;
+    if (json.FindMember("MicCalibrations") != json.MemberEnd()) {
+      for (const auto& microphoneJson : json["MicCalibrations"].GetArray()) {
+        MicrophoneCalibration microphoneCalib =
+            parseMicrophoneCalibrationFromJson(microphoneJson, calib, deviceSubtype);
+        auto& ref = calib.microphoneCalibs_[microphoneCalib.label];
+        ref = std::move(microphoneCalib);
+      }
     }
   }
   return calib;

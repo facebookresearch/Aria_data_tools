@@ -14,8 +14,9 @@
 
 add_library(mps_io
     trajectoryReader.h trajectoryReader.cpp
-    eyeGazeReader.h eyeGazeReader.cpp)
-target_link_libraries(mps_io PUBLIC Sophus::Sophus)
+    eyeGazeReader.h eyeGazeReader.cpp
+    onlineCalibrationReader.h onlineCalibrationReader.cpp)
+target_link_libraries(mps_io PUBLIC Sophus::Sophus sensors)
 target_include_directories(mps_io
     PUBLIC
         ${CMAKE_CURRENT_SOURCE_DIR} "../"
