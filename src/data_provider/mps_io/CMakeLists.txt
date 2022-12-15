@@ -12,23 +12,10 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-add_library(dataprovider AriaDataProvider.h utils.h utils.cpp)
-target_link_libraries(dataprovider
-    PUBLIC
-        players
-        sensors
-        vrsdataprovider
-        Sophus::Sophus)
-target_include_directories(dataprovider
+add_library(mps_ios trajectoryReader.h trajectoryReader.cpp)
+target_link_libraries(mps_ios PUBLIC Sophus::Sophus)
+target_include_directories(mps_io
     PUBLIC
         ${CMAKE_CURRENT_SOURCE_DIR} "../"
     PRIVATE
-        "./third_party/include/fast-cpp-csv-parser")
-
-add_library(vrsdataprovider AriaVrsDataProvider.h AriaVrsDataProvider.cpp)
-target_link_libraries(vrsdataprovider PUBLIC dataprovider players Sophus::Sophus PRIVATE fmt::fmt)
-target_include_directories(vrsdataprovider PUBLIC dataprovider ${CMAKE_CURRENT_SOURCE_DIR})
-
-add_subdirectory(examples)
-add_subdirectory(mps_io)
-add_subdirectory(players)
+        "../third_party/include/fast-cpp-csv-parser")
