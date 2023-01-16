@@ -68,9 +68,9 @@ Each recording uses this structure:
     ├── multiview_recording_checksum.txt
 ```
 
-* `aria_recording.vrs` — provides the Project Aria recordings in [VRS](aria-vrs.md) format. The cameras’ calibration parameters are stored as meta data inside the VRS file. The VRS file contains 1 RGB camera stream, 2 SLAM camera streams, 1 eye tracking (ET) camera stream and 2 IMU streams. The sensor timestamps reflect the device’s local time.
+* `aria_recording.vrs` — provides the Project Aria recordings in [VRS](aria-vrs.mdx) format. The cameras’ calibration parameters are stored as meta data inside the VRS file. The VRS file contains 1 RGB camera stream, 2 SLAM camera streams, 1 eye tracking (ET) camera stream and 2 IMU streams. The sensor timestamps reflect the device’s local time.
 * `multiview_recording.vrs`  — provides multi-view recordings in VRS format. This file contains 12 RGB camera streams, recorded at 60 FPS. The cameras’ calibration parameters are stored as meta data inside the VRS file. The intrinsic calibration follows [OpenCV camera calibration](https://docs.opencv.org/4.x/d9/d0c/group__calib3d.html#ga3207604e4b1a1758aa66acb6ed5aa65d) to describe the radial and tangential distortion for a pinhole camera model. The sensor timestamps reflect the synchronized global time.
-* `aria_timemap.csv` — Provides the time mapping from the Project Aria device timestamp to the synchronized timeline, using the [Timestamps Mapping Data](pilotdata/timestamps.md) format.
+* `aria_timemap.csv` — Provides the time mapping from the Project Aria device timestamp to the synchronized timeline, using the [Timestamps Mapping Data](pilotdata/timestamps.mdx) format.
 * `aria_trajectory.csv` – Provides the 6DoF SE(3) transformation of the Project Aria device with respect to the world coordinates. The world coordinates are defined by the multi-view camera extrinsics calibration. The trajectory is stored at 60 FPS and has a synchronized global timestamp.
 
 **Table 2:** *`aria_trajectory.csv` file format*
