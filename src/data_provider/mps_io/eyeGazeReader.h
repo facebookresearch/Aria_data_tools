@@ -16,10 +16,12 @@
 
 #pragma once
 
+#include <sophus/se3.hpp>
 #include <Eigen/Core>
 #include <chrono>
 #include <filesystem>
 #include <map>
+#include <optional>
 
 namespace ark::datatools {
 
@@ -37,5 +39,8 @@ struct EyeGaze {
 using TemporalEyeGazeData = std::map<std::chrono::microseconds, EyeGaze>;
 
 TemporalEyeGazeData readEyeGaze(const std::filesystem::path& path);
+
+// Read eye-gaze-coord-transform.json files
+std::optional<Sophus::SE3d> readTransform(const std::filesystem::path& path);
 
 } // namespace ark::datatools
