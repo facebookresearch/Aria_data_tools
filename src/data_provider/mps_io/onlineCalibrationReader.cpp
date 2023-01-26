@@ -17,7 +17,6 @@
 #include <fstream>
 #include <iostream>
 
-#include "models/DeviceModel.h"
 #include "onlineCalibrationReader.h"
 
 namespace ark::datatools {
