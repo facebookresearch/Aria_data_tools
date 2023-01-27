@@ -191,9 +191,6 @@ class AriaVrsDataProvider : public AriaDataProvider {
   bool tryCropAndScaleRgbCameraCalibration();
   bool tryScaleEtCameraCalibration();
 
-  vrs::RecordFileReader reader_;
-  std::mutex readerMutex_;
-
   std::unordered_map<
       vrs::RecordableTypeId,
       std::unordered_map<uint16_t, std::unique_ptr<AriaImageSensorPlayer>>>
@@ -214,6 +211,10 @@ class AriaVrsDataProvider : public AriaDataProvider {
       isFirstConfigRecordRead_;
 
   bool hasLivePoses_ = false;
+
+ protected:
+  std::mutex readerMutex_;
+  vrs::RecordFileReader reader_;
 };
 } // namespace dataprovider
 } // namespace datatools
