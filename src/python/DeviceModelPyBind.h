@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+#pragma once
+
 #include <models/DeviceModel.h>
 #include <sophus/se3.hpp>
 #include <utility/VrsUtils.h>
@@ -32,8 +34,7 @@ namespace sensors {
 
 void exportSensors(py::module& m) {
   m.doc() = "A pybind11 binding for Aria Research Kit (ARK) camera model and calibration APIs.";
-  m.def(
-      "test", [](const int a, const int b) { return a + b; }, "a"_a, "b"_a);
+
   py::enum_<CameraProjectionModel::ModelType>(m, "CameraModelType")
       .value("KannalaBrandtK3", CameraProjectionModel::ModelType::KannalaBrandtK3)
       .value("Fisheye624", CameraProjectionModel::ModelType::Fisheye624)

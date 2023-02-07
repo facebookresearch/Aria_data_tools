@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+#pragma once
+
 #include <data_provider/AriaDataProvider.h>
 #include <data_provider/AriaVrsDataProvider.h>
 

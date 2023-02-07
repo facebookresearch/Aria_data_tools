@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+#pragma once
+
 #include <players/AriaAudioPlayer.h>
 #include <players/AriaBarometerPlayer.h>
 #include <players/AriaBluetoothBeaconPlayer.h>

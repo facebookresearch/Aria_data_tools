@@ -14,10 +14,10 @@
  * limitations under the License.
  */
 
-#include "AriaDataProviderPyBind.cpp"
-#include "AriaPlayersPyBind.cpp"
-#include "AriaViewerPyBind.cpp"
-#include "DeviceModelPyBind.cpp"
+#include "AriaDataProviderPyBind.h"
+#include "AriaPlayersPyBind.h"
+#include "AriaViewerPyBind.h"
+#include "DeviceModelPyBind.h"
 
 namespace py = pybind11;
 using namespace ark::datatools;
