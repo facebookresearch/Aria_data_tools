@@ -27,7 +27,7 @@ cd /tmp; git clone https://github.com/fmtlib/fmt.git -b 8.1.1 \
     && cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_POSITION_INDEPENDENT_CODE=TRUE -DFMT_TEST=OFF .; sudo make -j$thread install; rm -rf /tmp/fmt;
 
 # Build Sophus
-cd /tmp; git clone https://github.com/strasdat/Sophus.git -b v22.04.1 \
+cd /tmp; git clone https://github.com/strasdat/Sophus.git -b 1.22.10 \
     && cd Sophus \
     && cmake -DCMAKE_BUILD_TYPE=Release -DBUILD_SOPHUS_TESTS=OFF .; sudo make -j$thread install; rm -rf /tmp/Sophus;
 
