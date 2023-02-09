@@ -17,9 +17,9 @@
 #include <cmath>
 
 #include "AriaImageSensorPlayer.h"
-#include "RecordFormat.h"
 
 #include <vrs/MultiRecordFileReader.h>
+#include <vrs/RecordFormat.h>
 
 namespace ark {
 namespace datatools {
