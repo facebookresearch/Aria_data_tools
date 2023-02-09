@@ -17,6 +17,7 @@
 #include <cmath>
 
 #include "AriaImageSensorPlayer.h"
+#include "RecordFormat.h"
 
 #include <vrs/MultiRecordFileReader.h>
 
@@ -73,15 +74,18 @@ bool AriaImageSensorPlayer::onImageRead(
   if (imageSpec.getImageFormat() == vrs::ImageFormat::JPG) {
     vrs::utils::PixelFrame::readJpegFrame(data_.pixelFrame, r.reader, cb.getBlockSize());
     callback_(r, data_.pixelFrame->getBuffer(), verbose_);
-    if (verbose_) {
-      fmt::print(
-          "{:.3f} {} [{}]: {}, {} bytes.\n",
-          r.timestamp,
-          r.streamId.getName(),
-          r.streamId.getNumericName(),
-          imageSpec.asString(),
-          blockSize);
-    }
+  } else if (imageSpec.getImageFormat() == vrs::ImageFormat::RAW) {
+    vrs::utils::PixelFrame::readRawFrame(data_.pixelFrame, r.reader, imageSpec);
+    callback_(r, data_.pixelFrame->getBuffer(), verbose_);
+  }
+  if (verbose_) {
+    fmt::print(
+        "{:.3f} {} [{}]: {}, {} bytes.\n",
+        r.timestamp,
+        r.streamId.getName(),
+        r.streamId.getNumericName(),
+        imageSpec.asString(),
+        blockSize);
   }
   return true; // read next blocks, if any
 }
