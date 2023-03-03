@@ -15,15 +15,18 @@
 import argparse
 
 import numpy as np
-import pyark
+
+from pyark.datatools import sensors
 
 
 def getCalibStrFromFile(filePath):
+    print(filePath)
     ext = filePath.split(".")[-1]
+    print(ext)
     if ext == "vrs":
-        reader = pyark.RecordFileReader()
+        reader = sensors.RecordFileReader()
         reader.openFile(filePath)
-        return pyark.getCalibrationFromVrsFile(reader)
+        return sensors.getCalibrationFromVrsFile(reader)
     elif ext == "json":
         with open(filePath, "r") as f:
             return f.read()
@@ -31,23 +34,38 @@ def getCalibStrFromFile(filePath):
         raise Exception(f"Unsupported file type: {filePath}!")
 
 
-if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description="pyark example.")
+def parse_args():
+    parser = argparse.ArgumentParser()
     parser.add_argument(
-        "file_path", type=str, help="Path to the input VRS or calib JSON file."
+        "--vrs",
+        dest="vrs_path",
+        type=str,
+        required=True,
+        help="path to vrs file",
     )
-    args = parser.parse_args()
+    return parser.parse_args()
 
-    # Fetch and parse device calibration info from input file.
-    calibStr = getCalibStrFromFile(args.file_path)
-    device = pyark.datatools.sensors.DeviceModel.fromJson(calibStr)
+
+if __name__ == "__main__":
+    args = parse_args()
+
+    #
+    # Read calibration data from a VRS file
+    #
+    print("Attempting to read calibration data from: ", args.vrs_path)
+    calib_str = getCalibStrFromFile(args.vrs_path)
+
+    device = sensors.DeviceModel.fromJson(calib_str)
     print(f"Cameras: {device.getCameraLabels()}")
     print(f"IMUs: {device.getImuLabels()}")
     print(f"Magnetometers: {device.getMagnetometerLabels()}")
     print(f"Barometers: {device.getBarometerLabels()}")
     print(f"Microphones: {device.getMicrophoneLabels()}")
 
-    # Project and unproject points with a camera model.
+    #
+    # Demonstrate how to use camera model
+
+    # Create a 3D points and project and unproject it with a given camera
     camLabel = "camera-slam-left"
     p_slamLeft = np.array([3.0, 2.0, 1.0])
     uv_slamLeft = device.getCameraCalib(camLabel).projectionModel.project(p_slamLeft)
