@@ -22,6 +22,7 @@
 #include <filesystem>
 #include <map>
 #include <optional>
+#include "models/DeviceModel.h"
 
 namespace ark::datatools {
 
@@ -39,5 +40,16 @@ struct EyeGaze {
 using TemporalEyeGazeData = std::map<std::chrono::microseconds, EyeGaze>;
 
 TemporalEyeGazeData readEyeGaze(const std::filesystem::path& path);
+
+void ProjectEyeGazeRayInCamera(
+    const std::string& cameraString,
+    const sensors::DeviceModel& deviceModel,
+    const Eigen::Vector3d& eyeGazeVector,
+    const double minDepth,
+    const double maxDepth,
+    const double samples,
+    std::map<double, Eigen::Vector2d>& camProjectionPerDepth,
+    const int cameraWidth = -1,
+    const int cameraHeight = -1);
 
 } // namespace ark::datatools

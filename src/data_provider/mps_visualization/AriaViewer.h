@@ -90,6 +90,9 @@ class AriaViewer {
   // A rolling buffer history of EyeGaze yaw, pitch recordings
   std::deque<Eigen::Vector2d> eyeGazeHistory_;
 
+  // Aria device model data
+  datatools::sensors::DeviceModel deviceModel_;
+
   // Aria VRS data provider
   datatools::dataprovider::AriaDataProvider* dataProvider_;
   // Store current Timestamp relative to the Aria sequence we are at

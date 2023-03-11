@@ -16,13 +16,23 @@
 
 #include "AriaViewer.h"
 #include <pangolin/display/image_view.h>
+#include <pangolin/gl/gldraw.h>
 #include <pangolin/pangolin.h>
+#include "models/DeviceModel.h"
+#include "mps_io/eyeGazeReader.h"
 
 namespace {
 const vrs::StreamId kEyeCameraStreamId(
     vrs::StreamId(vrs::RecordableTypeId::EyeCameraRecordableClass, 1));
+const vrs::StreamId kRgbCameraStreamId(vrs::RecordableTypeId::RgbCameraRecordableClass, 1);
+const vrs::StreamId kSlamLeftCameraStreamId(vrs::RecordableTypeId::SlamCameraData, 1);
+const vrs::StreamId kSlamRightCameraStreamId(vrs::RecordableTypeId::SlamCameraData, 2);
 
-const std::vector<vrs::StreamId> kImageStreamIds = {kEyeCameraStreamId};
+const std::vector<vrs::StreamId> kImageStreamIds = {
+    kEyeCameraStreamId,
+    kRgbCameraStreamId,
+    kSlamLeftCameraStreamId,
+    kSlamRightCameraStreamId};
 
 } // namespace
 
@@ -50,12 +60,23 @@ void AriaViewer::run() {
   // - Images: Left & Right eye
   // - Time series: EyeGaze yaw, pitch, uncertainty
   // - Radar: EyeGaze yaw, pitch and history (visualize direction change in time)
+  // - EyeGaze bearing vector: visualize eye gaze vector projected in RGB and/or SLAM images
   //
   // Initialize for the EyeTracking camera view
   setDataChanged(false, kEyeCameraStreamId);
   auto etCameraImageWidth = dataProvider_->getImageWidth(kEyeCameraStreamId);
   auto etCameraImageHeight = dataProvider_->getImageHeight(kEyeCameraStreamId);
   pangolin::ImageView cameraETView = pangolin::ImageView();
+
+  // Initialize for the RGB camera view
+  setDataChanged(false, kRgbCameraStreamId);
+  pangolin::ImageView cameraRGBView = pangolin::ImageView();
+
+  // Initialize for the SLAM left and right camera view
+  setDataChanged(false, kSlamLeftCameraStreamId);
+  pangolin::ImageView cameraSlamLView = pangolin::ImageView();
+  setDataChanged(false, kSlamRightCameraStreamId);
+  pangolin::ImageView cameraSlamRView = pangolin::ImageView();
 
   // Time Series setup for {yaw, pitch, uncertainty}
   pangolin::DataLog logEyeGaze;
@@ -76,7 +97,10 @@ void AriaViewer::run() {
                         .SetLayout(pangolin::LayoutEqual)
                         .AddDisplay(cameraETView)
                         .AddDisplay(plotEyeGaze)
-                        .AddDisplay(eyeGazeRadar);
+                        .AddDisplay(eyeGazeRadar)
+                        .AddDisplay(cameraRGBView)
+                        .AddDisplay(cameraSlamLView)
+                        .AddDisplay(cameraSlamRView);
 
   // prefix to give each viewer its own set of controls
   const std::string prefix = "ui";
@@ -89,7 +113,108 @@ void AriaViewer::run() {
   pangolin::Var<bool> showETCamImg(prefix + ".ET Img", true, true);
   pangolin::Var<bool> showETTemporal(prefix + ".EyeGaze Temporal", true, true);
   pangolin::Var<bool> showETRadar(prefix + ".EyeGaze Radar", true, true);
-  pangolin::Var<std::int64_t> timestampDisplay(prefix + ".Timestamp us", 0., 0.0, 0., false);
+  pangolin::Var<bool> showRGBCamImg(prefix + ".RGB Img", true, true);
+  pangolin::Var<bool> showSlamLCamImg(prefix + ".SLam Left Img", true, true);
+  pangolin::Var<bool> showSlamRCamImg(prefix + ".Slam Right Img", true, true);
+  pangolin::Var<std::int64_t> timestampDisplay(prefix + ".Timestamp us", 0., 0., 0., false);
+
+  // Define a function to draw EyeGazeVector on a VRS image
+  std::function<void(
+      pangolin::View&, pangolin::ImageView&, const vrs::StreamId&, const std::string&)>
+      f_drawEyeGazeVector = [this](
+                                pangolin::View& v,
+                                pangolin::ImageView& imageView,
+                                const vrs::StreamId& vrsStreamId,
+                                const std::string& cameraString) {
+        v.ActivatePixelOrthographic();
+        v.ActivateAndScissor();
+
+        // Get stream image size
+        auto cameraImageWidth = dataProvider_->getImageWidth(vrsStreamId);
+        auto cameraImageHeight = dataProvider_->getImageHeight(vrsStreamId);
+
+        bool isRgbStream = vrsStreamId == kRgbCameraStreamId;
+
+        if (imageView.IsShown()) {
+          if (isDataChanged(vrsStreamId)) {
+            // Draw vrs image
+            imageView.SetImage(
+                static_cast<void*>(
+                    cameraImageBufferMap_[vrsStreamId.getTypeId()][vrsStreamId.getInstanceId()]
+                        .data()),
+                cameraImageWidth,
+                cameraImageHeight,
+                isRgbStream ? cameraImageWidth * 3 : cameraImageWidth,
+                isRgbStream ? pangolin::PixelFormatFromString("RGB24")
+                            : pangolin::PixelFormatFromString("GRAY8"));
+            setDataChanged(false, vrsStreamId);
+          }
+
+          // Display EyeGaze vector reprojection in the VRS image
+          {
+            // scale to the current display size
+            const float scale = (float)v.v.w / (float)cameraImageWidth;
+
+            glLineWidth(10);
+            glColor3f(1.0, 1.0, 1.0);
+
+            std::map<double, Eigen::Vector2d> camProjectionPerDepth;
+            const double minDepth = .1; // 10cm
+            const double maxDepth = 8.; // 8 meter
+            const double depthSamples = 30.;
+            ProjectEyeGazeRayInCamera(
+                cameraString,
+                deviceModel_,
+                lastEyeGazeRecord_.first,
+                minDepth,
+                maxDepth,
+                depthSamples,
+                camProjectionPerDepth,
+                cameraImageWidth,
+                cameraImageHeight);
+
+            // Plot the resulted "projected" ray
+            // 1. compensate drawing in an OpenGL window
+            std::vector<Eigen::Vector2d> pointsAlongGaze;
+            {
+              for (auto& it : camProjectionPerDepth) {
+                // Flip Y axis to compensate rotation of the image and OpenGL axis swap
+                it.second.y() = cameraImageHeight - it.second.y();
+                // Rescale to the display context size
+                it.second *= scale;
+                pointsAlongGaze.push_back(it.second);
+              }
+            }
+            // 2. Display the ray
+            glLineWidth(3);
+            glColor3f(1.0, 1.0, 1.0);
+            pangolin::glDrawLineStrip(pointsAlongGaze);
+
+            // Retrieve closest point to 1 and 2 meters and display a circle
+            const auto itOneMeter = camProjectionPerDepth.lower_bound(1.);
+            const auto itTwoMeter = camProjectionPerDepth.lower_bound(2.);
+            if (itOneMeter != camProjectionPerDepth.end()) {
+              pangolin::glDrawCircle(itOneMeter->second);
+            }
+            if (itTwoMeter != camProjectionPerDepth.end()) {
+              pangolin::glDrawCircle(itTwoMeter->second);
+            }
+          }
+        }
+        v.GetBounds().DisableScissor();
+      };
+
+  cameraRGBView.extern_draw_function = [&](pangolin::View& v) {
+    f_drawEyeGazeVector(v, cameraRGBView, kRgbCameraStreamId, "camera-rgb");
+  };
+
+  cameraSlamLView.extern_draw_function = [&](pangolin::View& v) {
+    f_drawEyeGazeVector(v, cameraSlamLView, kSlamLeftCameraStreamId, "camera-slam-left");
+  };
+
+  cameraSlamRView.extern_draw_function = [&](pangolin::View& v) {
+    f_drawEyeGazeVector(v, cameraSlamRView, kSlamRightCameraStreamId, "camera-slam-right");
+  };
 
   // Main loop
   while (!pangolin::ShouldQuit()) {
@@ -160,6 +285,12 @@ void AriaViewer::run() {
     plotEyeGaze.Show(showETTemporal);
     container[2].Show(showETRadar);
     eyeGazeRadar.Show(showETRadar);
+    container[3].Show(showRGBCamImg);
+    cameraRGBView.Show(showRGBCamImg);
+    container[4].Show(showSlamLCamImg);
+    cameraSlamLView.Show(showSlamLCamImg);
+    container[5].Show(showSlamRCamImg);
+    cameraSlamRView.Show(showSlamRCamImg);
 
     {
       std::lock_guard<std::mutex> lock(*p_render_mutex);
@@ -189,6 +320,12 @@ std::pair<double, double> AriaViewer::initDataStreams(
   // Return data stream time & frequency statistics
   const double fastestNominalRateHz = dataProvider_->getFastestNominalRateHz();
   const double currentTimestampSec = dataProvider_->getFirstTimestampSec();
+
+  // Safe to load device model now for both provider modes, VRS configuration records were read
+  dataProvider_->loadDeviceModel();
+  // init device model (intrinsic and extrinsic calibration)
+  deviceModel_ = dataProvider_->getDeviceModel();
+
   return {currentTimestampSec, fastestNominalRateHz};
 }
 

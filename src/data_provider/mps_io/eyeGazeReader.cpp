@@ -52,4 +52,71 @@ TemporalEyeGazeData readEyeGaze(const std::filesystem::path& path) {
   return eyeGazeSequence;
 }
 
+void ProjectEyeGazeRayInCamera(
+    const std::string& cameraString,
+    const sensors::DeviceModel& deviceModel,
+    const Eigen::Vector3d& eyeGazeVector,
+    const double minDepth,
+    const double maxDepth,
+    const double samples,
+    std::map<double, Eigen::Vector2d>& camProjectionPerDepth,
+    const int cameraWidth,
+    const int cameraHeight) {
+  // Compute projection of the EyeGaze vector in chosen camera
+  camProjectionPerDepth.clear();
+
+  const bool projectionInCPF = true;
+  // Since EyeGaze results is defined in CPF you can project in Aria cameras:
+  // 1. by projecting directly for the CAD camera calib
+  // Or
+  // 2. by computing the device to CPF compensation (relative transform
+  // between the CAD and your own glasses calibration)
+
+  if (!deviceModel.getCameraCalib(cameraString)) {
+    return;
+  }
+
+  if (maxDepth < minDepth) {
+    return;
+  }
+
+  // Get back camera poses of interest
+  const auto vrsCamera = deviceModel.getCameraCalib(cameraString);
+  const auto cadCamera = deviceModel.getCADSensorPose(cameraString);
+
+  // If you want to compensate for the CPF
+  const auto T_device_cpf = vrsCamera->T_Device_Camera * cadCamera->inverse();
+  const auto T_cpf_cam = T_device_cpf.inverse() * vrsCamera->T_Device_Camera;
+
+  // Build the list of 3D points we will have to project in the camera
+  // 1. list depth we need to use
+  // 2. Sample the depth along the ray
+  // 3. Project in the camera
+
+  // 1.
+  std::vector<double> depthSamples;
+  for (double depth = minDepth; depth <= maxDepth; depth += ((maxDepth - minDepth) / samples)) {
+    depthSamples.push_back(depth);
+  }
+
+  // 2.
+  for (const auto itDepth : depthSamples) {
+    const Eigen::Vector3d sampledDepth = itDepth * eyeGazeVector;
+
+    const auto usedCameraTransform = projectionInCPF ? *cadCamera : T_cpf_cam;
+    auto projection =
+        vrsCamera->projectionModel.project(usedCameraTransform.inverse() * sampledDepth);
+
+    // Is projection inside the image or not
+    if (cameraWidth > 0 && cameraHeight > 0) {
+      if (!(projection.x() > 0 && projection.x() < cameraWidth && projection.y() > 0 &&
+            projection.y() < cameraHeight)) {
+        // Projection is outside image, we continue to the next point
+        continue;
+      }
+    }
+    camProjectionPerDepth[itDepth] = projection;
+  }
+}
+
 } // namespace ark::datatools
