@@ -56,5 +56,6 @@ endif(BUILD_PYARK)
 
 
 add_subdirectory(data_provider)
+add_subdirectory(experimental)
 add_subdirectory(sensors)
 add_subdirectory(visualization)
