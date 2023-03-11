@@ -27,8 +27,8 @@ namespace ark::datatools {
 constexpr std::array<const char*, 5> EyeGazeColumns =
     {"tracking_timestamp_us", "gaze_vector_x", "gaze_vector_y", "gaze_vector_z", "uncertainty"};
 
-TemporalEyeGazeData readEyeGaze(const std::filesystem::path& path) {
-  io::CSVReader<EyeGazeColumns.size()> csv(path.string());
+TemporalEyeGazeData readEyeGaze(const std::string& path) {
+  io::CSVReader<EyeGazeColumns.size()> csv(path);
   // Read in the CSV header
   const auto readHeader = [&](auto&&... args) { csv.read_header(io::ignore_no_column, args...); };
   std::apply(readHeader, EyeGazeColumns);

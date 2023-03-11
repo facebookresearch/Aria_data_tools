@@ -39,7 +39,7 @@ struct EyeGaze {
 // Timestamp is aligned with device image capture
 using TemporalEyeGazeData = std::map<std::chrono::microseconds, EyeGaze>;
 
-TemporalEyeGazeData readEyeGaze(const std::filesystem::path& path);
+TemporalEyeGazeData readEyeGaze(const std::string& path);
 
 void ProjectEyeGazeRayInCamera(
     const std::string& cameraString,

@@ -18,17 +18,24 @@
 #include "AriaPlayersPyBind.h"
 #include "AriaViewerPyBind.h"
 #include "DeviceModelPyBind.h"
+#include "MpsIOPyBind.h"
 
 namespace py = pybind11;
 using namespace ark::datatools;
 
 PYBIND11_MODULE(pyark, m) {
   py::module datatools = m.def_submodule("datatools");
+
   py::module dataprovider = datatools.def_submodule("dataprovider");
   dataprovider::exportPlayers(dataprovider);
   dataprovider::exportDataProvider(dataprovider);
+
   py::module sensors = datatools.def_submodule("sensors");
   sensors::exportSensors(sensors);
+
   py::module visualization = datatools.def_submodule("visualization");
   visualization::exportVisualization(visualization);
+
+  py::module mpsIO = datatools.def_submodule("mpsIO");
+  mpsIO::exportMpsIO(mpsIO);
 }

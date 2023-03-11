@@ -51,7 +51,7 @@ if(BUILD_PYARK)
 
     add_subdirectory(${pybind11_SOURCE_DIR})
     pybind11_add_module(pyark ${CMAKE_CURRENT_SOURCE_DIR}/python/bindings.cpp)
-    target_link_libraries(pyark PUBLIC aria_viewer_lib dataprovider sensors vrs::vrslib)
+    target_link_libraries(pyark PUBLIC aria_viewer_lib dataprovider sensors mps_io vrs::vrslib)
 endif(BUILD_PYARK)
 
 
