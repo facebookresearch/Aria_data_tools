@@ -35,6 +35,17 @@ namespace {
 const int kSlamValidRadius = 330;
 const int kRgbValidRadius = 1415;
 
+// Build the CAD pose from position and rotation vectors as a SE3D pose.
+Sophus::SE3d buildCADPose(const std::array<float, 9>& poseArray) {
+  Eigen::Vector3d position(poseArray[0], poseArray[1], poseArray[2]);
+
+  Eigen::Matrix3d R;
+  R.col(1) = Eigen::Vector3d(poseArray[3], poseArray[4], poseArray[5]);
+  R.col(2) = Eigen::Vector3d(poseArray[6], poseArray[7], poseArray[8]);
+  R.col(0) = R.col(1).cross(R.col(2));
+  return Sophus::SE3d(Sophus::makeRotationMatrix(R), position);
+}
+
 // Hardcoded values to be used by getSensorPoseByLabel to compute poses
 // for barometer, magnetometer and microphone sensors
 // There are two subtypes for Aria devices: DVT-L(large) and DVT-S(small)
@@ -43,146 +54,306 @@ const std::unordered_map<std::string, const std::unordered_map<std::string, Soph
     T_Device_FrameMap = {
         {"DVT-L",
          {{"camera-slam-left",
-           {Eigen::Quaterniond(
-                0.6634014621838321,
-                -0.20968650730402055,
-                0.24474170230353254,
-                -0.6753010941650868),
-            {0.071351, 0.002372, 0.008454}}},
+           buildCADPose(
+               {0.071351,
+                0.002372,
+                0.008454,
+                0.793353,
+                0.000000,
+                -0.608761,
+                0.607927,
+                -0.052336,
+                0.792266})},
+          {"camera-slam-right",
+           buildCADPose(
+               {-0.071351,
+                0.002372,
+                0.008454,
+                0.793353,
+                0.000000,
+                0.608761,
+                -0.607927,
+                -0.052336,
+                0.792266})},
+          {"camera-et-left",
+           buildCADPose(
+               {0.055753,
+                -0.019589,
+                0.004786,
+                0.034096,
+                -0.508436,
+                -0.860424,
+                -0.674299,
+                0.623745,
+                -0.395300})},
+          {"camera-et-right",
+           buildCADPose(
+               {-0.055753,
+                -0.019589,
+                0.004786,
+                -0.034096,
+                -0.508436,
+                -0.860424,
+                0.674299,
+                0.623745,
+                -0.395300})},
+          {"camera-rgb",
+           buildCADPose(
+               {0.058250,
+                0.007186,
+                0.012096,
+                1.000000,
+                0.000000,
+                0.000000,
+                0.000000,
+                -0.130526,
+                0.991445})},
           {"baro0",
-           {Eigen::Quaterniond(
-                0.7044160331158363,
-                -0.704416033115836,
-                0.06162833998534202,
-                -0.06162833998534204),
-            {-0.009258, 0.010842, 0.0172}}},
+           buildCADPose(
+               {-0.009258,
+                0.010842,
+                0.017200,
+                0.000000,
+                0.000000,
+                -1.000000,
+                0.173648,
+                0.984808,
+                0.000000})},
           {"mag0",
-           {Eigen::Quaterniond(
-                -0.3354557015967031,
-                0.6348637728730656,
-                0.6250835690288524,
-                -0.3060849455458301),
-            {0.066201, -0.00576, -0.001777}}},
+           buildCADPose(
+               {0.066201,
+                -0.005760,
+                -0.001777,
+                0.588330,
+                0.006520,
+                -0.808595,
+                -0.808020,
+                0.043280,
+                -0.587563})},
           {"mic0",
-           {Eigen::Quaterniond(
-                -0.4466732905655805,
-                -0.462594953221541,
-                0.5961358393213673,
-                -0.48073999399455747),
-            {-0.046137509961, -0.029296904188, 0.006233332458}}},
+           buildCADPose(
+               {-0.046137,
+                -0.029296,
+                0.006233,
+                0.981006,
+                -0.109790,
+                0.159915,
+                -0.087780,
+                -0.986430,
+                -0.138744})},
           {"mic1",
-           {Eigen::Quaterniond(
-                0.45451953667583,
-                -0.5416751709096407,
-                0.4545195366758299,
-                0.541675170909641),
-            {0.009200472201, 0.010304189016, 0.01725}}},
+           buildCADPose(
+               {0.009200, 0.010304, 0.01725, -0.984807, -0.173648, 0, -0.173648, 0.984807, 0})},
           {"mic2",
-           {Eigen::Quaterniond(
-                0.48073999399455714,
-                0.5961358393213673,
-                -0.4625949532215406,
-                0.44667329056558025),
-            {0.046137509961, -0.029296904188, 0.006233332458}}},
+           buildCADPose(
+               {0.046138,
+                -0.029297,
+                0.006233,
+                -0.981006,
+                -0.109790,
+                0.159915,
+                0.087780,
+                -0.986430,
+                -0.138744})},
           {"mic3",
-           {Eigen::Quaterniond(
-                0.03700718883556693,
-                0.024677753697836938,
-                0.706676013509939,
-                0.7061377262097094),
-            {0.065924850784, 0.011961037562, 0.004304525213}}},
+           buildCADPose(
+               {0.065925,
+                0.011961,
+                0.004305,
+                -0.017386,
+                0.001521,
+                0.999848,
+                0.087156,
+                0.996195,
+                0.000000})},
           {"mic4",
-           {Eigen::Quaterniond(
-                0.5533876349070789,
-                -0.5684125695232376,
-                0.4206033310715556,
-                0.4401841821686134),
-            {-0.054799747025, 0.013141924571, 0.01096}}},
+           buildCADPose(
+               {-0.054800,
+                0.013142,
+                0.010960,
+                0.965337,
+                0.033710,
+                0.258819,
+                -0.034899,
+                0.999391,
+                0.000000})},
           {"mic5",
-           {Eigen::Quaterniond(
-                0.0321917707643714,
-                0.7543767868913739,
-                0.029592009455780385,
-                0.6549837145081323),
-            {0.072318361733, 0.008272042771, -0.094954730047}}},
+           buildCADPose(
+               {0.072318,
+                0.008272,
+                -0.094955,
+                0.002477,
+                -0.996176,
+                0.087334,
+                0.990114,
+                -0.009805,
+                -0.139920})},
           {"mic6",
-           {Eigen::Quaterniond(
-                0.0321917707643717,
-                0.7543767868913734,
-                -0.02959200945578069,
-                -0.6549837145081314),
-            {-0.072318558345, 0.008271400968, -0.094954767162}}}}},
+           buildCADPose(
+               {-0.072319,
+                0.008271,
+                -0.094955,
+                -0.002477,
+                -0.996176,
+                0.087334,
+                -0.990114,
+                -0.009805,
+                -0.139920})}}},
         {"DVT-S",
          {{"camera-slam-left",
-           {Eigen::Quaterniond(
-                0.6634014621838321,
-                -0.20968650730402055,
-                0.24474170230353254,
-                -0.6753010941650868),
-            {0.069051, 0.002372, 0.009254}}},
+           buildCADPose(
+               {0.069051,
+                0.002372,
+                0.009254,
+                0.793353,
+                0.000000,
+                -0.608761,
+                0.607927,
+                -0.052336,
+                0.792266})},
+          {"camera-slam-right",
+           buildCADPose(
+               {-0.069051,
+                0.002372,
+                0.009254,
+                0.793353,
+                0.000000,
+                0.608761,
+                -0.607927,
+                -0.052336,
+                0.792266})},
+          {"camera-et-left",
+           buildCADPose(
+               {0.054298,
+                -0.018500,
+                0.006210,
+                0.034478,
+                -0.508118,
+                -0.860597,
+                -0.674245,
+                0.623794,
+                -0.395316})},
+          {"camera-et-right",
+           buildCADPose(
+               {-0.054298,
+                -0.018500,
+                0.006210,
+                -0.034478,
+                -0.508118,
+                -0.860597,
+                0.674245,
+                0.623794,
+                -0.395316})},
+          {"camera-rgb",
+           buildCADPose(
+               {0.056000,
+                0.007121,
+                0.012883,
+                1.000000,
+                0.000000,
+                0.000000,
+                0.000000,
+                -0.130526,
+                0.991445})},
           {"baro0",
-           {Eigen::Quaterniond(
-                0.7044160331158363,
-                -0.704416033115836,
-                0.06162833998534202,
-                -0.06162833998534204),
-            {-0.009258, 0.010842, 0.0172}}},
+           buildCADPose(
+               {-0.009258,
+                0.010842,
+                0.017200,
+                0.000000,
+                0.000000,
+                -1.000000,
+                0.173648,
+                0.984808,
+                0.000000})},
           {"mag0",
-           {Eigen::Quaterniond(
-                -0.33199561459691707,
-                0.641846614077474,
-                0.6179113269940647,
-                -0.30983451689269853),
-            {0.064372, -0.005868, 0.000699}}},
+           buildCADPose(
+               {0.064372,
+                -0.005868,
+                0.000699,
+                0.587481,
+                -0.015929,
+                -0.809081,
+                -0.808020,
+                0.043280,
+                -0.587563})},
           {"mic0",
-           {Eigen::Quaterniond(
-                0.46713221110590525,
-                0.6064273312736143,
-                0.4486845987290905,
-                -0.4612109279873855),
-            {-0.045906351881, -0.027938466628, 0.006667127264}}},
+           buildCADPose(
+               {-0.045906,
+                -0.027938,
+                0.006667,
+                0.97508224,
+                -0.160939007,
+                0.152686805,
+                -0.14019156,
+                -0.980440,
+                -0.138144})},
           {"mic1",
-           {Eigen::Quaterniond(
-                0.45451953667583,
-                -0.5416751709096407,
-                0.4545195366758299,
-                0.541675170909641),
-            {0.00916053312, 0.010230694799, 0.01725}}},
+           buildCADPose(
+               {0.009161,
+                0.010231,
+                0.017250,
+                -0.984808,
+                -0.173648,
+                0.000000,
+                -0.173648,
+                0.984808,
+                0.000000})},
           {"mic2",
-           {Eigen::Quaterniond(
-                0.46713206676748886,
-                0.6064275298986738,
-                -0.4486854732162549,
-                0.46120996227665667),
-            {0.045905335057, -0.027931354925, 0.006668129433}}},
+           buildCADPose(
+               {0.045905,
+                -0.027931,
+                0.006668,
+                -0.975082,
+                -0.160938,
+                0.152687,
+                0.140190,
+                -0.980440,
+                -0.138146})},
           {"mic3",
-           {Eigen::Quaterniond(
-                0.03700718883556693,
-                0.024677753697836938,
-                0.706676013509939,
-                0.7061377262097094),
-            {0.063470940948, 0.012033935758, 0.005565985947}}},
+           buildCADPose(
+               {0.063471,
+                0.012034,
+                0.005566,
+                -0.017386,
+                0.001521,
+                0.999848,
+                0.087156,
+                0.996195,
+                0.000000})},
           {"mic4",
-           {Eigen::Quaterniond(
-                -0.4401841821686135,
-                0.4206033310715548,
-                0.5684125695232379,
-                0.5533876349070787),
-            {-0.052398255025, 0.013200030459, 0.01216}}},
+           buildCADPose(
+               {-0.052398,
+                0.013200,
+                0.012160,
+                0.965337,
+                0.033710,
+                0.258819,
+                -0.034899,
+                0.999391,
+                0.000000})},
           {"mic5",
-           {Eigen::Quaterniond(
-                0.03219180881231075,
-                0.7543002196214468,
-                0.029591714532785928,
-                0.6550719018210435),
-            {0.06985623699, 0.008269731192, -0.093105155761}}},
+           buildCADPose(
+               {0.069856,
+                0.008270,
+                -0.093105,
+                0.002466,
+                -0.996176,
+                0.087334,
+                0.990147,
+                -0.009795,
+                -0.139689})},
           {"mic6",
-           {Eigen::Quaterniond(
-                0.03219152449164331,
-                0.7544533536981446,
-                -0.029591740767486312,
-                -0.6548955426042204),
-            {-0.069821880534, 0.008268307286, -0.093137768576}}}}}};
+           buildCADPose(
+               {-0.069822,
+                0.008268,
+                -0.093138,
+                -0.002487,
+                -0.996176,
+                0.087333,
+                -0.990081,
+                -0.009815,
+                -0.140151})}}}};
 
 Eigen::VectorXd parseVectorXdFromJson(const fb_rapidjson::Value& json) {
   Eigen::VectorXd vec(json.Size());
@@ -379,6 +550,18 @@ Eigen::Vector3d LinearRectificationModel::distortWithSystematicError(
   return rectificationMatrix * v_compensated + bias;
 }
 
+std::string DeviceModel::getDeviceSubtype() const {
+  return deviceSubtype_;
+}
+
+std::optional<Sophus::SE3d> DeviceModel::getCADSensorPose(const std::string& label) const {
+  if (deviceSubtype_.size() > 0 && T_Device_FrameMap.count(deviceSubtype_) &&
+      T_Device_FrameMap.at(deviceSubtype_).count(label)) {
+    return T_Device_FrameMap.at(deviceSubtype_).at(label);
+  }
+  return {};
+}
+
 std::optional<CameraCalibration> DeviceModel::getCameraCalib(const std::string& label) const {
   if (cameraCalibs_.find(label) == cameraCalibs_.end()) {
     return {};
@@ -479,11 +662,11 @@ DeviceModel DeviceModel::fromJson(const fb_rapidjson::Document& json) {
   }
 
   if (json.FindMember("DeviceClassInfo") != json.MemberEnd()) {
-    std::string deviceSubtype = json["DeviceClassInfo"]["BuildVersion"].GetString();
+    calib.deviceSubtype_ = json["DeviceClassInfo"]["BuildVersion"].GetString();
     if (json.FindMember("MagCalibrations") != json.MemberEnd()) {
       for (const auto& magnetometerJson : json["MagCalibrations"].GetArray()) {
         MagnetometerCalibration magnetometerCalib =
-            parseMagnetometerCalibrationFromJson(magnetometerJson, calib, deviceSubtype);
+            parseMagnetometerCalibrationFromJson(magnetometerJson, calib, calib.deviceSubtype_);
         auto& ref = calib.magnetometerCalibs_[magnetometerCalib.label];
         ref = std::move(magnetometerCalib);
       }
@@ -491,7 +674,7 @@ DeviceModel DeviceModel::fromJson(const fb_rapidjson::Document& json) {
     if (json.FindMember("BaroCalibrations") != json.MemberEnd()) {
       for (const auto& barometerJson : json["BaroCalibrations"].GetArray()) {
         BarometerCalibration barometerCalib =
-            parseBarometerCalibrationFromJson(barometerJson, calib, deviceSubtype);
+            parseBarometerCalibrationFromJson(barometerJson, calib, calib.deviceSubtype_);
         auto& ref = calib.barometerCalibs_[barometerCalib.label];
         ref = std::move(barometerCalib);
       }
@@ -499,7 +682,7 @@ DeviceModel DeviceModel::fromJson(const fb_rapidjson::Document& json) {
     if (json.FindMember("MicCalibrations") != json.MemberEnd()) {
       for (const auto& microphoneJson : json["MicCalibrations"].GetArray()) {
         MicrophoneCalibration microphoneCalib =
-            parseMicrophoneCalibrationFromJson(microphoneJson, calib, deviceSubtype);
+            parseMicrophoneCalibrationFromJson(microphoneJson, calib, calib.deviceSubtype_);
         auto& ref = calib.microphoneCalibs_[microphoneCalib.label];
         ref = std::move(microphoneCalib);
       }

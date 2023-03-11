@@ -52,31 +52,4 @@ TemporalEyeGazeData readEyeGaze(const std::filesystem::path& path) {
   return eyeGazeSequence;
 }
 
-std::optional<Sophus::SE3d> readTransform(const std::filesystem::path& path) {
-  std::ifstream inputFile(path.string());
-  if (inputFile) {
-    std::stringstream buffer;
-    buffer << inputFile.rdbuf();
-    // JSON decoding
-    fb_rapidjson::Document doc;
-    doc.Parse(buffer.str().c_str());
-    // Test validity
-    if (doc.FindMember("Translation") != doc.MemberEnd() &&
-        doc.FindMember("UnitQuaternion") != doc.MemberEnd()) {
-      const auto& translationJ = doc["Translation"].GetArray();
-      Eigen::Vector3d translation(
-          translationJ[0].GetDouble(), translationJ[1].GetDouble(), translationJ[2].GetDouble());
-      const auto& quaternionW = doc["UnitQuaternion"].GetArray()[0];
-      const auto& quaternionXYZ = doc["UnitQuaternion"].GetArray()[1].GetArray();
-      Eigen::Quaterniond quaternion(
-          quaternionXYZ[0].GetDouble(),
-          quaternionXYZ[1].GetDouble(),
-          quaternionXYZ[2].GetDouble(),
-          quaternionW.GetDouble());
-      return Sophus::SE3d(quaternion, translation);
-    }
-  }
-  return {};
-}
-
 } // namespace ark::datatools

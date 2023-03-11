@@ -40,7 +40,4 @@ using TemporalEyeGazeData = std::map<std::chrono::microseconds, EyeGaze>;
 
 TemporalEyeGazeData readEyeGaze(const std::filesystem::path& path);
 
-// Read eye-gaze-coord-transform.json files
-std::optional<Sophus::SE3d> readTransform(const std::filesystem::path& path);
-
 } // namespace ark::datatools

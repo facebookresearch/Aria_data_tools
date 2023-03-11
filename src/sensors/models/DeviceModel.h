@@ -121,6 +121,8 @@ class DeviceModel {
   std::optional<BarometerCalibration> getBarometerCalib(const std::string& label) const;
   std::optional<MicrophoneCalibration> getMicrophoneCalib(const std::string& label) const;
 
+  std::optional<Sophus::SE3d> getCADSensorPose(const std::string& label) const;
+
   bool tryCropAndScaleCameraCalibration(
       const std::string& label,
       const int nativeResolution,
@@ -131,6 +133,8 @@ class DeviceModel {
   std::vector<std::string> getMagnetometerLabels() const;
   std::vector<std::string> getBarometerLabels() const;
   std::vector<std::string> getMicrophoneLabels() const;
+
+  std::string getDeviceSubtype() const;
 
   Eigen::Vector3d transform(
       const Eigen::Vector3d& p_source,
@@ -144,6 +148,7 @@ class DeviceModel {
   std::unordered_map<std::string, BarometerCalibration> barometerCalibs_;
   std::unordered_map<std::string, MicrophoneCalibration> microphoneCalibs_;
   std::unordered_set<std::string> updatedCameraCalibs_;
+  std::string deviceSubtype_; // "DVT-L" or "DVT-S"
 };
 
 } // namespace sensors
