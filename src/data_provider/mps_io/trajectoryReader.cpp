@@ -43,8 +43,8 @@ constexpr std::array<const char*, 19> OpenLoopTrajectoryColumns = {
     "gravity_y_odometry",
     "gravity_z_odometry"};
 
-Trajectory readOpenLoop(const std::filesystem::path& path) {
-  io::CSVReader<OpenLoopTrajectoryColumns.size()> csv(path.string());
+Trajectory readOpenLoop(const std::string& path) {
+  io::CSVReader<OpenLoopTrajectoryColumns.size()> csv(path);
   // Read in the CSV header
   const auto readHeader = [&](auto&&... args) { csv.read_header(io::ignore_no_column, args...); };
   std::apply(readHeader, OpenLoopTrajectoryColumns);
@@ -112,8 +112,8 @@ constexpr std::array<const char*, 17> CloseLoopTrajectoryColumns = {
     "angular_velocity_z_device",
     "quality_score"};
 
-Trajectory readCloseLoop(const std::filesystem::path& path) {
-  io::CSVReader<CloseLoopTrajectoryColumns.size()> csv(path.string());
+Trajectory readCloseLoop(const std::string& path) {
+  io::CSVReader<CloseLoopTrajectoryColumns.size()> csv(path);
   // Read in the CSV header
   const auto readHeader = [&](auto&&... args) { csv.read_header(io::ignore_no_column, args...); };
   std::apply(readHeader, CloseLoopTrajectoryColumns);

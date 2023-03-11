@@ -20,7 +20,10 @@
 #include <pybind11/eigen.h>
 #include <pybind11/pybind11.h>
 #include <pybind11/stl.h>
+#include <sophus/se3.hpp>
+
 #include "eyeGazeReader.h"
+#include "trajectoryReader.h"
 
 namespace py = pybind11;
 using namespace pybind11::literals;
@@ -35,6 +38,19 @@ void exportMpsIO(py::module& m) {
       .def_readwrite("uncertainty", &EyeGaze::uncertainty);
 
   m.def("readEyeGaze", &readEyeGaze, "path"_a);
+
+  py::class_<TrajectoryPose>(m, "TrajectoryPose")
+      .def_readwrite("tracking_timestamp_us", &TrajectoryPose::tracking_timestamp_us)
+      .def_readwrite("utcTimestamp", &TrajectoryPose::utcTimestamp)
+      .def_readwrite("T_world_device", &TrajectoryPose::T_world_device)
+      .def_readwrite("deviceLinearVelocity_device", &TrajectoryPose::deviceLinearVelocity_device)
+      .def_readwrite("angularVelocity_device", &TrajectoryPose::angularVelocity_device)
+      .def_readwrite("qualityScore", &TrajectoryPose::qualityScore)
+      .def_readwrite("gravity_odometry", &TrajectoryPose::gravity_odometry)
+      .def_readwrite("graphUid", &TrajectoryPose::graphUid);
+
+  m.def("readOpenLoop", &readOpenLoop, "path"_a);
+  m.def("readCloseLoop", &readCloseLoop, "path"_a);
 }
 
 } // namespace ark::datatools::mpsIO

@@ -56,7 +56,7 @@ struct TrajectoryPose {
 // A Trajectory is a list of Trajectory poses
 using Trajectory = std::vector<TrajectoryPose>;
 
-Trajectory readOpenLoop(const std::filesystem::path& path);
-Trajectory readCloseLoop(const std::filesystem::path& path);
+Trajectory readOpenLoop(const std::string& path);
+Trajectory readCloseLoop(const std::string& path);
 
 } // namespace ark::datatools
