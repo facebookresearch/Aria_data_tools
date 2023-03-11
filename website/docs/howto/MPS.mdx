@@ -73,6 +73,15 @@ $ ./mps_trajectory_viewer <PATH>/closed_loop_trajectory.csv
 
 ![image of trajectory viewer](/img/docs/TrajectoryViewer.png)
 
+Note: You can also add eye gaze vector data on top of the device trajectory
+
+```
+$ cd build/visualization
+
+$ ./mps_trajectory_viewer -- <PATH>/closed_loop_trajectory.csv <PATH>/eye-gaze-output.csv
+```
+![image of trajectory viewer](/img/docs/TrajectoryAndEyeGazeVectorsViewer.png)
+
 # Eye Gaze data
 
 Eye Gaze data is produced by an MPS eye tracking algorithm. Gaze tracking is typically employed to determine a person's focus of attention (the direction they are looking in).

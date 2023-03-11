@@ -59,6 +59,4 @@ using Trajectory = std::vector<TrajectoryPose>;
 Trajectory readOpenLoop(const std::filesystem::path& path);
 Trajectory readCloseLoop(const std::filesystem::path& path);
 
-// TODO Add calibration reader (maybe in a different file since it will link sensors library)
-
 } // namespace ark::datatools
