@@ -34,3 +34,7 @@ target_link_libraries(aria_viewer PRIVATE aria_viewer_lib Threads::Threads)
 message("--- Compiling aria_multi_viewer.")
 add_executable(aria_multi_viewer main_multi.cpp)
 target_link_libraries(aria_multi_viewer PRIVATE aria_viewer_lib Threads::Threads)
+
+message("--- Compiling aria_sensors_viewer.")
+add_executable(aria_sensors_viewer main_aria_sensors_viewer.cpp)
+target_link_libraries(aria_sensors_viewer PRIVATE dataprovider ${Pangolin_LIBRARIES})

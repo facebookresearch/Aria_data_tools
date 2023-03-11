@@ -48,7 +48,6 @@ const std::vector<vrs::StreamId> kDataStreams = {
     kBluetoothStreamId,
     kGpsStreamId,
     kPoseStreamId};
-pangolin::GlFont kGlFontSpeechToText(AnonymousPro_ttf, 24);
 } // namespace
 
 namespace ark {
