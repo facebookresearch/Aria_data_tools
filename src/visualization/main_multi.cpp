@@ -59,7 +59,7 @@ int main(int argc, const char* argv[]) {
     viewers.emplace_back(std::make_shared<visualization::AriaViewer>(
         dataProvider.get(), 1280, 800, "AriaViewer", argi - 1));
     // initialize and setup datastreams
-    auto [currentTimestampSec, fastestNominalRateHz] = viewers.back()->initDataStreams();
+    viewers.back()->initDataStreams();
   }
   // get joint synced time table across all recordings
   std::set<int64_t> baseTimeSet;
@@ -74,10 +74,10 @@ int main(int argc, const char* argv[]) {
   // start viewer threads
   std::vector<std::thread> threads;
   for (auto& viewer : viewers) {
-    threads.push_back(std::move(viewer->runInThread()));
+    threads.emplace_back(viewer->runInThread());
   }
   // start data reading thread
-  threads.emplace_back([&viewers, &dataProviders, &timeSyncToTimeRecordings, &baseTime]() {
+  threads.emplace_back([&viewers, &timeSyncToTimeRecordings, &baseTime]() {
     for (size_t t = 1; t < baseTime.size(); ++t) {
       int64_t baseTimeNs = baseTime[t];
       int64_t prevBaseTimeNs = baseTime[t - 1];
