@@ -61,19 +61,12 @@ podman run --rm -it -e DISPLAY --volume <your_local_data>/data -v /tmp/.X11-unix
 The following dependencies are used by Aria Data Tools and are automatically installed:
 
 
-* VRS - https://github.com/facebookresearch/vrs
-* FMT - https://github.com/fmtlib/fmt
-* SOPHUS - https://github.com/strasdat/Sophus
-* CEREAL - https://github.com/USCiLab/cereal
-* PANGOLIN - https://github.com/stevenlovegrove/Pangolin
-* FAST-CPP-CSV-PARSER - https://github.com/ben-strasser/fast-cpp-csv-parser
-* EIGEN - https://gitlab.com/libeigen/eigen.git
-* PYBIND11 - https://github.com/pybind/pybind11
-* PYTORCH - https://github.com/pytorch/pytorch
-
-## Test
-Some unit tests are compiled by default with the CMake `BUILD_ARK_TESTS` preprocessor.
-
-```
-ctest -j8
-```
+* [VRS](https://github.com/facebookresearch/vrs)
+* [FMT](https://github.com/fmtlib/fmt)
+* [SOPHUS](https://github.com/strasdat/Sophus)
+* [CEREAL](https://github.com/USCiLab/cereal)
+* [PANGOLIN](https://github.com/stevenlovegrove/Pangolin)
+* [FAST-CPP-CSV-PARSER](https://github.com/ben-strasser/fast-cpp-csv-parser)
+* [EIGEN](https://gitlab.com/libeigen/eigen)
+* [PYBIND11](https://github.com/pybind/pybind11)
+* [PYTORCH](https://github.com/pytorch/pytorch)
