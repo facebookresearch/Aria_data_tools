@@ -23,23 +23,42 @@ RUN if type sudo 2>/dev/null; then \
      chmod +x /usr/sbin/sudo; \
     fi
 
-# Get dependencies
+# Update & upgrade distribution repositories
 RUN apt-get update --fix-missing && DEBIAN_FRONTEND="noninteractive" TZ="America/New_York" apt-get install -y tzdata --fix-missing; sudo apt upgrade -y --fix-missing
+
+# Install build essentials
+RUN sudo apt-get install -y cmake git build-essential;
+
+# Install python pip essentials
+RUN sudo apt-get install -y libpython3-dev python3-pip;
+
+# Install VRS dependencies and compile/install VRS
+# Note that we install cereal (header only) library to get last version
+# On some system libcereal-dev can be enough
+RUN sudo apt-get install -y libgtest-dev libgmock-dev \
+    libfmt-dev  \
+    libturbojpeg-dev libpng-dev \
+    liblz4-dev libzstd-dev libxxhash-dev \
+    libboost-system-dev libboost-filesystem-dev libboost-thread-dev libboost-chrono-dev libboost-date-time-dev; \
+    cd /tmp; git clone https://github.com/USCiLab/cereal.git -b v1.3.2 \
+    && cd cereal \
+    && cmake -DSKIP_PORTABILITY_TEST=1 -DJUST_INSTALL_CEREAL=ON .; sudo make -j2 install; rm -rf /tmp/cereal; \
+    cd /tmp; git clone https://github.com/facebookresearch/vrs.git -b v1.0.4 \
+            && mkdir vrs_Build && cd vrs_Build \
+            && cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_POSITION_INDEPENDENT_CODE=TRUE ../vrs/ \
+            && sudo make -j2 install; rm -rf /tmp/vrs /tmp/vrs_Build;
 
 # Code
 ADD ./ /opt/aria_data_tools
 
-# Install build
-RUN cd /opt/aria_data_tools/src/scripts/; sh ./install_deps_debian.sh
-
 # Configure
-RUN mkdir /opt/aria_data_tools_Build; cd /opt/aria_data_tools_Build; cmake -DCMAKE_BUILD_TYPE=RELEASE /opt/aria_data_tools/src;
+RUN mkdir /opt/aria_data_tools_Build; cd /opt/aria_data_tools_Build; cmake -DBUILD_WITH_PANGOLIN=OFF /opt/aria_data_tools/src;
 
 # Build & test
-RUN cd /opt/aria_data_tools_Build; make -j ; ctest -j;
+RUN cd /opt/aria_data_tools_Build; make -j2 ; ctest -j;
 
 # Build python bindings
-RUN cd /opt/aria_data_tools/src; pip3 install --global-option=build_ext --global-option="-j8" .;
+RUN cd /opt/aria_data_tools/src; pip3 install --global-option=build_ext --global-option="-j2" .;
 
 # Link shared Pangolin libraries
 RUN ldconfig;
