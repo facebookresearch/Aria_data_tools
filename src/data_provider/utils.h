@@ -21,7 +21,6 @@
 #include <optional>
 #include <string>
 #include <unordered_map>
-#include "speech_to_text_datum.h"
 
 namespace ark {
 namespace datatools {
@@ -41,27 +40,7 @@ std::vector<std::string> strSplit(const std::string& s, const char delimiter);
 
 std::string getTimeSyncPath(const std::string& vrsPath);
 
-std::map<int64_t, Sophus::SE3d> readPosesFromCsvFile(const std::string& inputPoseCsv);
-
-std::map<int64_t, Eigen::Vector2f> readEyetrackingFromCsvFile(
-    const std::string& inputEyetrackingCsv);
-
-std::map<int64_t, SpeechToTextDatum> readSpeechToTextFromCsvFile(
-    const std::string& inputSpeechToTextCsv);
-
 std::map<int64_t, int64_t> readTimeSyncCsv(const std::string& inputTimeSyncCsv);
-
-std::optional<Sophus::SE3d> queryPose(
-    const int64_t timestamp,
-    const std::map<int64_t, Sophus::SE3d>& timestampToPose);
-
-std::optional<Eigen::Vector2f> queryEyetrack(
-    const int64_t timestamp,
-    const std::map<int64_t, Eigen::Vector2f>& timestampToEyetrack);
-
-std::optional<SpeechToTextDatum> querySpeechToText(
-    const int64_t timestamp,
-    const std::map<int64_t, SpeechToTextDatum>& timestampToSpeechToText);
 
 } // namespace dataprovider
 } // namespace datatools

@@ -17,7 +17,6 @@
 #pragma once
 
 #include "AriaViewerBase.h"
-#include "data_provider/speech_to_text_datum.h"
 #include "utils.h"
 
 namespace ark {

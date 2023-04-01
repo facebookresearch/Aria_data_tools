@@ -16,9 +16,7 @@
 
 #pragma once
 
-namespace ark {
-namespace datatools {
-namespace dataprovider {
+namespace ark::datatools::dataprovider {
 
 // struct to hold one speech-to-text datum spanning the time from tStart to tEnd (in nano
 // seconds).
@@ -41,6 +39,4 @@ struct SpeechToTextDatum {
   }
 };
 
-} // namespace dataprovider
-} // namespace datatools
-} // namespace ark
+} // namespace ark::datatools::dataprovider

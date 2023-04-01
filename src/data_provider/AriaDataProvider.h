@@ -21,7 +21,6 @@
 #include <optional>
 #include <set>
 #include "models/DeviceModel.h"
-#include "speech_to_text_datum.h"
 
 namespace ark {
 namespace datatools {
