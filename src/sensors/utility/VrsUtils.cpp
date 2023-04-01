@@ -16,13 +16,38 @@
 
 #include <utility/VrsUtils.h>
 
-namespace ark {
-namespace datatools {
-namespace sensors {
+#include <filesystem>
+#include <fstream>
+#include <sstream>
+
+namespace ark::datatools::sensors {
+
+namespace fs = std::filesystem;
+
+std::string getCalibStrFromFile(const std::string& filePath) {
+  auto ext = fs::path(filePath).extension();
+  if (ext == ".json") {
+    std::ifstream fin(filePath);
+    if (!fin.is_open()) {
+      std::cerr << "Unable to find file: " << filePath << std::endl;
+    }
+    std::ostringstream sstr;
+    sstr << fin.rdbuf();
+    fin.close();
+    return sstr.str();
+  } else if (ext == ".vrs") {
+    vrs::RecordFileReader reader;
+    reader.openFile(filePath);
+    return sensors::getCalibrationFromVrsFile(reader);
+  } else {
+    std::cerr << "Unsupported file type: " << ext << std::endl;
+  }
+  // return {} - no calibration string was found
+  return {};
+}
+
 std::string getCalibrationFromVrsFile(const vrs::RecordFileReader& reader) {
   return reader.getTag("calib_json");
 }
 
-} // namespace sensors
-} // namespace datatools
-} // namespace ark
+} // namespace ark::datatools::sensors

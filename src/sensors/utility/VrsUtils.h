@@ -20,10 +20,12 @@
 
 #include <string>
 
-namespace ark {
-namespace datatools {
-namespace sensors {
+namespace ark::datatools::sensors {
+
+// Get calibration string either from VRS or JSON file on disk
+std::string getCalibStrFromFile(const std::string& filePath);
+
+// Get calibration string from VRS RecordFileReader
 std::string getCalibrationFromVrsFile(const vrs::RecordFileReader& reader);
-} // namespace sensors
-} // namespace datatools
-} // namespace ark
+
+} // namespace ark::datatools::sensors

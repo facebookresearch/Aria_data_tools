@@ -22,41 +22,10 @@
 #include <fmt/ostream.h>
 #include <Eigen/Eigen>
 
-#include <filesystem>
-#include <fstream>
 #include <iostream>
-#include <sstream>
 
-namespace fs = std::filesystem;
 using namespace ark::datatools;
-
-namespace {
-
-std::string getCalibStrFromFile(const std::string& filePath) {
-  auto ext = fs::path(filePath).extension();
-  if (ext == ".json") {
-    std::ifstream fin(filePath);
-    if (!fin.is_open()) {
-      std::cerr << fmt::format("Unable to find file: {}.", filePath) << std::endl;
-      assert(false);
-    }
-    std::ostringstream sstr;
-    sstr << fin.rdbuf();
-    fin.close();
-    return sstr.str();
-  } else if (ext == ".vrs") {
-    vrs::RecordFileReader reader;
-    reader.openFile(filePath);
-    return sensors::getCalibrationFromVrsFile(reader);
-  } else {
-    std::cerr << "Unsupported file type: " << ext << std::endl;
-    assert(false);
-  }
-  // return {} to remove compiler warning
-  return {};
-}
-
-} // namespace
+using namespace ark::datatools::sensors;
 
 int main(int argc, char** argv) {
   // Load calibration file.
@@ -64,7 +33,7 @@ int main(int argc, char** argv) {
     std::cerr << "Usage: sensors_example [<path_to_calib>.json | <path_to_vrs>.vrs]" << std::endl;
     return 1;
   }
-  sensors::DeviceModel model = sensors::DeviceModel::fromJson(getCalibStrFromFile(argv[1]));
+  DeviceModel model = DeviceModel::fromJson(getCalibStrFromFile(argv[1]));
 
   std::cout << fmt::format("Successfully loaded calibration file from: {}.", argv[1]) << std::endl;
 

@@ -19,21 +19,6 @@ import numpy as np
 from pyark.datatools import sensors
 
 
-def getCalibStrFromFile(filePath):
-    print(filePath)
-    ext = filePath.split(".")[-1]
-    print(ext)
-    if ext == "vrs":
-        reader = sensors.RecordFileReader()
-        reader.openFile(filePath)
-        return sensors.getCalibrationFromVrsFile(reader)
-    elif ext == "json":
-        with open(filePath, "r") as f:
-            return f.read()
-    else:
-        raise Exception(f"Unsupported file type: {filePath}!")
-
-
 def parse_args():
     parser = argparse.ArgumentParser()
     parser.add_argument(
@@ -53,7 +38,7 @@ if __name__ == "__main__":
     # Read calibration data from a VRS file
     #
     print("Attempting to read calibration data from: ", args.vrs_path)
-    calib_str = getCalibStrFromFile(args.vrs_path)
+    calib_str = sensors.getCalibStrFromFile(args.vrs_path)
 
     device = sensors.DeviceModel.fromJson(calib_str)
     print(f"Cameras: {device.getCameraLabels()}")

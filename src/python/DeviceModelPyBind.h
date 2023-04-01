@@ -171,6 +171,7 @@ void exportSensors(py::module& m) {
           },
           "filePath"_a);
   m.def("getCalibrationFromVrsFile", &getCalibrationFromVrsFile, "reader"_a);
+  m.def("getCalibStrFromFile", &getCalibStrFromFile, "reader"_a);
 }
 } // namespace sensors
 } // namespace datatools
