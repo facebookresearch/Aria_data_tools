@@ -67,11 +67,9 @@ struct LinearRectificationModel {
   Eigen::Vector3d bias;
 
   // Compensates the input vector (acceleration for accelerator, or angular
-  // velocity for gyroscope) with a linear model:
-  // v_compensated = rectificationMatrix.inv() * (v_raw - bias):
+  // velocity for gyroscope) with a linear model
   Eigen::Vector3d compensateForSystematicErrorFromMeasurement(const Eigen::Vector3d& v_raw) const;
   // inverse function of compensateForSystematicErrorFromMeasurement
-  // v_compensated = rectificationMatrix * v_raw + bias
   Eigen::Vector3d distortWithSystematicError(const Eigen::Vector3d& v_compensated) const;
 };
 
