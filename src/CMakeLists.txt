@@ -28,11 +28,22 @@ if (NOT CMAKE_BUILD_TYPE AND NOT MSVC)
   set(CMAKE_BUILD_TYPE "Release")
 endif (NOT CMAKE_BUILD_TYPE AND NOT MSVC)
 
+# Handle shared 3rd party library
+# - Installed
 find_package(vrslib REQUIRED)
-find_package(Eigen3 REQUIRED NO_MODULE)
-find_package(Sophus REQUIRED)
-ADD_DEFINITIONS("-DSOPHUS_DISABLE_ENSURES")
+# - Submodules
+add_subdirectory("${CMAKE_CURRENT_SOURCE_DIR}/third_party/eigen" EXCLUDE_FROM_ALL)
+option(SKIP_PERFORMANCE_COMPARISON OFF)
+option(BUILD_SANDBOX OFF)
+option(BUILD_DOC OFF)
+add_subdirectory("${CMAKE_CURRENT_SOURCE_DIR}/third_party/cereal")
+option(BUILD_SOPHUS_TESTS OFF)
+option(BUILD_SOPHUS_EXAMPLES OFF)
+add_subdirectory("${CMAKE_CURRENT_SOURCE_DIR}/third_party/Sophus")
+add_definitions("-DSOPHUS_DISABLE_ENSURES")
 
+
+# Project CMAKE options
 option(BUILD_PYARK "Build python binding." OFF)
 option(BUILD_ARK_TESTS "Build tests." ON)
 option(BUILD_ARK_EXAMPLES "Build examples." ON)

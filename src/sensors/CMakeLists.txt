@@ -14,8 +14,6 @@
 
 set(SENSORS_SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}")
 
-find_package(cereal REQUIRED)
-
 # Build sensors lib.
 file(GLOB_RECURSE SENSORS_SRCS
     camera/*.h
