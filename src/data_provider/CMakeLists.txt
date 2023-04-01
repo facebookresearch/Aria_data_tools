@@ -23,7 +23,8 @@ target_include_directories(dataprovider
     PUBLIC
         ${CMAKE_CURRENT_SOURCE_DIR} "../"
     PRIVATE
-        "../third_party/include/fast-cpp-csv-parser")
+        "../third_party/"#fast-cpp-csv-parser"
+        )
 
 add_library(vrsdataprovider AriaVrsDataProvider.h AriaVrsDataProvider.cpp)
 target_link_libraries(vrsdataprovider PUBLIC dataprovider players PRIVATE fmt::fmt)

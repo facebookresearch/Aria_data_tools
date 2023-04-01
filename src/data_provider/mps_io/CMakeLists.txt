@@ -21,4 +21,5 @@ target_include_directories(mps_io
     PUBLIC
         ${CMAKE_CURRENT_SOURCE_DIR} "../"
     PRIVATE
-        "../../third_party/include/fast-cpp-csv-parser")
+        "../../third_party/" #fast-cpp-csv-parser
+)

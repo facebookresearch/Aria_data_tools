@@ -17,9 +17,12 @@
 #include "PilotDataset.h"
 
 #include "AriaStreamIds.h"
-#define CSV_IO_NO_THREAD
-#include "csv.h"
 #include "utils.h"
+
+#ifndef CSV_IO_NO_THREAD
+#define CSV_IO_NO_THREAD
+#endif
+#include "fast-cpp-csv-parser/csv.h"
 
 #include <filesystem>
 

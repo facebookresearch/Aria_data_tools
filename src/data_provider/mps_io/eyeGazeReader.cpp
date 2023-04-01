@@ -19,9 +19,11 @@
 #include <fstream>
 #include <iostream>
 
+#ifndef CSV_IO_NO_THREAD
 #define CSV_IO_NO_THREAD
-#include "csv.h"
+#endif
 #include "eyeGazeReader.h"
+#include "fast-cpp-csv-parser/csv.h"
 
 namespace ark::datatools {
 
