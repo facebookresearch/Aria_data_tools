@@ -16,8 +16,8 @@
 
 #pragma once
 
+#include <data_layout/aria/WifiBeaconMetadata.h>
 #include <vrs/RecordFormatStreamPlayer.h>
-#include <vrs/oss/aria/WifiBeaconMetadata.h>
 
 namespace ark {
 namespace datatools {

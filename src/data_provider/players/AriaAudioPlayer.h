@@ -16,8 +16,8 @@
 
 #pragma once
 
+#include <data_layout/aria/AudioMetadata.h>
 #include <vrs/RecordFormatStreamPlayer.h>
-#include <vrs/oss/aria/AudioMetadata.h>
 
 namespace ark {
 namespace datatools {

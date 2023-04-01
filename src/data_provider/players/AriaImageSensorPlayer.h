@@ -16,8 +16,8 @@
 
 #pragma once
 
+#include <data_layout/aria/ImageSensorMetadata.h>
 #include <vrs/RecordFormatStreamPlayer.h>
-#include <vrs/oss/aria/ImageSensorMetadata.h>
 #include <vrs/utils/PixelFrame.h>
 
 namespace ark {

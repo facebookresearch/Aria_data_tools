@@ -16,8 +16,8 @@
 
 #pragma once
 
+#include <data_layout/aria/BarometerMetadata.h>
 #include <vrs/RecordFormatStreamPlayer.h>
-#include <vrs/oss/aria/BarometerMetadata.h>
 
 namespace ark {
 namespace datatools {

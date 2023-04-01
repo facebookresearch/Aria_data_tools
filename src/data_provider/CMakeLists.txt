@@ -29,6 +29,7 @@ add_library(vrsdataprovider AriaVrsDataProvider.h AriaVrsDataProvider.cpp)
 target_link_libraries(vrsdataprovider PUBLIC dataprovider players Sophus::Sophus PRIVATE fmt::fmt)
 target_include_directories(vrsdataprovider PUBLIC dataprovider ${CMAKE_CURRENT_SOURCE_DIR})
 
+add_subdirectory(data_layout)
 add_subdirectory(examples)
 add_subdirectory(mps_io)
 add_subdirectory(mps_visualization)

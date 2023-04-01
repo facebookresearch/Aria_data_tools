@@ -16,8 +16,8 @@
 
 #pragma once
 
+#include <data_layout/aria/PoseMetadata.h>
 #include <vrs/RecordFormatStreamPlayer.h>
-#include <vrs/oss/aria/PoseMetadata.h>
 
 namespace ark {
 namespace datatools {

@@ -16,8 +16,8 @@
 
 #pragma once
 
+#include <data_layout/aria/GpsMetadata.h>
 #include <vrs/RecordFormatStreamPlayer.h>
-#include <vrs/oss/aria/GpsMetadata.h>
 
 namespace ark {
 namespace datatools {

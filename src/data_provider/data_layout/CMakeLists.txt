@@ -12,18 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# players library
 file(
-  GLOB_RECURSE
-  source_files
-  *.cpp
-)
-file(
-  GLOB_RECURSE
+  GLOB
   header_files
-  *.h
+  ./aria/*.h
 )
 
-add_library(players ${source_files} ${header_files})
-target_link_libraries(players PUBLIC ariaDataLayout vrs::vrslib vrs::vrs_utils)
-target_include_directories(players PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
+add_library(ariaDataLayout INTERFACE)
+target_sources(ariaDataLayout INTERFACE ${header_files})
+target_link_libraries(ariaDataLayout INTERFACE vrs::vrslib)
+target_include_directories(ariaDataLayout INTERFACE ${CMAKE_CURRENT_SOURCE_DIR}/..)
+
+add_executable(AriaFileReader ./aria/sample_app/AriaFileReader.cpp)
+target_link_libraries(AriaFileReader PRIVATE ariaDataLayout)

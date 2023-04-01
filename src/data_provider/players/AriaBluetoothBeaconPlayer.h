@@ -16,8 +16,8 @@
 
 #pragma once
 
+#include <data_layout/aria/BluetoothBeaconMetadata.h>
 #include <vrs/RecordFormatStreamPlayer.h>
-#include <vrs/oss/aria/BluetoothBeaconMetadata.h>
 
 namespace ark {
 namespace datatools {

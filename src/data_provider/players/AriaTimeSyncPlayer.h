@@ -16,8 +16,8 @@
 
 #pragma once
 
+#include <data_layout/aria/TimeSyncMetadata.h>
 #include <vrs/RecordFormatStreamPlayer.h>
-#include <vrs/oss/aria/TimeSyncMetadata.h>
 
 namespace ark {
 namespace datatools {

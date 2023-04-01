@@ -16,8 +16,8 @@
 
 #pragma once
 
+#include <data_layout/aria/MotionSensorMetadata.h>
 #include <vrs/RecordFormatStreamPlayer.h>
-#include <vrs/oss/aria/MotionSensorMetadata.h>
 
 namespace ark {
 namespace datatools {
