@@ -26,6 +26,11 @@ cd /tmp; git clone https://github.com/fmtlib/fmt.git -b 8.1.1 \
     && cd fmt \
     && cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_POSITION_INDEPENDENT_CODE=TRUE -DFMT_TEST=OFF .; sudo make -j$thread install; rm -rf /tmp/fmt;
 
+# Build Eigen
+cd /tmp; git clone https://gitlab.com/libeigen/eigen.git -b 3.4.0 \
+    && mkdir eigen_Build && cd eigen_Build \
+    && cmake -DCMAKE_BUILD_TYPE=Release ../eigen/; sudo make -j$thread install; rm -rf /tmp/eigen*;
+
 # Build Sophus
 cd /tmp; git clone https://github.com/strasdat/Sophus.git -b 1.22.10 \
     && cd Sophus \
