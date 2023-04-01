@@ -19,6 +19,7 @@
 #include <fstream>
 #include <iostream>
 
+#define CSV_IO_NO_THREAD
 #include "csv.h"
 #include "eyeGazeReader.h"
 

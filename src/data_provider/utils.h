@@ -41,21 +41,15 @@ std::vector<std::string> strSplit(const std::string& s, const char delimiter);
 
 std::string getTimeSyncPath(const std::string& vrsPath);
 
-std::map<int64_t, Sophus::SE3d> readPosesFromCsvFile(
-    const std::string& inputPoseCsv,
-    const int firstN = -1);
+std::map<int64_t, Sophus::SE3d> readPosesFromCsvFile(const std::string& inputPoseCsv);
 
 std::map<int64_t, Eigen::Vector2f> readEyetrackingFromCsvFile(
-    const std::string& inputEyetrackingCsv,
-    const int firstN = -1);
+    const std::string& inputEyetrackingCsv);
 
 std::map<int64_t, SpeechToTextDatum> readSpeechToTextFromCsvFile(
-    const std::string& inputSpeechToTextCsv,
-    const int firstN = -1);
+    const std::string& inputSpeechToTextCsv);
 
-std::map<int64_t, int64_t> readTimeSyncCsv(
-    const std::string& inputTimeSyncCsv,
-    const int firstN = -1);
+std::map<int64_t, int64_t> readTimeSyncCsv(const std::string& inputTimeSyncCsv);
 
 std::optional<Sophus::SE3d> queryPose(
     const int64_t timestamp,

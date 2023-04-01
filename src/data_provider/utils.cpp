@@ -18,6 +18,7 @@
 #include <filesystem>
 #include <iostream>
 #include <set>
+#define CSV_IO_NO_THREAD
 #include "csv.h"
 
 namespace ark {
@@ -45,9 +46,7 @@ std::string getTimeSyncPath(const std::string& vrsPath) {
   return timeSyncCsvPath;
 }
 
-std::map<int64_t, Sophus::SE3d> readPosesFromCsvFile(
-    const std::string& inputPoseCsv,
-    const int firstN) {
+std::map<int64_t, Sophus::SE3d> readPosesFromCsvFile(const std::string& inputPoseCsv) {
   std::map<int64_t, Sophus::SE3d> timeToPoseMap;
   if (!inputPoseCsv.empty()) {
     io::CSVReader<8> in(inputPoseCsv);
@@ -64,9 +63,7 @@ std::map<int64_t, Sophus::SE3d> readPosesFromCsvFile(
     int64_t ts;
     Eigen::Vector3d t;
     Eigen::Quaterniond q;
-    int count = 0;
-    while (in.read_row(ts, t(0), t(1), t(2), q.w(), q.x(), q.y(), q.z()) &&
-           (firstN < 0 || count++ < firstN)) {
+    while (in.read_row(ts, t(0), t(1), t(2), q.w(), q.x(), q.y(), q.z())) {
       timeToPoseMap[ts] = Sophus::SE3d(Sophus::SO3d(q), t);
     }
   }
@@ -75,8 +72,7 @@ std::map<int64_t, Sophus::SE3d> readPosesFromCsvFile(
 }
 
 std::map<int64_t, Eigen::Vector2f> readEyetrackingFromCsvFile(
-    const std::string& inputEyetrackingCsv,
-    const int firstN) {
+    const std::string& inputEyetrackingCsv) {
   std::map<int64_t, Eigen::Vector2f> timeToEtMap;
   if (!inputEyetrackingCsv.empty()) {
     io::CSVReader<3> in(inputEyetrackingCsv);
@@ -84,8 +80,7 @@ std::map<int64_t, Eigen::Vector2f> readEyetrackingFromCsvFile(
         io::ignore_extra_column, "timestamp_unix_ns", "calib_x [pixel]", "calib_y [pixel]");
     int64_t ts;
     Eigen::Vector2f etCalib_im;
-    int count = 0;
-    while (in.read_row(ts, etCalib_im(0), etCalib_im(1)) && (firstN < 0 || count++ < firstN)) {
+    while (in.read_row(ts, etCalib_im(0), etCalib_im(1))) {
       timeToEtMap[ts] = etCalib_im;
     }
   }
@@ -94,8 +89,7 @@ std::map<int64_t, Eigen::Vector2f> readEyetrackingFromCsvFile(
 }
 
 std::map<int64_t, SpeechToTextDatum> readSpeechToTextFromCsvFile(
-    const std::string& inputSpeechToTextCsv,
-    const int firstN) {
+    const std::string& inputSpeechToTextCsv) {
   std::map<int64_t, SpeechToTextDatum> timeToSpeechToTextMap;
   if (!inputSpeechToTextCsv.empty()) {
     io::CSVReader<4, io::trim_chars<' ', '\t'>, io::double_quote_escape<',', '"'>> in(
@@ -104,8 +98,7 @@ std::map<int64_t, SpeechToTextDatum> readSpeechToTextFromCsvFile(
     int64_t tStart, tEnd;
     std::string text;
     float confidence;
-    int count = 0;
-    while (in.read_row(tStart, tEnd, text, confidence) && (firstN < 0 || count++ < firstN)) {
+    while (in.read_row(tStart, tEnd, text, confidence)) {
       timeToSpeechToTextMap[tStart] = {
           .tStart_ns = tStart, .tEnd_ns = tEnd, .text = text, .confidence = confidence};
     }
@@ -114,14 +107,13 @@ std::map<int64_t, SpeechToTextDatum> readSpeechToTextFromCsvFile(
   return timeToSpeechToTextMap;
 }
 
-std::map<int64_t, int64_t> readTimeSyncCsv(const std::string& inputTimeSyncCsv, const int firstN) {
+std::map<int64_t, int64_t> readTimeSyncCsv(const std::string& inputTimeSyncCsv) {
   std::map<int64_t, int64_t> timeSyncToTimeRecording;
   if (!inputTimeSyncCsv.empty()) {
     io::CSVReader<2> in(inputTimeSyncCsv);
     in.read_header(io::ignore_extra_column, "deviceTimestampNs", "syncedTimestampNs");
     uint64_t tRecording, tSync;
-    int count = 0;
-    while (in.read_row(tRecording, tSync) && (firstN < 0 || count++ < firstN)) {
+    while (in.read_row(tRecording, tSync)) {
       timeSyncToTimeRecording[tSync] = tRecording;
     }
   }

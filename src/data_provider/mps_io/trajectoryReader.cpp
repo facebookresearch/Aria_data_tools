@@ -17,6 +17,7 @@
 #include <array>
 #include <iostream>
 
+#define CSV_IO_NO_THREAD
 #include "csv.h"
 #include "trajectoryReader.h"
 
