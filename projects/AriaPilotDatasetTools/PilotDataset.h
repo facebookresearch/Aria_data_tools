@@ -17,8 +17,8 @@
 #pragma once
 
 #include <sophus/se3.hpp>
-#include "./pilot/speech_to_text_datum.h"
 #include "AriaVrsDataProvider.h"
+#include "speech_to_text_datum.h"
 
 namespace ark::datatools::dataprovider {
 

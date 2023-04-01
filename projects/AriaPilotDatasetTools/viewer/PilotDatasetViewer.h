@@ -18,7 +18,7 @@
 
 #include "AriaViewerBase.h"
 
-#include "./pilot/PilotDataset.h"
+#include "PilotDataset.h"
 
 namespace ark {
 namespace datatools {
