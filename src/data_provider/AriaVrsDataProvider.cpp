@@ -16,7 +16,6 @@
 
 #include "AriaVrsDataProvider.h"
 #include "AriaStreamIds.h"
-#include "utils.h"
 
 #include <fmt/core.h>
 #include <fmt/ostream.h>
@@ -76,9 +75,6 @@ auto kWifiBeaconCallback =
       return true;
     };
 
-constexpr const char* kTrajectoryPathSuffix = "location/trajectory.csv";
-constexpr const char* kEyetrackingPathSuffix = "eyetracking/et_in_rgb_stream.csv";
-constexpr const char* kSpeechToTextPathSuffix = "speech2text/speech_aria_domain.csv";
 const int kAriaNativeRgbResolution = 2880;
 const int kAriaNativeEtResolution = 640;
 }; // namespace
@@ -524,15 +520,8 @@ void AriaVrsDataProvider::setTimeSyncPlayerVerbose(bool verbose) {
   }
 }
 
-bool AriaVrsDataProvider::open(
-    const std::string& vrsPath,
-    const std::string& posePath,
-    const std::string& eyetrackingPath,
-    const std::string& speechToTextPath) {
+bool AriaVrsDataProvider::open(const std::string& vrsPath) {
   sourcePath_ = vrsPath;
-  hasPoses_ = loadPosesFromCsv(posePath);
-  hasEyetracks_ = loadEyetrackingFromCsv(eyetrackingPath);
-  hasSpeechToText_ = loadSpeechToTextFromCsv(speechToTextPath);
   return openFile(vrsPath);
 }
 
@@ -826,150 +815,6 @@ bool AriaVrsDataProvider::tryScaleEtCameraCalibration() {
   }
   std::cout << "Eye stream player doesn't exist, cannot update camera calibration" << std::endl;
   return false;
-}
-
-std::optional<Sophus::SE3d> AriaVrsDataProvider::getPose() const {
-  if (hasPoses_) {
-    // Always query using the slam-camera-left timestamp.
-    int64_t slamCameraLeftTimestampNs =
-        static_cast<int64_t>(1e9 * getNextTimestampSec(kSlamLeftCameraStreamId));
-    return queryPose(slamCameraLeftTimestampNs, imuLeftPoses_);
-  }
-
-  fmt::print(stderr, "No poses are loaded. Please check if a valid trajectory file is provided.");
-  return {};
-}
-
-std::optional<Sophus::SE3d> AriaVrsDataProvider::getPoseOfStreamAtTimestampNs(
-    const vrs::StreamId& streamId,
-    const int64_t timestampNs) {
-  std::optional<Sophus::SE3d> T_world_imuleft;
-  if (hasPoses_) {
-    T_world_imuleft = queryPose(timestampNs, imuLeftPoses_);
-  }
-  if (!T_world_imuleft) {
-    return {};
-  }
-  Sophus::SE3d T_Device_stream;
-
-  if (!kDeviceNumericIdToLabel.count(streamId.getNumericName())) {
-    fmt::print(stderr, "Stream {} not supported", streamId.getName());
-    return {};
-  }
-  const std::string labelName = kDeviceNumericIdToLabel.at(streamId.getNumericName());
-  if (labelName.find("cam") != std::string::npos) {
-    // Camera Calib
-    T_Device_stream = deviceModel_.getCameraCalib(labelName)->T_Device_Camera;
-  } else if (labelName.find("imu") != std::string::npos) {
-    // IMU Calib
-    T_Device_stream = deviceModel_.getImuCalib(labelName)->T_Device_Imu;
-  }
-  auto T_Device_imuleft = deviceModel_.getImuCalib("imu-left")->T_Device_Imu;
-  auto T_imuleft_stream = T_Device_imuleft.inverse() * T_Device_stream;
-  auto T_world_stream = T_world_imuleft.value() * T_imuleft_stream;
-  return T_world_stream;
-}
-
-std::optional<Sophus::SE3d> AriaVrsDataProvider::getLatestPoseOfStream(
-    const vrs::StreamId& streamId) {
-  if (!hasPoses_) {
-    return {};
-  }
-
-  // get latest timestamp of pose
-  int64_t currentTimestampNs = static_cast<int64_t>(1e9 * getNextTimestampSec(streamId));
-  return getPoseOfStreamAtTimestampNs(streamId, currentTimestampNs);
-}
-
-bool AriaVrsDataProvider::loadPosesFromCsv(const std::string& posePath) {
-  std::string trajectoryCsvFile = "";
-  if (!posePath.empty()) {
-    trajectoryCsvFile = posePath;
-  } else {
-    auto pathSplitted = strSplit(sourcePath_, '/');
-    pathSplitted.pop_back();
-    for (auto& subfolder : pathSplitted) {
-      trajectoryCsvFile += subfolder + "/";
-    }
-    trajectoryCsvFile += kTrajectoryPathSuffix;
-  }
-  std::filesystem::path trajectoryCsvPath(trajectoryCsvFile);
-  if (!std::filesystem::exists(trajectoryCsvPath)) {
-    std::cout << "No pose file found at " << trajectoryCsvPath << " , not visualizing poses"
-              << std::endl;
-    return false;
-  }
-  std::cout << "Loading poses file from " << trajectoryCsvFile << std::endl;
-  imuLeftPoses_ = readPosesFromCsvFile(trajectoryCsvFile);
-  return true;
-}
-
-std::optional<Eigen::Vector2f> AriaVrsDataProvider::getEyetracksOnRgbImage() const {
-  if (!hasEyetracks_) {
-    return {};
-  }
-
-  // Always query using the rgb camera timestamp.
-  int64_t rgbTimestampNs =
-      static_cast<int64_t>(1e9 * getNextTimestampSec(vrs::StreamId(kRgbCameraStreamId)));
-  return queryEyetrack(rgbTimestampNs, eyetracksOnRgbImage_);
-}
-
-bool AriaVrsDataProvider::loadEyetrackingFromCsv(const std::string& eyetrackingPath) {
-  std::string eyetrackingCsvFile = "";
-  if (!eyetrackingPath.empty()) {
-    eyetrackingCsvFile = eyetrackingPath;
-  } else {
-    auto pathSplitted = strSplit(sourcePath_, '/');
-    pathSplitted.pop_back();
-    for (auto& subfolder : pathSplitted) {
-      eyetrackingCsvFile += subfolder + "/";
-    }
-    eyetrackingCsvFile += kEyetrackingPathSuffix;
-  }
-  std::filesystem::path eyetrackingCsvPath(eyetrackingCsvFile);
-  if (!std::filesystem::exists(eyetrackingCsvPath)) {
-    std::cout << "No eyetracking file found at " << eyetrackingCsvPath
-              << " , not visualizing eye tracks" << std::endl;
-    return false;
-  }
-  std::cout << "Loading eye tracking file from " << eyetrackingCsvFile << std::endl;
-  eyetracksOnRgbImage_ = readEyetrackingFromCsvFile(eyetrackingCsvFile);
-  return true;
-}
-
-std::optional<SpeechToTextDatum> AriaVrsDataProvider::getSpeechToText() const {
-  if (!hasSpeechToText_) {
-    return {};
-  }
-
-  // Always query using the rgb camera timestamp.
-  int64_t rgbTimestampNs =
-      static_cast<int64_t>(1e9 * getNextTimestampSec(vrs::StreamId(kRgbCameraStreamId)));
-  return querySpeechToText(rgbTimestampNs, speechToText_);
-}
-
-bool AriaVrsDataProvider::loadSpeechToTextFromCsv(const std::string& speechToTextPath) {
-  std::string speechToTextCsvFile = "";
-  if (!speechToTextPath.empty()) {
-    speechToTextCsvFile = speechToTextPath;
-  } else {
-    auto pathSplitted = strSplit(sourcePath_, '/');
-    pathSplitted.pop_back();
-    for (auto& subfolder : pathSplitted) {
-      speechToTextCsvFile += subfolder + "/";
-    }
-    speechToTextCsvFile += kSpeechToTextPathSuffix;
-  }
-  std::filesystem::path speechToTextCsvPath(speechToTextCsvFile);
-  if (!std::filesystem::exists(speechToTextCsvPath)) {
-    std::cout << "No speechToText file found at " << speechToTextCsvPath
-              << " , not visualizing speech2text" << std::endl;
-    return false;
-  }
-  std::cout << "Loading speech2text file from " << speechToTextCsvFile << std::endl;
-  speechToText_ = readSpeechToTextFromCsvFile(speechToTextCsvFile);
-  return true;
 }
 
 } // namespace dataprovider

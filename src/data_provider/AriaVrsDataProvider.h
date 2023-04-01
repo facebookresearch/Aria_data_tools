@@ -16,7 +16,6 @@
 
 #pragma once
 
-#include <sophus/se3.hpp>
 #include <vrs/RecordFileReader.h>
 #include <vrs/RecordFormatStreamPlayer.h>
 
@@ -116,11 +115,7 @@ class AriaVrsDataProvider : public AriaDataProvider {
   void setVerbose(bool verbose);
 
   // Override functions for AriaDataProvider
-  bool open(
-      const std::string& vrsPath,
-      const std::string& posePath = "",
-      const std::string& eyetrackingPath = "",
-      const std::string& speechToTextPath = "") override;
+  bool open(const std::string& vrsPath) override;
   bool tryFetchNextData(
       const vrs::StreamId& streamId,
       double currentTimestampSec = std::numeric_limits<double>::max()) override;
@@ -143,19 +138,6 @@ class AriaVrsDataProvider : public AriaDataProvider {
   // audio data
   AriaDataProvider::optional_audio_reference_vector getAudioData() const override;
   uint8_t getAudioNumChannels() const override;
-  // pose data
-  std::optional<Sophus::SE3d> getPose() const override;
-  std::optional<Sophus::SE3d> getLatestPoseOfStream(const vrs::StreamId& streamId) override;
-  std::optional<Sophus::SE3d> getPoseOfStreamAtTimestampNs(
-      const vrs::StreamId& streamId,
-      const int64_t timestampNs) override;
-  bool loadPosesFromCsv(const std::string& posePath) override;
-  // eye tracking on rgb image data
-  std::optional<Eigen::Vector2f> getEyetracksOnRgbImage() const override;
-  bool loadEyetrackingFromCsv(const std::string& eyetrackingPath) override;
-  // speech-to-text data
-  std::optional<SpeechToTextDatum> getSpeechToText() const override;
-  bool loadSpeechToTextFromCsv(const std::string& speechToTextPath) override;
 
   bool atLastRecords() override;
   bool loadDeviceModel() override;

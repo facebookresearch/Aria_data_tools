@@ -38,7 +38,8 @@ using namespace ark::datatools::dataprovider;
 const std::vector<vrs::StreamId> kImageStreamIds = {
     kSlamLeftCameraStreamId,
     kSlamRightCameraStreamId,
-    kRgbCameraStreamId};
+    kRgbCameraStreamId,
+    kEyeCameraStreamId};
 const std::vector<vrs::StreamId> kImuStreamIds = {kImuRightStreamId, kImuLeftStreamId};
 const std::vector<vrs::StreamId> kDataStreams = {
     kMagnetometerStreamId,
@@ -75,7 +76,8 @@ int main(int argc, const char* argv[]) {
   // get and open data provider
   std::shared_ptr<dataprovider::AriaDataProvider> dataProvider =
       std::make_shared<dataprovider::AriaVrsDataProvider>();
-  if (!dataProvider->open(vrsPath, posePath, eyetrackingPath, speechToTextPath)) {
+  // posePath, eyetrackingPath, speechToTextPath
+  if (!dataProvider->open(vrsPath)) {
     fmt::print(stderr, "Failed to open '{}'.\n", vrsPath);
     return 0;
   }

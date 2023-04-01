@@ -41,7 +41,7 @@ int main(int argc, char** argv) {
 
   // get and open the VRS data provider
   dataprovider::AriaVrsDataProvider dataProvider;
-  if (!dataProvider.open(vrsPath, "", "", "")) {
+  if (!dataProvider.open(vrsPath)) {
     std::cerr << "Failed to open " << vrsPath << std::endl;
     return EXIT_FAILURE;
   }

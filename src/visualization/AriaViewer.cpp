@@ -42,19 +42,13 @@ void AriaViewer::run() {
   std::mutex* p_render_mutex = render_mutex.get();
 
   pangolin::CreateWindowAndBind(name_, width_, height_);
-  pangolin::OpenGlRenderState Visualization3D_camera(
-      pangolin::ProjectionMatrix(
-          width_ / 2, height_ / 2, width_ / 2, height_ / 2, width_ / 4, height_ / 4, 0.1, 100),
-      pangolin::ModelViewLookAt(2.0, 2.0, 1.0, 0, 0, 0, pangolin::AxisZ));
-  auto* handler = new pangolin::Handler3D(Visualization3D_camera);
-  pangolin::OpenGlMatrix Twc;
-  Twc.SetIdentity();
 
   using namespace ark::datatools::dataprovider;
 
   setDataChanged(false, kSlamLeftCameraStreamId);
   setDataChanged(false, kSlamRightCameraStreamId);
   setDataChanged(false, kRgbCameraStreamId);
+  setDataChanged(false, kEyeCameraStreamId);
 
   auto slamLeftCameraImageWidth = dataProvider_->getImageWidth(kSlamLeftCameraStreamId);
   auto slamLeftCameraImageHeight = dataProvider_->getImageHeight(kSlamLeftCameraStreamId);
@@ -62,14 +56,13 @@ void AriaViewer::run() {
   auto slamRightCameraImageHeight = dataProvider_->getImageHeight(kSlamRightCameraStreamId);
   auto rgbCameraImageWidth = dataProvider_->getImageWidth(kRgbCameraStreamId);
   auto rgbCameraImageHeight = dataProvider_->getImageHeight(kRgbCameraStreamId);
+  auto eyeCameraImageWidth = dataProvider_->getImageWidth(kEyeCameraStreamId);
+  auto eyeCameraImageHeight = dataProvider_->getImageHeight(kEyeCameraStreamId);
 
   pangolin::ImageView cameraSlamLeftView = pangolin::ImageView(); //"slam left");
   pangolin::ImageView cameraSlamRightView = pangolin::ImageView(); //"slam right");
-  // no tag for this one since we want to render text-to-speech
   pangolin::ImageView cameraRgbView = pangolin::ImageView();
-
-  pangolin::View& camTraj = pangolin::Display("camTrajectory").SetAspect(640 / (float)640);
-  camTraj.SetHandler(handler);
+  pangolin::ImageView cameraEyeView = pangolin::ImageView();
 
   // setup a loggers to show the imu signals
   pangolin::DataLog logAcc;
@@ -100,12 +93,8 @@ void AriaViewer::run() {
   // barometer and temperature logs
   pangolin::DataLog logBaro;
   logBaro.SetLabels({"barometer [Pa]"});
-  pangolin::Plotter plotBaro(&logBaro, 0.0f, 75.f, 101320 - 20000, 101320 + 1000, 100, 1.);
-  plotBaro.Track("$i");
   pangolin::DataLog logTemp;
   logTemp.SetLabels({"temperature [C]"});
-  pangolin::Plotter plotTemp(&logTemp, 0.0f, 75.f, 10., 35.0, 100, 1.);
-  plotBaro.Track("$i");
   // setup a logger to show the audio signals
   pangolin::DataLog logAudio;
   logAudio.SetLabels({"m0", "m1", "m2", "m3", "m4", "m5", "m6"});
@@ -118,13 +107,11 @@ void AriaViewer::run() {
                         .AddDisplay(cameraSlamLeftView)
                         .AddDisplay(cameraRgbView)
                         .AddDisplay(cameraSlamRightView)
-                        .AddDisplay(camTraj)
                         .AddDisplay(plotAcc)
                         .AddDisplay(plotGyro)
                         .AddDisplay(plotMag)
                         .AddDisplay(plotAudio)
-                        .AddDisplay(plotBaro)
-                        .AddDisplay(plotTemp);
+                        .AddDisplay(cameraEyeView);
 
   // prefix to give each viewer its own set of controls (otherwise they are
   // shared if multiple viewers are opened)
@@ -146,22 +133,12 @@ void AriaViewer::run() {
   pangolin::Var<bool> showLeftCamImg(prefix + ".LeftImg", true, true);
   pangolin::Var<bool> showRightCamImg(prefix + ".RightImg", true, true);
   pangolin::Var<bool> showRgbCamImg(prefix + ".RgbImg", true, true);
-  pangolin::Var<bool> showEyetracking(prefix + ".Eyetracking", true, true);
-  pangolin::Var<bool> showSpeechToText(prefix + ".SpeechToText", true, true);
-  // 3D visualization
-  pangolin::Var<bool> showLeftCam3D(prefix + ".LeftCam", true, true);
-  pangolin::Var<bool> showRightCam3D(prefix + ".RightCam", true, true);
-  pangolin::Var<bool> showRgbCam3D(prefix + ".RgbCam", true, true);
-  pangolin::Var<bool> showRig3D(prefix + ".Rig", true, true);
-  pangolin::Var<bool> showTraj(prefix + ".Trajectory", true, true);
-  pangolin::Var<bool> showWorldCoordinateSystem(prefix + ".World Coord.", true, true);
+  pangolin::Var<bool> showEyeImg(prefix + ".EyeImg", true, true);
   // IMU
   pangolin::Var<bool> showLeftImu(prefix + ".LeftImu", true, true);
   pangolin::Var<bool> showRightImu(prefix + ".RightImu", true, true);
   pangolin::Var<bool> showMagnetometer(prefix + ".Magnetometer", true, true);
-  //  barometer and temperature are pretty constant so we dont show by default
-  pangolin::Var<bool> showBarometer(prefix + ".Barometer", false, true);
-  pangolin::Var<bool> showTemperature(prefix + ".Temperature", false, true);
+  // Audio
   pangolin::Var<bool> showAudio(prefix + ".Audio", true, true);
   // print gps, wifi, bluetooth to terminal output.
   pangolin::Var<bool> printGps(prefix + ".print GPS log", true, true);
@@ -170,50 +147,6 @@ void AriaViewer::run() {
   // temperature and pressure display on the side of the menu
   pangolin::Var<float> temperatureDisplay(prefix + ".temp [C]", 0., 0.0, 0., false);
   pangolin::Var<float> pressureDisplay(prefix + ".pres [kPa]", 0., 0.0, 0., false);
-  // keys 0-9 are used to toggle the different views
-  std::array<char, 10> show_hide_keys = {'1', '2', '3', '4', '5', '6', '7', '8', '9', '0'};
-  for (size_t v = 0; v < container.NumChildren() && v < show_hide_keys.size(); v++) {
-    pangolin::RegisterKeyPressCallback(
-        show_hide_keys[v], [v, &container]() { container[v].ToggleShow(); });
-  }
-
-  // enable blending to allow showing the text-to-speech overlay
-  glEnable(GL_BLEND);
-  glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-  pangolin::GlFont glFontSpeechToText(AnonymousPro_ttf, 24);
-
-  cameraRgbView.extern_draw_function = [this,
-                                        rgbCameraImageWidth,
-                                        rgbCameraImageHeight,
-                                        &showSpeechToText,
-                                        &showEyetracking,
-                                        &glFontSpeechToText](pangolin::View& v) {
-    v.ActivatePixelOrthographic();
-    v.ActivateAndScissor();
-    if (showSpeechToText) {
-      std::stringstream text;
-      if (speechToText_) {
-        // show formatted as "text (confidence, duration)"
-        text << speechToText_->text << " (" << std::fixed << std::setprecision(0)
-             << 100 * speechToText_->confidence << "%, " << std::fixed << std::setw(5)
-             << std::setprecision(3) << speechToText_->duration_s() << "s)";
-      }
-      glFontSpeechToText.Text(text.str()).DrawWindow(v.v.l, v.v.t() - glFontSpeechToText.Height());
-    }
-    if (showEyetracking) {
-      glLineWidth(3);
-      glColor3f(1.0, 0.0, 0.0);
-      if (eyetracksOnRgbImage_.size()) {
-        // scale to the current display size
-        const float scale = (float)v.v.w / (float)rgbCameraImageWidth;
-        pangolin::glDrawCross(
-            scale * eyetracksOnRgbImage_.back()(0),
-            scale * (rgbCameraImageHeight - eyetracksOnRgbImage_.back()(1)),
-            10);
-      }
-    }
-    v.GetBounds().DisableScissor();
-  };
 
   // Main loop
   while (!pangolin::ShouldQuit()) {
@@ -232,7 +165,6 @@ void AriaViewer::run() {
             slamLeftCameraImageHeight,
             slamLeftCameraImageWidth,
             pangolin::PixelFormatFromString("GRAY8"));
-        setPose(dataProvider_->getPose());
         setDataChanged(false, kSlamLeftCameraStreamId);
       }
       if (cameraRgbView.IsShown() && isDataChanged(kRgbCameraStreamId)) {
@@ -244,9 +176,18 @@ void AriaViewer::run() {
             rgbCameraImageHeight,
             rgbCameraImageWidth * 3,
             pangolin::PixelFormatFromString("RGB24"));
-        setEyetracksOnRgbImage(dataProvider_->getEyetracksOnRgbImage());
-        setSpeechToText(dataProvider_->getSpeechToText());
         setDataChanged(false, kRgbCameraStreamId);
+      }
+      if (cameraEyeView.IsShown() && isDataChanged(kEyeCameraStreamId)) {
+        cameraEyeView.SetImage(
+            static_cast<void*>(cameraImageBufferMap_[kEyeCameraStreamId.getTypeId()]
+                                                    [kEyeCameraStreamId.getInstanceId()]
+                                                        .data()),
+            eyeCameraImageWidth,
+            eyeCameraImageHeight,
+            eyeCameraImageWidth,
+            pangolin::PixelFormatFromString("GRAY8"));
+        setDataChanged(false, kEyeCameraStreamId);
       }
       if (cameraSlamRightView.IsShown() && isDataChanged(kSlamRightCameraStreamId)) {
         cameraSlamRightView.SetImage(
@@ -329,20 +270,6 @@ void AriaViewer::run() {
       temperatureDisplay = temperature_.back(); // C
     }
 
-    if (hasFirstPose_) {
-      // draw 3D
-      camTraj.Activate(Visualization3D_camera);
-      // draw origin of world coordinate system
-      if (showWorldCoordinateSystem) {
-        glLineWidth(3);
-        pangolin::glDrawAxis(0.3);
-      }
-      if (showTraj) {
-        drawTraj();
-      }
-      drawRigs(showRig3D, showLeftCam3D, showRightCam3D, showRgbCam3D, sparsitySlide.Get());
-    }
-
     // propagate show parameters
     container[0].Show(showLeftCamImg);
     container[1].Show(showRightCamImg);
@@ -350,12 +277,10 @@ void AriaViewer::run() {
     cameraSlamLeftView.Show(showLeftCamImg);
     cameraSlamRightView.Show(showRightCamImg);
     cameraRgbView.Show(showRgbCamImg);
+    cameraEyeView.Show(showEyeImg);
     plotAudio.Show(showAudio);
     plotAcc.Show(showLeftImu || showRightImu);
     plotGyro.Show(showLeftImu || showRightImu);
-    plotBaro.Show(showBarometer);
-    plotTemp.Show(showTemperature);
-    plotMag.Show(showMagnetometer);
 
     {
       std::lock_guard<std::mutex> lock(*p_render_mutex);
@@ -364,134 +289,6 @@ void AriaViewer::run() {
   }
   std::cout << "\nQuit Viewer." << std::endl;
   exit(1);
-}
-
-void AriaViewer::drawTraj() {
-  glColor3f(1, 0.8, 0);
-  glLineWidth(3);
-  std::vector<Eigen::Vector3d> trajectory;
-  for (auto const& T_wi : T_World_ImuLeft_) {
-    trajectory.emplace_back(T_wi.translation());
-  }
-  pangolin::glDrawLineStrip(trajectory);
-}
-
-void AriaViewer::drawRigs(
-    bool showRig3D,
-    bool showLeftCam3D,
-    bool showRightCam3D,
-    bool showRgbCam3D,
-    int camSparsity) {
-  const float sz = 0.03;
-
-  using namespace ark::datatools::dataprovider;
-
-  glLineWidth(3);
-  int counter = 0;
-  while (counter < T_World_ImuLeft_.size()) {
-    auto const& T_World_ImuLeft = T_World_ImuLeft_[counter];
-    const auto T_World_CamSlamLeft = T_World_ImuLeft *
-        T_ImuLeft_cameraMap_[kSlamLeftCameraStreamId.getTypeId()]
-                            [kSlamLeftCameraStreamId.getInstanceId()];
-    const auto T_World_CamSlamRight = T_World_ImuLeft *
-        T_ImuLeft_cameraMap_[kSlamRightCameraStreamId.getTypeId()]
-                            [kSlamRightCameraStreamId.getInstanceId()];
-    const auto T_World_CamRgb = T_World_ImuLeft *
-        T_ImuLeft_cameraMap_[kRgbCameraStreamId.getTypeId()][kRgbCameraStreamId.getInstanceId()];
-
-    if (counter == T_World_ImuLeft_.size() - 1)
-      glColor3f(0.0, 1.0, 0.0);
-    else
-      glColor3f(0.0, 0.0, 1.0);
-
-    if (showRig3D) {
-      // Rig
-      pangolin::glDrawAxis(T_World_ImuLeft.matrix(), sz / 2);
-    }
-    if (showLeftCam3D) {
-      auto camSlamLeft = deviceModel_.getCameraCalib("camera-slam-left");
-      if (camSlamLeft) {
-        auto fs = camSlamLeft->projectionModel.getFocalLengths();
-        auto cs = camSlamLeft->projectionModel.getPrincipalPoint();
-        // Left cam
-        pangolin::glSetFrameOfReference(T_World_CamSlamLeft.matrix());
-        pangolin::glDrawFrustum(
-            -cs(0) / fs(0), -cs(1) / fs(1), 1. / fs(0), 1. / fs(1), 640, 480, sz * 0.8);
-        pangolin::glUnsetFrameOfReference();
-      }
-    }
-
-    if (showRightCam3D) {
-      auto camSlamRight = deviceModel_.getCameraCalib("camera-slam-right");
-      if (camSlamRight) {
-        auto fs = camSlamRight->projectionModel.getFocalLengths();
-        auto cs = camSlamRight->projectionModel.getPrincipalPoint();
-        // Right cam
-        pangolin::glSetFrameOfReference(T_World_CamSlamRight.matrix());
-        pangolin::glDrawFrustum(
-            -cs(0) / fs(0), -cs(1) / fs(1), 1. / fs(0), 1. / fs(1), 640, 480, sz * 0.8);
-        pangolin::glUnsetFrameOfReference();
-      }
-    }
-
-    if (showRgbCam3D) {
-      auto camRgb = deviceModel_.getCameraCalib("camera-rgb");
-      if (camRgb) {
-        auto fs = camRgb->projectionModel.getFocalLengths();
-        auto cs = camRgb->projectionModel.getPrincipalPoint();
-        // Rgb cam
-        pangolin::glSetFrameOfReference(T_World_CamRgb.matrix());
-        pangolin::glDrawFrustum(
-            -cs(0) / fs(0), -cs(1) / fs(1), 1. / fs(0), 1. / fs(1), 1408, 1408, sz * 0.8);
-        pangolin::glUnsetFrameOfReference();
-      }
-    }
-
-    // draw line connecting rig coordinate frames
-    pangolin::glDrawLineStrip(std::vector<Eigen::Vector3d>{
-        T_World_CamSlamLeft.translation(),
-        T_World_CamRgb.translation(),
-        T_World_ImuLeft.translation(),
-        T_World_CamSlamRight.translation(),
-    });
-
-    // Always draw the latest camera.
-    if (counter != T_World_ImuLeft_.size() - 1 &&
-        counter + camSparsity >= T_World_ImuLeft_.size()) {
-      counter = T_World_ImuLeft_.size() - 1;
-    } else {
-      counter += camSparsity;
-    }
-  }
-}
-
-void AriaViewer::setPose(const std::optional<Sophus::SE3d>& T_World_ImuLeft) {
-  if (!T_World_ImuLeft) {
-    return;
-  }
-  if (!hasFirstPose_) {
-    // Use first pose translation to define the world frame.
-    // Rotation is gravity aligned so we leave it as is.
-    T_Viewer_World_ = Sophus::SE3d(Sophus::SO3d(), -T_World_ImuLeft.value().translation());
-    hasFirstPose_ = true;
-  }
-
-  // Set pose based on slam-left-camera timestamps.
-  if (isDataChanged(dataprovider::kSlamLeftCameraStreamId)) {
-    T_World_ImuLeft_.emplace_back(T_Viewer_World_ * T_World_ImuLeft.value());
-  }
-}
-
-void AriaViewer::setEyetracksOnRgbImage(const std::optional<Eigen::Vector2f>& eyetrackOnRgbImage) {
-  if (!eyetrackOnRgbImage) {
-    return;
-  }
-  eyetracksOnRgbImage_.emplace_back(eyetrackOnRgbImage.value());
-}
-
-void AriaViewer::setSpeechToText(
-    const std::optional<ark::datatools::dataprovider::SpeechToTextDatum>& speechToText) {
-  speechToText_ = speechToText;
 }
 
 std::pair<double, double> AriaViewer::initDataStreams(
@@ -503,27 +300,6 @@ std::pair<double, double> AriaViewer::initDataStreams(
   // Call mother initialization
   const auto speedDataRate =
       AriaViewerBase::initDataStreams(kImageStreamIds, kImuStreamIds, kDataStreams);
-
-  using namespace ark::datatools::dataprovider;
-
-  // Deal with specifics to this implementation
-  //
-  // init transformation from camera coordinate systems to the pose coordinate system (imuLeft).
-  if (deviceModel_.getImuCalib("imu-left") && deviceModel_.getCameraCalib("camera-slam-left") &&
-      deviceModel_.getImuCalib("camera-rgb")) {
-    auto T_ImuLeft_Device = deviceModel_.getImuCalib("imu-left")->T_Device_Imu.inverse();
-    T_ImuLeft_cameraMap_[kSlamLeftCameraStreamId.getTypeId()]
-                        [kSlamLeftCameraStreamId.getInstanceId()] = T_ImuLeft_Device *
-        deviceModel_.getCameraCalib("camera-slam-left")->T_Device_Camera;
-    T_ImuLeft_cameraMap_[kRgbCameraStreamId.getTypeId()][kRgbCameraStreamId.getInstanceId()] =
-        T_ImuLeft_Device * deviceModel_.getCameraCalib("camera-rgb")->T_Device_Camera;
-    T_ImuLeft_cameraMap_[kSlamRightCameraStreamId.getTypeId()]
-                        [kSlamRightCameraStreamId.getInstanceId()] = T_ImuLeft_Device *
-        deviceModel_.getCameraCalib("camera-slam-right")->T_Device_Camera;
-  }
-  if (!dataProvider_->hasPoses()) {
-    fmt::print("Not visualizing poses\n");
-  }
   return speedDataRate;
 }
 

@@ -37,34 +37,10 @@ class AriaViewer : public AriaViewerBase {
 
   void run() override;
 
-  void drawTraj();
-  void drawRigs(
-      bool showRig3D,
-      bool showLeftCam3D,
-      bool showRightCam3D,
-      bool showRgbCam3D,
-      int camSparsity);
-
-  void setPose(const std::optional<Sophus::SE3d>& T_World_ImuLeft);
-  void setEyetracksOnRgbImage(const std::optional<Eigen::Vector2f>& eyetrackOnRgbImage);
-  void setSpeechToText(
-      const std::optional<ark::datatools::dataprovider::SpeechToTextDatum>& speechToText);
-
   std::pair<double, double> initDataStreams(
       const std::vector<vrs::StreamId>& kImageStreamIds,
       const std::vector<vrs::StreamId>& kImuStreamIds = {},
       const std::vector<vrs::StreamId>& kDataStreams = {}) override;
-
- private:
-  std::vector<Sophus::SE3d> T_World_ImuLeft_;
-  std::vector<Eigen::Vector2f> eyetracksOnRgbImage_;
-  std::optional<ark::datatools::dataprovider::SpeechToTextDatum> speechToText_;
-  Sophus::SE3d T_Viewer_World_;
-  bool hasFirstPose_ = false;
-
-  // Save transformation to move data to IMU Left (Aria Pilot dataset Reference system)
-  std::unordered_map<vrs::RecordableTypeId, std::unordered_map<uint16_t, Sophus::SE3d>>
-      T_ImuLeft_cameraMap_;
 };
 } // namespace visualization
 } // namespace datatools

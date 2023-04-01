@@ -16,7 +16,6 @@
 
 #pragma once
 
-#include <sophus/se3.hpp>
 #include <vrs/StreamId.h>
 #include <map>
 #include <optional>
@@ -38,11 +37,7 @@ class AriaDataProvider {
  public:
   AriaDataProvider() = default;
   virtual ~AriaDataProvider() = default;
-  virtual bool open(
-      const std::string& sourcePath,
-      const std::string& posePath = "",
-      const std::string& eyetrackingPath = "",
-      const std::string& speechToTextPath = "") = 0;
+  virtual bool open(const std::string& sourcePath) = 0;
   virtual void setStreamPlayer(const vrs::StreamId& streamId) = 0;
   virtual bool tryFetchNextData(
       const vrs::StreamId& streamId,
@@ -65,19 +60,6 @@ class AriaDataProvider {
   // audio data
   virtual optional_audio_reference_vector getAudioData() const = 0;
   virtual uint8_t getAudioNumChannels() const = 0;
-  // aria pose side-loading (from csv file) and time-aligned serving
-  virtual std::optional<Sophus::SE3d> getPose() const = 0;
-  virtual std::optional<Sophus::SE3d> getLatestPoseOfStream(const vrs::StreamId& streamId) = 0;
-  virtual std::optional<Sophus::SE3d> getPoseOfStreamAtTimestampNs(
-      const vrs::StreamId& streamId,
-      const int64_t timestampNs) = 0;
-  virtual bool loadPosesFromCsv(const std::string& posePath) = 0;
-  // eyetracking data side-loading (from csv file) and time-aligned serving
-  virtual std::optional<Eigen::Vector2f> getEyetracksOnRgbImage() const = 0;
-  virtual bool loadEyetrackingFromCsv(const std::string& eyetrackingPath) = 0;
-  // speechToText data side-loading (from csv file) and time-aligned serving
-  virtual std::optional<SpeechToTextDatum> getSpeechToText() const = 0;
-  virtual bool loadSpeechToTextFromCsv(const std::string& speechToTextPath) = 0;
 
   virtual bool atLastRecords() = 0;
   virtual bool loadDeviceModel() = 0;
@@ -96,21 +78,11 @@ class AriaDataProvider {
     return deviceModel_;
   }
 
-  bool hasPoses() const {
-    return hasPoses_;
-  }
-
  protected:
   std::set<vrs::StreamId> providerStreamIds_;
   datatools::sensors::DeviceModel deviceModel_;
 
-  bool hasPoses_ = false;
-  bool hasEyetracks_ = false;
-  bool hasSpeechToText_ = false;
   std::string sourcePath_;
-  std::map<int64_t, Sophus::SE3d> imuLeftPoses_;
-  std::map<int64_t, Eigen::Vector2f> eyetracksOnRgbImage_;
-  std::map<int64_t, SpeechToTextDatum> speechToText_;
 };
 } // namespace dataprovider
 } // namespace datatools

@@ -56,7 +56,7 @@ int main(int argc, const char* argv[]) {
   // get and open data provider
   std::shared_ptr<dataprovider::AriaDataProvider> dataProvider =
       std::make_shared<dataprovider::AriaVrsDataProvider>();
-  if (!dataProvider->open(vrsPath, "", "", "")) {
+  if (!dataProvider->open(vrsPath)) {
     fmt::print(stderr, "Failed to open '{}'.\n", vrsPath);
     return 0;
   }

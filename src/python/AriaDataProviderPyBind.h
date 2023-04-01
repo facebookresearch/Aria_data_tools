@@ -37,7 +37,6 @@ void exportDataProvider(py::module& m) {
   // AriaDataProvider bindings
   py::class_<AriaDataProvider>(m, "AriaDataProvider")
       .def("getDeviceModel", &AriaDataProvider::getDeviceModel, py::return_value_policy::reference)
-      .def("hasPoses", &AriaDataProvider::hasPoses)
       .def("streamExistsInSource", &AriaDataProvider::streamExistsInSource, py::arg("streamId"));
 
   // AriaVrsDataProvider bindings
@@ -171,13 +170,7 @@ void exportDataProvider(py::module& m) {
       .def("setVerbose", &AriaVrsDataProvider::setVerbose, py::arg("verbose"))
 
       // AriaDataProvider override functions
-      .def(
-          "open",
-          &AriaVrsDataProvider::open,
-          py::arg("vrsPath"),
-          py::arg("posePath"),
-          py::arg("eyetrackingPath"),
-          py::arg("speechToTextPath"))
+      .def("open", &AriaVrsDataProvider::open, py::arg("vrsPath"))
       .def("setStreamPlayer", &AriaVrsDataProvider::setStreamPlayer, py::arg("streamId"))
       .def(
           "tryFetchNextData",
@@ -193,14 +186,12 @@ void exportDataProvider(py::module& m) {
       .def("getImageHeight", &AriaVrsDataProvider::getImageHeight, py::arg("streamId"))
       .def("getFastestNominalRateHz", &AriaVrsDataProvider::getFastestNominalRateHz)
       .def("getFirstTimestampSec", py::overload_cast<>(&AriaVrsDataProvider::getFirstTimestampSec))
-      .def("getPose", &AriaVrsDataProvider::getPose)
       .def("atLastRecords", &AriaVrsDataProvider::atLastRecords)
       .def("loadDeviceModel", &AriaVrsDataProvider::loadDeviceModel)
       .def(
           "getDeviceModel",
           &AriaVrsDataProvider::getDeviceModel,
           py::return_value_policy::reference)
-      .def("hasPoses", &AriaVrsDataProvider::hasPoses)
       .def("streamExistsInSource", &AriaVrsDataProvider::streamExistsInSource, py::arg("streamId"));
 }
 
