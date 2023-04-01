@@ -14,7 +14,6 @@
 
 message("--- Compiling dataset_provider Pilot dataset.")
 
-find_package(Pangolin REQUIRED)
 find_package(Threads REQUIRED)
 
 add_library(pilotDatasetProvider_lib
@@ -32,13 +31,16 @@ target_include_directories(pilotDatasetProvider_lib
     PRIVATE
         "../third_party/include/fast-cpp-csv-parser")
 
-add_executable(pilotDataset_viewer
-    ./pilot/viewer/main.cpp
-    ./pilot/viewer/PilotDatasetViewer.cpp
-    ./pilot/viewer/PilotDatasetViewer.h)
-target_link_libraries(pilotDataset_viewer
-    PRIVATE
-    pilotDatasetProvider_lib
-    aria_viewer_lib
-    ${Pangolin_LIBRARIES}
-    Threads::Threads)
+if (BUILD_WITH_PANGOLIN)
+    find_package(Pangolin REQUIRED)
+    add_executable(pilotDataset_viewer
+        ./pilot/viewer/main.cpp
+        ./pilot/viewer/PilotDatasetViewer.cpp
+        ./pilot/viewer/PilotDatasetViewer.h)
+    target_link_libraries(pilotDataset_viewer
+        PRIVATE
+        pilotDatasetProvider_lib
+        aria_viewer_lib
+        ${Pangolin_LIBRARIES}
+        Threads::Threads)
+endif (BUILD_WITH_PANGOLIN)

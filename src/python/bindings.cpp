@@ -16,7 +16,6 @@
 
 #include "AriaDataProviderPyBind.h"
 #include "AriaPlayersPyBind.h"
-#include "AriaViewerPyBind.h"
 #include "DeviceModelPyBind.h"
 #include "MpsIOPyBind.h"
 
@@ -32,9 +31,6 @@ PYBIND11_MODULE(pyark, m) {
 
   py::module sensors = datatools.def_submodule("sensors");
   sensors::exportSensors(sensors);
-
-  py::module visualization = datatools.def_submodule("visualization");
-  visualization::exportVisualization(visualization);
 
   py::module mpsIO = datatools.def_submodule("mpsIO");
   mpsIO::exportMpsIO(mpsIO);
