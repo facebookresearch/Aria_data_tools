@@ -19,64 +19,22 @@
 #include <deque>
 #include "data_provider/AriaVrsDataProvider.h"
 #include "eyeGazeReader.h"
-#include "models/DeviceModel.h"
-#include "utils.h"
+#include "visualization/AriaViewerBase.h"
 
 namespace ark::datatools::visualization {
 
-class AriaViewer {
+class AriaViewer : public AriaViewerBase {
  public:
   AriaViewer(
       datatools::dataprovider::AriaDataProvider* dataProvider,
       int width,
       int height,
+      const std::string& eyeTrackingFilepath,
       const std::string& name = "AriaEyeGazeViewer");
-  ~AriaViewer() = default;
-  void run();
+  ~AriaViewer() override = default;
+  void run() override;
 
-  std::mutex& getDataMutex() {
-    return dataMutex_;
-  }
-
-  std::thread runInThread() {
-    return std::thread(&AriaViewer::run, this);
-  }
-
-  bool isPlaying() const {
-    return isPlaying_;
-  }
-
-  float getPlaybackSpeedFactor() const {
-    return playbackSpeedFactor_;
-  }
-
-  bool isDataChanged(const vrs::StreamId& streamId) {
-    return dataChangedMap_[streamId.getTypeId()][streamId.getInstanceId()];
-  }
-
-  void setDataChanged(bool dataChanged, const vrs::StreamId& streamId) {
-    dataChangedMap_[streamId.getTypeId()][streamId.getInstanceId()] = dataChanged;
-  }
-  void setCameraImageBuffer(const std::vector<uint8_t>& buffer, const vrs::StreamId& streamId) {
-    cameraImageBufferMap_[streamId.getTypeId()][streamId.getInstanceId()] = buffer;
-  }
-
-  std::pair<double, double> initDataStreams(const std::filesystem::path& eyeTrackingFilepath);
-  // read data until currentTimestampSec
-  bool readData(double currentTimestampSec);
-
- private:
-  const int width_, height_;
-  const std::string name_;
-  bool isPlaying_ = false;
-  float playbackSpeedFactor_ = 1;
-  std::mutex dataMutex_;
-
-  // Store if RecordableTypeId has been changed
-  std::unordered_map<vrs::RecordableTypeId, std::unordered_map<uint16_t, bool>> dataChangedMap_;
-  // Current image data buffer per RecordableTypeID to be shown
-  std::unordered_map<vrs::RecordableTypeId, std::unordered_map<uint16_t, std::vector<uint8_t>>>
-      cameraImageBufferMap_;
+  bool readData(double currentTimestampSec) override;
 
  public:
   // Interface to store temporally sorted EyeGaze data record
@@ -90,11 +48,6 @@ class AriaViewer {
   // A rolling buffer history of EyeGaze yaw, pitch recordings
   std::deque<Eigen::Vector2d> eyeGazeHistory_;
 
-  // Aria device model data
-  datatools::sensors::DeviceModel deviceModel_;
-
-  // Aria VRS data provider
-  datatools::dataprovider::AriaDataProvider* dataProvider_;
   // Store current Timestamp relative to the Aria sequence we are at
   std::int64_t currentTimestamp_ = 0;
 };

@@ -18,6 +18,7 @@
 #include <filesystem>
 #include <string>
 #include <thread>
+#include "AriaStreamIds.h"
 #include "AriaViewer.h"
 #include "utils.h"
 
@@ -30,6 +31,22 @@ template <
 auto since(std::chrono::time_point<clock_t, duration_t> const& start) {
   return std::chrono::duration_cast<result_t>(clock_t::now() - start);
 };
+
+using namespace ark::datatools::dataprovider;
+
+const std::vector<vrs::StreamId> kImageStreamIds = {
+    kSlamLeftCameraStreamId,
+    kSlamRightCameraStreamId,
+    kRgbCameraStreamId};
+const std::vector<vrs::StreamId> kImuStreamIds = {kImuRightStreamId, kImuLeftStreamId};
+const std::vector<vrs::StreamId> kDataStreams = {
+    kMagnetometerStreamId,
+    kBarometerStreamId,
+    kAudioStreamId,
+    kWifiStreamId,
+    kBluetoothStreamId,
+    kGpsStreamId,
+    kPoseStreamId};
 
 } // namespace
 
@@ -59,7 +76,7 @@ int main(int argc, const char* argv[]) {
     viewers.emplace_back(std::make_shared<visualization::AriaViewer>(
         dataProvider.get(), 1280, 800, "AriaViewer", argi - 1));
     // initialize and setup datastreams
-    viewers.back()->initDataStreams();
+    viewers.back()->initDataStreams(kImageStreamIds, kImuStreamIds, kDataStreams);
   }
   // get joint synced time table across all recordings
   std::set<int64_t> baseTimeSet;

@@ -17,6 +17,7 @@
 #include <chrono>
 #include <string>
 #include <thread>
+#include "AriaStreamIds.h"
 #include "AriaViewer.h"
 
 using namespace ark::datatools;
@@ -29,6 +30,15 @@ template <
 auto since(std::chrono::time_point<clock_t, duration_t> const& start) {
   return std::chrono::duration_cast<result_t>(clock_t::now() - start);
 };
+
+using namespace ark::datatools::dataprovider;
+
+const std::vector<vrs::StreamId> kImageStreamIds = {
+    kEyeCameraStreamId,
+    kRgbCameraStreamId,
+    kSlamLeftCameraStreamId,
+    kSlamRightCameraStreamId};
+
 } // namespace
 
 int main(int argc, const char* argv[]) {
@@ -55,9 +65,9 @@ int main(int argc, const char* argv[]) {
 
   // start viewer with dataprovider
   std::shared_ptr<visualization::AriaViewer> viewer =
-      std::make_shared<visualization::AriaViewer>(dataProvider.get(), 900, 800);
+      std::make_shared<visualization::AriaViewer>(dataProvider.get(), 900, 800, eyeGazeRecordsPath);
   // initialize and setup datastreams
-  auto initDataStreams = viewer->initDataStreams(eyeGazeRecordsPath);
+  auto initDataStreams = viewer->initDataStreams(kImageStreamIds);
   double currentTimestampSec = initDataStreams.first;
   double fastestNominalRateHz = initDataStreams.second;
   // read and visualize datastreams at desired speed

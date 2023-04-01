@@ -18,15 +18,12 @@
 #include <pangolin/display/image_view.h>
 #include <pangolin/gl/gldraw.h>
 #include <pangolin/pangolin.h>
-#include "models/DeviceModel.h"
+#include "AriaStreamIds.h"
 #include "mps_io/eyeGazeReader.h"
 
 namespace {
-const vrs::StreamId kEyeCameraStreamId(
-    vrs::StreamId(vrs::RecordableTypeId::EyeCameraRecordableClass, 1));
-const vrs::StreamId kRgbCameraStreamId(vrs::RecordableTypeId::RgbCameraRecordableClass, 1);
-const vrs::StreamId kSlamLeftCameraStreamId(vrs::RecordableTypeId::SlamCameraData, 1);
-const vrs::StreamId kSlamRightCameraStreamId(vrs::RecordableTypeId::SlamCameraData, 2);
+
+using namespace ark::datatools::dataprovider;
 
 const std::vector<vrs::StreamId> kImageStreamIds = {
     kEyeCameraStreamId,
@@ -42,8 +39,19 @@ AriaViewer::AriaViewer(
     datatools::dataprovider::AriaDataProvider* dataProvider,
     int width,
     int height,
+    const std::string& eyeTrackingFilepath,
     const std::string& name)
-    : width_(width), height_(height), name_(name), dataProvider_(dataProvider) {}
+    : AriaViewerBase(dataProvider, width, height, name) {
+  // Initialize EyeGaze data
+  {
+    const TemporalEyeGazeData eyeGaze_records = readEyeGaze(eyeTrackingFilepath);
+    // Convert eyeGaze data to a simpler convention
+    for (const auto& eyeGazeData : eyeGaze_records) {
+      eyeGazeData_[eyeGazeData.first] =
+          std::make_pair(eyeGazeData.second.gaze_vector, eyeGazeData.second.uncertainty);
+    }
+  }
+}
 
 void AriaViewer::run() {
   std::cout << "Start " << name_ << "!" << std::endl;
@@ -55,6 +63,7 @@ void AriaViewer::run() {
   pangolin::OpenGlMatrix Twc;
   Twc.SetIdentity();
 
+  using namespace ark::datatools::dataprovider;
   //
   // Initialize EyeTracking data visualization widgets
   // - Images: Left & Right eye
@@ -301,34 +310,6 @@ void AriaViewer::run() {
   exit(1);
 }
 
-std::pair<double, double> AriaViewer::initDataStreams(
-    const std::filesystem::path& eyeTrackingFilepath) {
-  // Streams should be set after opening VRS file in AriaVrsDataProvider
-  for (auto& streamId : kImageStreamIds) {
-    dataProvider_->setStreamPlayer(streamId);
-  }
-
-  // Initialize EyeGaze data
-  {
-    const TemporalEyeGazeData eyeGaze_records = readEyeGaze(eyeTrackingFilepath);
-    // Convert eyeGaze data to a simpler convention
-    for (const auto& eyeGazeData : eyeGaze_records) {
-      eyeGazeData_[eyeGazeData.first] =
-          std::make_pair(eyeGazeData.second.gaze_vector, eyeGazeData.second.uncertainty);
-    }
-  }
-  // Return data stream time & frequency statistics
-  const double fastestNominalRateHz = dataProvider_->getFastestNominalRateHz();
-  const double currentTimestampSec = dataProvider_->getFirstTimestampSec();
-
-  // Safe to load device model now for both provider modes, VRS configuration records were read
-  dataProvider_->loadDeviceModel();
-  // init device model (intrinsic and extrinsic calibration)
-  deviceModel_ = dataProvider_->getDeviceModel();
-
-  return {currentTimestampSec, fastestNominalRateHz};
-}
-
 // Convert a Timestamp stored in double to microseconds with std::chrono
 constexpr auto durationDoubleToChronoUsCast(const double time_s) {
   using namespace std::chrono;
@@ -372,7 +353,7 @@ bool AriaViewer::readData(double currentTimestampSec) {
       // Handle image streams & update eye gaze data if available
       for (auto& streamId : kImageStreamIds) {
         if (dataProvider_->tryFetchNextData(streamId, currentTimestampSec)) {
-          if (streamId == kEyeCameraStreamId) {
+          if (streamId == dataprovider::kEyeCameraStreamId) {
             const auto ret =
                 queryEyetrack(durationDoubleToChronoUsCast(currentTimestampSec), eyeGazeData_);
             if (ret)

@@ -15,6 +15,7 @@
  */
 
 #include "AriaVrsDataProvider.h"
+#include "AriaStreamIds.h"
 #include "utils.h"
 
 #include <fmt/core.h>
@@ -281,59 +282,59 @@ void AriaVrsDataProvider::createPosePlayer(const vrs::StreamId& streamId) {
 }
 
 void AriaVrsDataProvider::setSlamLeftCameraPlayer() {
-  setStreamPlayer(vrs::StreamId(vrs::RecordableTypeId::SlamCameraData, 1));
+  setStreamPlayer(kSlamLeftCameraStreamId);
 }
 
 void AriaVrsDataProvider::setSlamRightCameraPlayer() {
-  setStreamPlayer(vrs::StreamId(vrs::RecordableTypeId::SlamCameraData, 2));
+  setStreamPlayer(kSlamRightCameraStreamId);
 }
 
 void AriaVrsDataProvider::setRgbCameraPlayer() {
-  setStreamPlayer(vrs::StreamId(vrs::RecordableTypeId::RgbCameraRecordableClass, 1));
+  setStreamPlayer(kRgbCameraStreamId);
 }
 
 void AriaVrsDataProvider::setEyeCameraPlayer() {
-  setStreamPlayer(vrs::StreamId(vrs::RecordableTypeId::EyeCameraRecordableClass, 1));
+  setStreamPlayer(kEyeCameraStreamId);
 }
 
 void AriaVrsDataProvider::setImuRightPlayer() {
-  setStreamPlayer(vrs::StreamId(vrs::RecordableTypeId::SlamImuData, 1));
+  setStreamPlayer(kImuRightStreamId);
 }
 
 void AriaVrsDataProvider::setImuLeftPlayer() {
-  setStreamPlayer(vrs::StreamId(vrs::RecordableTypeId::SlamImuData, 2));
+  setStreamPlayer(kImuLeftStreamId);
 }
 
 void AriaVrsDataProvider::setMagnetometerPlayer() {
-  setStreamPlayer(vrs::StreamId(vrs::RecordableTypeId::SlamMagnetometerData, 1));
+  setStreamPlayer(kMagnetometerStreamId);
 }
 
 void AriaVrsDataProvider::setWifiBeaconPlayer() {
-  setStreamPlayer(vrs::StreamId(vrs::RecordableTypeId::WifiBeaconRecordableClass, 1));
+  setStreamPlayer(kWifiStreamId);
 }
 
 void AriaVrsDataProvider::setBluetoothBeaconPlayer() {
-  setStreamPlayer(vrs::StreamId(vrs::RecordableTypeId::BluetoothBeaconRecordableClass, 1));
+  setStreamPlayer(kBluetoothStreamId);
 }
 
 void AriaVrsDataProvider::setAudioPlayer() {
-  setStreamPlayer(vrs::StreamId(vrs::RecordableTypeId::StereoAudioRecordableClass, 1));
+  setStreamPlayer(kAudioStreamId);
 }
 
 void AriaVrsDataProvider::setGpsPlayer() {
-  setStreamPlayer(vrs::StreamId(vrs::RecordableTypeId::GpsRecordableClass, 1));
+  setStreamPlayer(kGpsStreamId);
 }
 
 void AriaVrsDataProvider::setBarometerPlayer() {
-  setStreamPlayer(vrs::StreamId(vrs::RecordableTypeId::BarometerRecordableClass, 1));
+  setStreamPlayer(kBarometerStreamId);
 }
 
 void AriaVrsDataProvider::setTimeSyncPlayer() {
-  setStreamPlayer(vrs::StreamId(vrs::RecordableTypeId::TimeRecordableClass, 1));
+  setStreamPlayer(kTimeSyncStreamId);
 }
 
 void AriaVrsDataProvider::setPosePlayer() {
-  setStreamPlayer(vrs::StreamId(vrs::RecordableTypeId::PoseRecordableClass, 1));
+  setStreamPlayer(kPoseStreamId);
 }
 
 void AriaVrsDataProvider::setStreamPlayer(const vrs::StreamId& streamId) {
@@ -394,31 +395,31 @@ void AriaVrsDataProvider::setStreamPlayer(const vrs::StreamId& streamId) {
 }
 
 const AriaImageSensorPlayer* AriaVrsDataProvider::getSlamLeftCameraPlayer() const {
-  return getImageSensorPlayer(vrs::StreamId(vrs::RecordableTypeId::SlamCameraData, 1));
+  return getImageSensorPlayer(kSlamLeftCameraStreamId);
 }
 
 const AriaImageSensorPlayer* AriaVrsDataProvider::getSlamRightCameraPlayer() const {
-  return getImageSensorPlayer(vrs::StreamId(vrs::RecordableTypeId::SlamCameraData, 2));
+  return getImageSensorPlayer(kSlamRightCameraStreamId);
 }
 
 const AriaImageSensorPlayer* AriaVrsDataProvider::getRgbCameraPlayer() const {
-  return getImageSensorPlayer(vrs::StreamId(vrs::RecordableTypeId::RgbCameraRecordableClass, 1));
+  return getImageSensorPlayer(kRgbCameraStreamId);
 }
 
 const AriaImageSensorPlayer* AriaVrsDataProvider::getEyeCameraPlayer() const {
-  return getImageSensorPlayer(vrs::StreamId(vrs::RecordableTypeId::EyeCameraRecordableClass, 1));
+  return getImageSensorPlayer(kEyeCameraStreamId);
 }
 
 const AriaMotionSensorPlayer* AriaVrsDataProvider::getImuRightPlayer() const {
-  return getMotionSensorPlayer(vrs::StreamId(vrs::RecordableTypeId::SlamImuData, 1));
+  return getMotionSensorPlayer(kImuRightStreamId);
 }
 
 const AriaMotionSensorPlayer* AriaVrsDataProvider::getImuLeftPlayer() const {
-  return getMotionSensorPlayer(vrs::StreamId(vrs::RecordableTypeId::SlamImuData, 2));
+  return getMotionSensorPlayer(kImuLeftStreamId);
 }
 
 const AriaMotionSensorPlayer* AriaVrsDataProvider::getMagnetometerPlayer() const {
-  return getMotionSensorPlayer(vrs::StreamId(vrs::RecordableTypeId::SlamMagnetometerData, 1));
+  return getMotionSensorPlayer(kMagnetometerStreamId);
 }
 
 const AriaWifiBeaconPlayer* AriaVrsDataProvider::getWifiBeaconPlayer() const {
@@ -566,8 +567,7 @@ bool AriaVrsDataProvider::open(
   hasSpeechToText_ = loadSpeechToTextFromCsv(speechToTextPath);
   bool success = openFile(vrsPath);
   // Try loading poses from VRS file
-  if (!hasPoses_ &&
-      streamExistsInSource(vrs::StreamId(vrs::RecordableTypeId::PoseRecordableClass, 1))) {
+  if (!hasPoses_ && streamExistsInSource(kPoseStreamId)) {
     hasLivePoses_ = true;
   }
   return success;
@@ -871,8 +871,8 @@ bool AriaVrsDataProvider::tryScaleEtCameraCalibration() {
 std::optional<Sophus::SE3d> AriaVrsDataProvider::getPose() const {
   if (hasPoses_) {
     // Always query using the slam-camera-left timestamp.
-    int64_t slamCameraLeftTimestampNs = static_cast<int64_t>(
-        1e9 * getNextTimestampSec(vrs::StreamId(vrs::RecordableTypeId::SlamCameraData, 1)));
+    int64_t slamCameraLeftTimestampNs =
+        static_cast<int64_t>(1e9 * getNextTimestampSec(kSlamLeftCameraStreamId));
     return queryPose(slamCameraLeftTimestampNs, imuLeftPoses_);
   } else if (hasLivePoses_) {
     const auto& dataRecord = posePlayer_->getDataRecord();
@@ -900,7 +900,7 @@ std::optional<Sophus::SE3d> AriaVrsDataProvider::getPoseOfStreamAtTimestampNs(
     T_world_imuleft = queryPose(timestampNs, imuLeftPoses_);
   } else if (hasLivePoses_) {
     double timestampSec = static_cast<double>(timestampNs) / 1e9;
-    tryFetchNextData(vrs::StreamId(vrs::RecordableTypeId::PoseRecordableClass, 1), timestampSec);
+    tryFetchNextData(kPoseStreamId, timestampSec);
     T_world_imuleft = getPose();
   }
   if (!T_world_imuleft) {
@@ -966,8 +966,8 @@ std::optional<Eigen::Vector2f> AriaVrsDataProvider::getEyetracksOnRgbImage() con
   }
 
   // Always query using the rgb camera timestamp.
-  int64_t rgbTimestampNs = static_cast<int64_t>(
-      1e9 * getNextTimestampSec(vrs::StreamId(vrs::RecordableTypeId::RgbCameraRecordableClass, 1)));
+  int64_t rgbTimestampNs =
+      static_cast<int64_t>(1e9 * getNextTimestampSec(vrs::StreamId(kRgbCameraStreamId)));
   return queryEyetrack(rgbTimestampNs, eyetracksOnRgbImage_);
 }
 
@@ -1000,8 +1000,8 @@ std::optional<SpeechToTextDatum> AriaVrsDataProvider::getSpeechToText() const {
   }
 
   // Always query using the rgb camera timestamp.
-  int64_t rgbTimestampNs = static_cast<int64_t>(
-      1e9 * getNextTimestampSec(vrs::StreamId(vrs::RecordableTypeId::RgbCameraRecordableClass, 1)));
+  int64_t rgbTimestampNs =
+      static_cast<int64_t>(1e9 * getNextTimestampSec(vrs::StreamId(kRgbCameraStreamId)));
   return querySpeechToText(rgbTimestampNs, speechToText_);
 }
 

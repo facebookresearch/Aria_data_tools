@@ -17,38 +17,11 @@
 #include "AriaViewer.h"
 #include <pangolin/display/image_view.h>
 #include <pangolin/gl/glpixformat.h>
+#include <pangolin/pangolin.h>
+#include "AriaStreamIds.h"
 
 // font defined in pangolin
 extern const unsigned char AnonymousPro_ttf[];
-
-namespace {
-const vrs::StreamId kRgbCameraStreamId(vrs::RecordableTypeId::RgbCameraRecordableClass, 1);
-const vrs::StreamId kSlamLeftCameraStreamId(vrs::RecordableTypeId::SlamCameraData, 1);
-const vrs::StreamId kSlamRightCameraStreamId(vrs::RecordableTypeId::SlamCameraData, 2);
-const vrs::StreamId kImuRightStreamId(vrs::RecordableTypeId::SlamImuData, 1);
-const vrs::StreamId kImuLeftStreamId(vrs::RecordableTypeId::SlamImuData, 2);
-const vrs::StreamId kMagnetometerStreamId(vrs::RecordableTypeId::SlamMagnetometerData, 1);
-const vrs::StreamId kBarometerStreamId(vrs::RecordableTypeId::BarometerRecordableClass, 1);
-const vrs::StreamId kAudioStreamId(vrs::RecordableTypeId::StereoAudioRecordableClass, 1);
-const vrs::StreamId kWifiStreamId(vrs::RecordableTypeId::WifiBeaconRecordableClass, 1);
-const vrs::StreamId kBluetoothStreamId(vrs::RecordableTypeId::BluetoothBeaconRecordableClass, 1);
-const vrs::StreamId kGpsStreamId(vrs::RecordableTypeId::GpsRecordableClass, 1);
-const vrs::StreamId kPoseStreamId(vrs::RecordableTypeId::PoseRecordableClass, 1);
-
-const std::vector<vrs::StreamId> kImageStreamIds = {
-    kSlamLeftCameraStreamId,
-    kSlamRightCameraStreamId,
-    kRgbCameraStreamId};
-const std::vector<vrs::StreamId> kImuStreamIds = {kImuRightStreamId, kImuLeftStreamId};
-const std::vector<vrs::StreamId> kDataStreams = {
-    kMagnetometerStreamId,
-    kBarometerStreamId,
-    kAudioStreamId,
-    kWifiStreamId,
-    kBluetoothStreamId,
-    kGpsStreamId,
-    kPoseStreamId};
-} // namespace
 
 namespace ark {
 namespace datatools {
@@ -60,11 +33,7 @@ AriaViewer::AriaViewer(
     int height,
     const std::string& name,
     int id)
-    : width_(width),
-      height_(height),
-      name_(name + std::to_string(id)),
-      id_(id),
-      dataProvider_(dataProvider) {}
+    : AriaViewerBase(dataProvider, width, height, name + std::to_string(id), id) {}
 
 void AriaViewer::run() {
   std::cout << "Start " << name_ << "!" << std::endl;
@@ -80,6 +49,8 @@ void AriaViewer::run() {
   auto* handler = new pangolin::Handler3D(Visualization3D_camera);
   pangolin::OpenGlMatrix Twc;
   Twc.SetIdentity();
+
+  using namespace ark::datatools::dataprovider;
 
   setDataChanged(false, kSlamLeftCameraStreamId);
   setDataChanged(false, kSlamRightCameraStreamId);
@@ -413,6 +384,8 @@ void AriaViewer::drawRigs(
     int camSparsity) {
   const float sz = 0.03;
 
+  using namespace ark::datatools::dataprovider;
+
   glLineWidth(3);
   int counter = 0;
   while (counter < T_World_ImuLeft_.size()) {
@@ -504,7 +477,7 @@ void AriaViewer::setPose(const std::optional<Sophus::SE3d>& T_World_ImuLeft) {
   }
 
   // Set pose based on slam-left-camera timestamps.
-  if (isDataChanged(kSlamLeftCameraStreamId)) {
+  if (isDataChanged(dataprovider::kSlamLeftCameraStreamId)) {
     T_World_ImuLeft_.emplace_back(T_Viewer_World_ * T_World_ImuLeft.value());
   }
 }
@@ -521,53 +494,21 @@ void AriaViewer::setSpeechToText(
   speechToText_ = speechToText;
 }
 
-std::pair<double, double> AriaViewer::initDataStreams() {
-  auto vrsDataProvider =
-      dynamic_cast<ark::datatools::dataprovider::AriaVrsDataProvider*>(dataProvider_);
+std::pair<double, double> AriaViewer::initDataStreams(
+    const std::vector<vrs::StreamId>& kImageStreamIds,
+    const std::vector<vrs::StreamId>& kImuStreamIds,
+    const std::vector<vrs::StreamId>& kDataStreams) {
+  std::unique_lock<std::mutex> dataLock(dataMutex_);
 
-  // Streams should be set after opening VRS file in AriaVrsDataProvider
-  bool vrsContainsImageStream = false;
-  for (auto& streamId : kImageStreamIds) {
-    if (vrsDataProvider && vrsDataProvider->getStreamsInFile().count(streamId)) {
-      dataProvider_->setStreamPlayer(streamId);
-      vrsContainsImageStream = true;
-    }
-  }
-  double fastestNominalRateHz = 0;
-  double currentTimestampSec = 0;
-  if (vrsContainsImageStream) {
-    fastestNominalRateHz = dataProvider_->getFastestNominalRateHz();
-    currentTimestampSec = dataProvider_->getFirstTimestampSec();
-  }
+  // Call mother initialization
+  const auto speedDataRate =
+      AriaViewerBase::initDataStreams(kImageStreamIds, kImuStreamIds, kDataStreams);
 
-  // Setup the other datastreams; this is done after the image streams and
-  // getting their fastestNominalRate.
-  for (auto& streamId : kImuStreamIds) {
-    if (vrsDataProvider && vrsDataProvider->getStreamsInFile().count(streamId)) {
-      dataProvider_->setStreamPlayer(streamId);
-      if (vrsDataProvider) {
-        vrsDataProvider->readFirstConfigurationRecord(streamId);
-      }
-    }
-  }
-  if (!vrsContainsImageStream) {
-    fastestNominalRateHz = dataProvider_->getFastestNominalRateHz();
-    currentTimestampSec = dataProvider_->getFirstTimestampSec();
-  }
+  using namespace ark::datatools::dataprovider;
+  auto vrsDataProvider = dynamic_cast<AriaVrsDataProvider*>(dataProvider_);
 
-  for (auto& streamId : kDataStreams) {
-    if (vrsDataProvider && vrsDataProvider->getStreamsInFile().count(streamId)) {
-      dataProvider_->setStreamPlayer(streamId);
-      if (vrsDataProvider) {
-        vrsDataProvider->readFirstConfigurationRecord(streamId);
-      }
-    }
-  }
-
-  // Safe to load device model now for both provider modes, VRS configuration records were read
-  dataProvider_->loadDeviceModel();
-  // init device model (intrinsic and extrinsic calibration)
-  deviceModel_ = dataProvider_->getDeviceModel();
+  // Deal with specifics to this implementation
+  //
   // init transformation from camera coordinate systems to the pose coordinate system (imuLeft).
   if (deviceModel_.getImuCalib("imu-left") && deviceModel_.getCameraCalib("camera-slam-left") &&
       deviceModel_.getImuCalib("camera-rgb")) {
@@ -584,95 +525,7 @@ std::pair<double, double> AriaViewer::initDataStreams() {
   if (!dataProvider_->hasPoses() && (!vrsDataProvider || !vrsDataProvider->hasLivePoses())) {
     fmt::print("Not visualizing poses\n");
   }
-  return {currentTimestampSec, fastestNominalRateHz};
-}
-
-bool AriaViewer::readData(double currentTimestampSec) {
-  if (isPlaying()) {
-    {
-      std::unique_lock<std::mutex> dataLock(dataMutex_);
-      auto vrsDataProvider =
-          dynamic_cast<ark::datatools::dataprovider::AriaVrsDataProvider*>(dataProvider_);
-
-      // Handle image streams
-      for (auto& streamId : kImageStreamIds) {
-        if (vrsDataProvider && vrsDataProvider->getStreamsInFile().count(streamId)) {
-          if (dataProvider_->tryFetchNextData(streamId, currentTimestampSec)) {
-            setDataChanged(true, streamId);
-            auto imageBufferVector = dataProvider_->getImageBufferVector(streamId);
-            if (imageBufferVector) {
-              setCameraImageBuffer(*imageBufferVector, streamId);
-            }
-          }
-        }
-      }
-      // Handle left and right imu streams
-      for (auto& streamId : kImuStreamIds) {
-        if (vrsDataProvider && vrsDataProvider->getStreamsInFile().count(streamId)) {
-          std::vector<Eigen::Vector3f> accMSec2, gyroRadSec;
-          while (dataProvider_->tryFetchNextData(streamId, currentTimestampSec)) {
-            accMSec2.push_back(dataProvider_->getMotionAccelData(streamId));
-            gyroRadSec.push_back(dataProvider_->getMotionGyroData(streamId));
-          }
-          setImuDataChunk(streamId, accMSec2, gyroRadSec);
-        }
-      }
-      // handle magnetometer stream
-      std::vector<Eigen::Vector3f> magTesla;
-      if (vrsDataProvider && vrsDataProvider->getStreamsInFile().count(kMagnetometerStreamId)) {
-        while (dataProvider_->tryFetchNextData(kMagnetometerStreamId, currentTimestampSec)) {
-          auto magnetometerData = dataProvider_->getMagnetometerData();
-          magTesla.emplace_back(magnetometerData[0], magnetometerData[1], magnetometerData[2]);
-        }
-      }
-      setMagnetometerChunk(kMagnetometerStreamId, magTesla);
-      // handle barometer stream
-      std::vector<float> temperature, pressure;
-      if (vrsDataProvider && vrsDataProvider->getStreamsInFile().count(kBarometerStreamId)) {
-        while (dataProvider_->tryFetchNextData(kBarometerStreamId, currentTimestampSec)) {
-          temperature.emplace_back(dataProvider_->getBarometerTemperature());
-          pressure.emplace_back(dataProvider_->getBarometerPressure());
-        }
-      }
-      setBarometerChunk(kBarometerStreamId, temperature, pressure);
-      // handle audio stream
-      std::vector<std::vector<float>> audio;
-      if (vrsDataProvider && vrsDataProvider->getStreamsInFile().count(kAudioStreamId)) {
-        while (dataProvider_->tryFetchNextData(kAudioStreamId, currentTimestampSec)) {
-          auto audioStreamData = dataProvider_->getAudioData();
-          if (audioStreamData) {
-            // get the audio data chunk
-            const auto& audioData = audioStreamData->get();
-            // Get property of the local data chunk
-            const size_t C = dataProvider_->getAudioNumChannels();
-            const auto N = audioData.size() / C;
-            assert(audioData.size() % C == 0);
-            for (size_t i = 0; i < N; ++i) {
-              audio.emplace_back();
-              for (size_t c = 0; c < C; ++c) {
-                // Audio samples are 32bit; convert to float for visualization
-                audio.back().emplace_back(
-                    (float)(audioData[i * C + c] / (double)std::numeric_limits<int32_t>::max()));
-              }
-            }
-          }
-        }
-      }
-      setAudioChunk(kAudioStreamId, audio);
-      // Make sure we fetch next data for wifi, bluetooth, and gps so that
-      // callbacks can printout sensor information to the terminal.
-      const std::array<const vrs::StreamId, 4> callbackStreamIds = {
-          kWifiStreamId, kBluetoothStreamId, kGpsStreamId, kPoseStreamId};
-      for (const auto& streamId : callbackStreamIds) {
-        if (vrsDataProvider && vrsDataProvider->getStreamsInFile().count(streamId)) {
-          while (dataProvider_->tryFetchNextData(streamId, currentTimestampSec)) {
-          }
-        }
-      }
-    }
-    return true;
-  }
-  return false;
+  return speedDataRate;
 }
 
 } // namespace visualization

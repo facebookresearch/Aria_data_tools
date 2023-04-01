@@ -18,22 +18,21 @@ find_package(Pangolin REQUIRED)
 find_package(Threads REQUIRED)
 find_package(fmt REQUIRED)
 
-add_library(aria_viewer_lib AriaViewer.cpp AriaViewer.h)
+add_library(aria_viewer_lib AriaViewerBase.cpp AriaViewerBase.h)
 target_link_libraries(aria_viewer_lib
     PUBLIC
         dataprovider
         Sophus::Sophus
-        fmt::fmt
-        ${Pangolin_LIBRARIES})
+        fmt::fmt)
 target_include_directories(aria_viewer_lib PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 
 message("--- Compiling aria_viewer.")
-add_executable(aria_viewer main.cpp)
-target_link_libraries(aria_viewer PRIVATE aria_viewer_lib Threads::Threads)
+add_executable(aria_viewer main.cpp AriaViewer.cpp)
+target_link_libraries(aria_viewer PRIVATE aria_viewer_lib ${Pangolin_LIBRARIES} Threads::Threads)
 
 message("--- Compiling aria_multi_viewer.")
-add_executable(aria_multi_viewer main_multi.cpp)
-target_link_libraries(aria_multi_viewer PRIVATE aria_viewer_lib Threads::Threads)
+add_executable(aria_multi_viewer main_multi.cpp AriaViewer.cpp)
+target_link_libraries(aria_multi_viewer PRIVATE aria_viewer_lib ${Pangolin_LIBRARIES} Threads::Threads)
 
 message("--- Compiling aria_sensors_viewer.")
 add_executable(aria_sensors_viewer main_aria_sensors_viewer.cpp)

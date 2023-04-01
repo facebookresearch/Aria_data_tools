@@ -18,6 +18,7 @@
 #include <filesystem>
 #include <string>
 #include <thread>
+#include "AriaStreamIds.h"
 #include "AriaViewer.h"
 #include "utils.h"
 
@@ -31,6 +32,23 @@ template <
 auto since(std::chrono::time_point<clock_t, duration_t> const& start) {
   return std::chrono::duration_cast<result_t>(clock_t::now() - start);
 };
+
+using namespace ark::datatools::dataprovider;
+
+const std::vector<vrs::StreamId> kImageStreamIds = {
+    kSlamLeftCameraStreamId,
+    kSlamRightCameraStreamId,
+    kRgbCameraStreamId};
+const std::vector<vrs::StreamId> kImuStreamIds = {kImuRightStreamId, kImuLeftStreamId};
+const std::vector<vrs::StreamId> kDataStreams = {
+    kMagnetometerStreamId,
+    kBarometerStreamId,
+    kAudioStreamId,
+    kWifiStreamId,
+    kBluetoothStreamId,
+    kGpsStreamId,
+    kPoseStreamId};
+
 } // namespace
 
 int main(int argc, const char* argv[]) {
@@ -67,7 +85,7 @@ int main(int argc, const char* argv[]) {
   std::shared_ptr<visualization::AriaViewer> viewer =
       std::make_shared<visualization::AriaViewer>(dataProvider.get(), 1280, 800);
   // initialize and setup datastreams
-  auto initDataStreams = viewer->initDataStreams();
+  auto initDataStreams = viewer->initDataStreams(kImageStreamIds, kImuStreamIds, kDataStreams);
   double currentTimestampSec = initDataStreams.first;
   double fastestNominalRateHz = initDataStreams.second;
   // read and visualize datastreams at desired speed

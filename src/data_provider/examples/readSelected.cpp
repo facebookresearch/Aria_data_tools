@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 
+#include "data_provider/AriaStreamIds.h"
 #include "data_provider/AriaVrsDataProvider.h"
 
 int main(int argc, char** argv) {
@@ -30,7 +31,7 @@ int main(int argc, char** argv) {
   vrsDataProvider.setSlamRightCameraPlayer();
   vrsDataProvider.setImuRightPlayer();
   // Another way of setting a player by using a stream ID explicitly
-  vrsDataProvider.setStreamPlayer(vrs::StreamId(vrs::RecordableTypeId::SlamMagnetometerData, 1));
+  vrsDataProvider.setStreamPlayer(ark::datatools::dataprovider::kMagnetometerStreamId);
   vrsDataProvider.setVerbose(true);
   // Read all records
   vrsDataProvider.readAllRecords();

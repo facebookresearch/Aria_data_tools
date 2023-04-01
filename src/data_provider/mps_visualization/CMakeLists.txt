@@ -21,10 +21,8 @@ find_package(fmt REQUIRED)
 add_executable(mps_eyegaze_viewer main_eyegaze.cpp AriaViewer.cpp AriaViewer.h)
 target_link_libraries(mps_eyegaze_viewer
     PRIVATE
-        vrsdataprovider
+        aria_viewer_lib
         mps_io
-        Sophus::Sophus
-        fmt::fmt
         ${Pangolin_LIBRARIES}
         Threads::Threads)
 
