@@ -46,8 +46,7 @@ const std::vector<vrs::StreamId> kDataStreams = {
     kAudioStreamId,
     kWifiStreamId,
     kBluetoothStreamId,
-    kGpsStreamId,
-    kPoseStreamId};
+    kGpsStreamId};
 
 } // namespace
 

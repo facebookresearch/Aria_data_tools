@@ -32,6 +32,5 @@ extern const vrs::StreamId kAudioStreamId;
 extern const vrs::StreamId kWifiStreamId;
 extern const vrs::StreamId kBluetoothStreamId;
 extern const vrs::StreamId kGpsStreamId;
-extern const vrs::StreamId kPoseStreamId;
 extern const vrs::StreamId kTimeSyncStreamId;
 } // namespace ark::datatools::dataprovider

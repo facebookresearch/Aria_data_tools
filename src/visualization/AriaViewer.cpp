@@ -505,7 +505,6 @@ std::pair<double, double> AriaViewer::initDataStreams(
       AriaViewerBase::initDataStreams(kImageStreamIds, kImuStreamIds, kDataStreams);
 
   using namespace ark::datatools::dataprovider;
-  auto vrsDataProvider = dynamic_cast<AriaVrsDataProvider*>(dataProvider_);
 
   // Deal with specifics to this implementation
   //
@@ -522,7 +521,7 @@ std::pair<double, double> AriaViewer::initDataStreams(
                         [kSlamRightCameraStreamId.getInstanceId()] = T_ImuLeft_Device *
         deviceModel_.getCameraCalib("camera-slam-right")->T_Device_Camera;
   }
-  if (!dataProvider_->hasPoses() && (!vrsDataProvider || !vrsDataProvider->hasLivePoses())) {
+  if (!dataProvider_->hasPoses()) {
     fmt::print("Not visualizing poses\n");
   }
   return speedDataRate;

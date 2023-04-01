@@ -38,7 +38,6 @@ const vrs::StreamId kWifiStreamId =
 const vrs::StreamId kBluetoothStreamId =
     vrs::StreamId(vrs::RecordableTypeId::BluetoothBeaconRecordableClass, 1);
 const vrs::StreamId kGpsStreamId = vrs::StreamId(vrs::RecordableTypeId::GpsRecordableClass, 1);
-const vrs::StreamId kPoseStreamId = vrs::StreamId(vrs::RecordableTypeId::PoseRecordableClass, 1);
 const vrs::StreamId kTimeSyncStreamId =
     vrs::StreamId(vrs::RecordableTypeId::TimeRecordableClass, 1);
 } // namespace ark::datatools::dataprovider

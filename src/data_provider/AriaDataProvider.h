@@ -91,7 +91,6 @@ class AriaDataProvider {
   virtual void setGpsPlayerVerbose(bool verbose) = 0;
   virtual void setBarometerPlayerVerbose(bool verbose) = 0;
   virtual void setTimeSyncPlayerVerbose(bool verbose) = 0;
-  virtual void setPosePlayerVerbose(bool verbose) = 0;
 
   const datatools::sensors::DeviceModel& getDeviceModel() const {
     return deviceModel_;

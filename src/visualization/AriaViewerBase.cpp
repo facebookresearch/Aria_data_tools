@@ -186,8 +186,7 @@ bool AriaViewerBase::readData(double currentTimestampSec) {
       const std::array<const vrs::StreamId, 4> callbackStreamIds = {
           dataprovider::kWifiStreamId,
           dataprovider::kBluetoothStreamId,
-          dataprovider::kGpsStreamId,
-          dataprovider::kPoseStreamId};
+          dataprovider::kGpsStreamId};
       for (const auto& streamId : callbackStreamIds) {
         if (std::find(dataStreams_.begin(), dataStreams_.end(), streamId) != dataStreams_.end()) {
           if (vrsDataProvider && vrsDataProvider->getStreamsInFile().count(streamId)) {

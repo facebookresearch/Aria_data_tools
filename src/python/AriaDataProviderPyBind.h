@@ -120,7 +120,6 @@ void exportDataProvider(py::module& m) {
       .def("setGpsPlayer", &AriaVrsDataProvider::setGpsPlayer)
       .def("setBarometerPlayer", &AriaVrsDataProvider::setBarometerPlayer)
       .def("setTimeSyncPlayer", &AriaVrsDataProvider::setTimeSyncPlayer)
-      .def("setPosePlayer", &AriaVrsDataProvider::setPosePlayer)
       .def("setStreamPlayer", &AriaVrsDataProvider::setStreamPlayer, py::arg("streamId"))
 
       .def(
@@ -168,10 +167,8 @@ void exportDataProvider(py::module& m) {
           "getTimeSyncPlayer",
           &AriaVrsDataProvider::getTimeSyncPlayer,
           py::return_value_policy::reference)
-      .def("getPosePlayer", &AriaVrsDataProvider::getPosePlayer, py::return_value_policy::reference)
 
       .def("setVerbose", &AriaVrsDataProvider::setVerbose, py::arg("verbose"))
-      .def("hasLivePoses", &AriaVrsDataProvider::hasLivePoses)
 
       // AriaDataProvider override functions
       .def(
