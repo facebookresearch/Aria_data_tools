@@ -18,12 +18,10 @@ add_executable(sensors_example
 
 set(THREADS_PREFER_PTHREAD_FLAG ON)
 find_package(Threads REQUIRED)
-find_package(fmt REQUIRED)
 
 target_link_libraries(sensors_example
     PUBLIC
         sensors
-        fmt::fmt
     PRIVATE
         Threads::Threads
 )

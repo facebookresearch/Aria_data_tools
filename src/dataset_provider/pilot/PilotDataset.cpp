@@ -293,7 +293,7 @@ std::optional<Sophus::SE3d> PilotDatasetProvider::getPoseOfStreamAtTimestampNs(
   Sophus::SE3d T_Device_stream;
 
   if (!kDeviceNumericIdToLabel.count(streamId.getNumericName())) {
-    fmt::print(stderr, "Stream {} not supported", streamId.getName());
+    std::cerr << "Stream " << streamId.getName() << " not supported" << std::endl;
     return {};
   }
   const std::string labelName = kDeviceNumericIdToLabel.at(streamId.getNumericName());
@@ -317,7 +317,7 @@ std::optional<Sophus::SE3d> PilotDatasetProvider::getPose() const {
         static_cast<int64_t>(1e9 * getNextTimestampSec(kSlamLeftCameraStreamId));
     return queryPose(slamCameraLeftTimestampNs, imuLeftPoses_);
   } else {
-    fmt::print(stderr, "No poses are loaded.");
+    std::cerr << "No poses are loaded." << std::endl;
   }
   return {};
 }

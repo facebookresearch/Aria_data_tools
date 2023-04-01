@@ -18,12 +18,11 @@
 #include <iostream>
 
 #include <cereal/external/rapidjson/document.h>
-#include <models/DeviceModel.h>
+#include <cereal/external/rapidjson/rapidjson.h>
 
 #include <camera/projection/FisheyeRadTanThinPrism.h>
 #include <camera/projection/KannalaBrandtK3.h>
-
-#include <cereal/external/rapidjson/rapidjson.h>
+#include <models/DeviceModel.h>
 
 namespace ark {
 namespace datatools {

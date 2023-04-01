@@ -14,14 +14,12 @@
 
 find_package(Pangolin REQUIRED)
 find_package(Threads REQUIRED)
-find_package(fmt REQUIRED)
 
 add_library(aria_viewer_lib AriaViewerBase.cpp AriaViewerBase.h)
 target_link_libraries(aria_viewer_lib
     PUBLIC
         dataprovider
-        Sophus::Sophus
-        fmt::fmt)
+        Sophus::Sophus)
 target_include_directories(aria_viewer_lib PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 
 message("--- Compiling aria_viewer.")

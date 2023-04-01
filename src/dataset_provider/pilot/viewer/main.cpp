@@ -42,7 +42,7 @@ const std::vector<vrs::StreamId> kImageStreamIds = {
 
 int main(int argc, const char* argv[]) {
   if (argc < 2) {
-    fmt::print(stderr, "VRS file path must be provided as the argument, exiting.\n");
+    std::cerr << "VRS file path must be provided as the argument, exiting." << std::endl;
     return 0;
   }
 
@@ -66,10 +66,10 @@ int main(int argc, const char* argv[]) {
   auto dataProvider = std::make_shared<dataprovider::PilotDatasetProvider>(
       posePath, eyetrackingPath, speechToTextPath);
   if (!dataProvider->open(vrsPath)) {
-    fmt::print(stderr, "Failed to open '{}'.\n", vrsPath);
+    std::cerr << "Failed to open '" << vrsPath << "'" << std::endl;
     return 0;
   }
-  fmt::print(stdout, "Opened '{}'.\n", vrsPath);
+  std::cout << "Opened: '" << vrsPath << "'" << std::endl;
   // start viewer with dataprovider
   auto viewer = std::make_shared<visualization::PilotDatasetViewer>(dataProvider.get(), 1280, 800);
   // initialize and setup datastreams

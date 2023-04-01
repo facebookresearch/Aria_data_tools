@@ -27,7 +27,7 @@ target_include_directories(dataprovider
         )
 
 add_library(vrsdataprovider AriaVrsDataProvider.h AriaVrsDataProvider.cpp)
-target_link_libraries(vrsdataprovider PUBLIC dataprovider players PRIVATE fmt::fmt)
+target_link_libraries(vrsdataprovider PUBLIC dataprovider players)
 target_include_directories(vrsdataprovider PUBLIC dataprovider ${CMAKE_CURRENT_SOURCE_DIR})
 
 add_subdirectory(data_layout)

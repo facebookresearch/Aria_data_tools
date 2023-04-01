@@ -18,8 +18,6 @@
 #include <utility/VrsUtils.h>
 #include <vrs/RecordFileReader.h>
 
-#include <fmt/core.h>
-#include <fmt/ostream.h>
 #include <Eigen/Eigen>
 
 #include <iostream>
@@ -35,35 +33,30 @@ int main(int argc, char** argv) {
   }
   DeviceModel model = DeviceModel::fromJson(getCalibStrFromFile(argv[1]));
 
-  std::cout << fmt::format("Successfully loaded calibration file from: {}.", argv[1]) << std::endl;
+  std::cout << "Successfully loaded calibration file from: " << argv[1] << std::endl;
 
   Eigen::Vector3d p_slamLeft{3.0, 2.0, 1.0};
-  std::cout << fmt::format("Original point in camera-slam-left frame: {}.", p_slamLeft.transpose())
-            << std::endl;
+  std::cout << "Original point in camera-slam-left frame: " << p_slamLeft.transpose() << std::endl;
 
   // Transform a 3D point from one frame to another.
   Eigen::Vector3d p_imuLeft = model.transform(p_slamLeft, "camera-slam-left", "imu-left");
-  std::cout << fmt::format("Transformed to imu-left frame: {}.", p_imuLeft.transpose())
-            << std::endl;
+  std::cout << "Transformed to imu-left frame: " << p_imuLeft.transpose() << std::endl;
 
   // Project a 3D point to image plane and back.
   const auto slamLeft = model.getCameraCalib("camera-slam-left").value();
   Eigen::Vector2d uv_slamLeft = slamLeft.projectionModel.project(p_slamLeft);
-  std::cout << fmt::format("Projected to image plane: {}.", uv_slamLeft.transpose()) << std::endl;
+  std::cout << "Projected to image plane: " << uv_slamLeft.transpose() << std::endl;
   Eigen::Vector3d p_slamLeft_convertBack = slamLeft.projectionModel.unproject(uv_slamLeft);
-  std::cout << fmt::format("Unprojected to camera frame: {}.", p_slamLeft_convertBack.transpose())
-            << std::endl;
+  std::cout << "Unprojected to camera frame: " << p_slamLeft_convertBack.transpose() << std::endl;
 
   // Rectify a gyro 3D vector in IMU space.
   p_imuLeft = {0.1, 0.2, 0.3};
-  std::cout << fmt::format("Original vector in imu-left frame: {}.", p_imuLeft.transpose())
-            << std::endl;
+  std::cout << "Original vector in imu-left frame: " << p_imuLeft.transpose() << std::endl;
   Eigen::Vector3d p_imuLeft_gyroRectified =
       model.getImuCalib("imu-left")
           .value()
           .gyro.compensateForSystematicErrorFromMeasurement(p_imuLeft);
-  std::cout << fmt::format("Rectified gyro vector: {}.", p_imuLeft_gyroRectified.transpose())
-            << std::endl;
+  std::cout << "Rectified gyro vector: " << p_imuLeft_gyroRectified.transpose() << std::endl;
 
   return 0;
 }

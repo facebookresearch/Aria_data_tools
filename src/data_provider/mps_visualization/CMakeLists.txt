@@ -14,7 +14,6 @@
 
 find_package(Pangolin REQUIRED)
 find_package(Threads REQUIRED)
-find_package(fmt REQUIRED)
 
 add_executable(mps_eyegaze_viewer main_eyegaze.cpp AriaViewer.cpp AriaViewer.h)
 target_link_libraries(mps_eyegaze_viewer

@@ -13,5 +13,5 @@
 # limitations under the License.
 
 add_executable(vrs_mutable main.cpp ImageMutationFilterCopier.h)
-target_link_libraries(vrs_mutable PRIVATE vrs::vrs_utils fmt::fmt)
+target_link_libraries(vrs_mutable PRIVATE vrs::vrs_utils)
 target_include_directories(vrs_mutable PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
