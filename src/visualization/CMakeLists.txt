@@ -12,8 +12,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-ADD_DEFINITIONS("-DSOPHUS_DISABLE_ENSURES")
-
 find_package(Pangolin REQUIRED)
 find_package(Threads REQUIRED)
 find_package(fmt REQUIRED)

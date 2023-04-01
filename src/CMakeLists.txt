@@ -31,6 +31,7 @@ endif (NOT CMAKE_BUILD_TYPE AND NOT MSVC)
 find_package(vrslib REQUIRED)
 find_package(Eigen3 REQUIRED NO_MODULE)
 find_package(Sophus REQUIRED)
+ADD_DEFINITIONS("-DSOPHUS_DISABLE_ENSURES")
 
 option(BUILD_PYARK "Build python binding." OFF)
 option(BUILD_ARK_TESTS "Build tests." ON)
@@ -56,6 +57,7 @@ endif(BUILD_PYARK)
 
 
 add_subdirectory(data_provider)
+add_subdirectory(dataset_provider)
 add_subdirectory(experimental)
 add_subdirectory(sensors)
 add_subdirectory(visualization)
