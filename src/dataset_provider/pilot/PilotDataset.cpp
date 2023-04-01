@@ -207,7 +207,7 @@ std::optional<std::map<int64_t, SpeechToTextDatum>> loadSpeechToTextFromCsv(
   return readSpeechToTextFromCsvFile(speechToTextCsvFile);
 }
 
-static std::optional<std::map<int64_t, Eigen::Vector2f>> loadEyetrackingFromCsv(
+std::optional<std::map<int64_t, Eigen::Vector2f>> loadEyetrackingFromCsv(
     const std::string& eyetrackingPath) {
   std::string eyetrackingCsvFile = "";
   if (!std::filesystem::is_directory(eyetrackingPath)) {

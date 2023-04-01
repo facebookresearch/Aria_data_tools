@@ -22,15 +22,6 @@
 
 namespace ark::datatools::dataprovider {
 
-// Load timestamp poses (centered on IMULeft)
-static std::optional<std::map<int64_t, Sophus::SE3d>> loadPosesFromCsv(const std::string& posePath);
-// Load timestamp speech data
-static std::optional<std::map<int64_t, SpeechToTextDatum>> loadSpeechToTextFromCsv(
-    const std::string& speechToTextPath);
-// Load eye-tracking data
-static std::optional<std::map<int64_t, Eigen::Vector2f>> loadEyetrackingFromCsv(
-    const std::string& eyetrackingPath);
-
 // PilotDatasetProvider provides the necessary APIs to load and access timesync data from the Aria
 // CVPR Pilot dataset
 // 3 kind of metadata is available:
@@ -45,13 +36,17 @@ class PilotDatasetProvider : public AriaVrsDataProvider {
       const std::string& eyetrackingPath = "",
       const std::string& speechToTextPath = "");
 
-  // eyetracking data side-loading (from csv file) and time-aligned serving
-  std::optional<Eigen::Vector2f> getEyetracksOnRgbImage() const;
-  // speechToText data side-loading (from csv file) and time-aligned serving
-  std::optional<SpeechToTextDatum> getSpeechToText() const;
+  //
+  // Time aligned serving of Dataset metadata
+  //
 
-  // aria pose side-loading (from csv file) and time-aligned serving
+  // eyetracking data time-aligned serving
+  std::optional<Eigen::Vector2f> getEyetracksOnRgbImage() const;
+  // speechToText data time-aligned serving
+  std::optional<SpeechToTextDatum> getSpeechToText() const;
+  // aria pose side-loading time-aligned serving
   std::optional<Sophus::SE3d> getPose() const;
+
   // return pose aligned with the current SLAM camera timestamp
   std::optional<Sophus::SE3d> getLatestPoseOfStream(const vrs::StreamId& streamId);
   std::optional<Sophus::SE3d> getPoseOfStreamAtTimestampNs(
