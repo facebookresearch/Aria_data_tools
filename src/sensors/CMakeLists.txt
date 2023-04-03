@@ -31,7 +31,7 @@ target_include_directories(sensors
 target_link_libraries(sensors
     PUBLIC
         Eigen3::Eigen
-        vrs::vrslib
+        vrslib
         Sophus::Sophus
         cereal::cereal
 )

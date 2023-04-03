@@ -20,7 +20,7 @@ file(
 
 add_library(ariaDataLayout INTERFACE)
 target_sources(ariaDataLayout INTERFACE ${header_files})
-target_link_libraries(ariaDataLayout INTERFACE vrs::vrslib)
+target_link_libraries(ariaDataLayout INTERFACE vrslib)
 target_include_directories(ariaDataLayout INTERFACE ${CMAKE_CURRENT_SOURCE_DIR}/..)
 
 add_executable(AriaFileReader ./aria/sample_app/AriaFileReader.cpp)

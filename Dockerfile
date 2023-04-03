@@ -42,11 +42,7 @@ RUN sudo apt-get install -y libgtest-dev libgmock-dev \
     libboost-system-dev libboost-filesystem-dev libboost-thread-dev libboost-chrono-dev libboost-date-time-dev; \
     cd /tmp; git clone https://github.com/USCiLab/cereal.git -b v1.3.2 \
     && cd cereal \
-    && cmake -DSKIP_PORTABILITY_TEST=1 -DJUST_INSTALL_CEREAL=ON .; sudo make -j2 install; rm -rf /tmp/cereal; \
-    cd /tmp; git clone https://github.com/facebookresearch/vrs.git -b v1.0.4 \
-            && mkdir vrs_Build && cd vrs_Build \
-            && cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_POSITION_INDEPENDENT_CODE=TRUE ../vrs/ \
-            && sudo make -j2 install; rm -rf /tmp/vrs /tmp/vrs_Build;
+    && cmake -DSKIP_PORTABILITY_TEST=1 -DJUST_INSTALL_CEREAL=ON .; sudo make -j2 install; rm -rf /tmp/cereal;
 
 # Code
 ADD ./ /opt/aria_data_tools
@@ -59,6 +55,3 @@ RUN cd /opt/aria_data_tools_Build; make -j2 ; ctest -j;
 
 # Build python bindings
 RUN cd /opt/aria_data_tools/src; pip3 install --global-option=build_ext --global-option="-j2" .;
-
-# Link shared Pangolin libraries
-RUN ldconfig;

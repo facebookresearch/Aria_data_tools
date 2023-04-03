@@ -27,10 +27,11 @@ if (NOT CMAKE_BUILD_TYPE AND NOT MSVC)
   set(CMAKE_BUILD_TYPE "Release")
 endif (NOT CMAKE_BUILD_TYPE AND NOT MSVC)
 
-# Handle shared 3rd party library
-# - Installed
-find_package(vrslib REQUIRED)
-# - Submodules
+# Handle shared 3rd party library (all as submodules)
+option(UNIT_TESTS OFF)
+option(BUILD_SAMPLES OFF)
+option(BUILD_TOOLS OFF)
+add_subdirectory("${CMAKE_CURRENT_SOURCE_DIR}/third_party/vrs" EXCLUDE_FROM_ALL)
 add_subdirectory("${CMAKE_CURRENT_SOURCE_DIR}/third_party/eigen" EXCLUDE_FROM_ALL)
 option(SKIP_PERFORMANCE_COMPARISON OFF)
 option(BUILD_SANDBOX OFF)
@@ -40,7 +41,6 @@ option(BUILD_SOPHUS_TESTS OFF)
 option(BUILD_SOPHUS_EXAMPLES OFF)
 add_subdirectory("${CMAKE_CURRENT_SOURCE_DIR}/third_party/Sophus")
 add_definitions("-DSOPHUS_DISABLE_ENSURES")
-
 
 # Project CMAKE options
 option(BUILD_PYARK "Build python binding." OFF)
@@ -63,7 +63,7 @@ if(BUILD_PYARK)
 
     add_subdirectory(${pybind11_SOURCE_DIR})
     pybind11_add_module(pyark ${CMAKE_CURRENT_SOURCE_DIR}/python/bindings.cpp)
-    target_link_libraries(pyark PUBLIC dataprovider sensors mps_io vrs::vrslib)
+    target_link_libraries(pyark PUBLIC dataprovider sensors mps_io vrslib)
     if (BUILD_WITH_PANGOLIN)
         target_compile_definitions(pyark PUBLIC BUILD_WITH_PANGOLIN=1)
         target_link_libraries(pyark PUBLIC aria_viewer_lib)
