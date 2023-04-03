@@ -20,7 +20,6 @@ project(ark
     LANGUAGES CXX)
 
 set(CMAKE_CXX_STANDARD 17)
-set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 
 # Build in Release mode by default
@@ -73,8 +72,11 @@ endif(BUILD_PYARK)
 
 
 add_subdirectory(data_provider)
-add_subdirectory(experimental)
 add_subdirectory(sensors)
+
+if (BUILD_ARK_EXAMPLES)
+    add_subdirectory(experimental)
+endif(BUILD_ARK_EXAMPLES)
 
 if (BUILD_WITH_PANGOLIN)
     add_subdirectory(visualization)
