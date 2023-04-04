@@ -10,3 +10,6 @@
 [submodule "src/third_party/Sophus"]
 	path = src/third_party/Sophus
 	url = https://github.com/strasdat/Sophus.git
+[submodule "src/third_party/vrs"]
+	path = src/third_party/vrs
+	url = https://github.com/facebookresearch/vrs.git

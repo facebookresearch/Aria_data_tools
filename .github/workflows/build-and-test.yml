@@ -54,20 +54,11 @@ jobs:
               # Install system deps with Homebrew
               brew install cmake
               # VRS dependencies
-              brew install boost sophus cereal googletest glog lz4 zstd xxhash libpng jpeg-turbo
+              brew install boost fmt sophus cereal googletest glog lz4 zstd xxhash libpng jpeg-turbo
           else
               echo "$RUNNER_OS not supported"
               exit 1
           fi
-
-      - name: Build required dependencies
-        shell: bash
-        run: |
-          # Build and install VRS
-          cd /tmp; git clone https://github.com/facebookresearch/vrs.git -b v1.0.4 \
-            && mkdir vrs_Build && cd vrs_Build \
-            && cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_POSITION_INDEPENDENT_CODE=TRUE ../vrs/ \
-            && sudo make -j$thread install; rm -rf /tmp/vrs /tmp/vrs_Build;
 
       - name: Install & build optional dependencies (Pangolin)
         shell: bash

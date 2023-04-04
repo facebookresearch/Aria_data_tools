@@ -25,5 +25,5 @@ file(
 )
 
 add_library(players ${source_files} ${header_files})
-target_link_libraries(players PUBLIC ariaDataLayout vrs::vrslib vrs::vrs_utils)
+target_link_libraries(players PUBLIC ariaDataLayout vrslib vrs_utils)
 target_include_directories(players PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
