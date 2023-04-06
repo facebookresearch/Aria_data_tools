@@ -22,16 +22,16 @@
 namespace py = pybind11;
 using namespace ark::datatools;
 
-PYBIND11_MODULE(pyark, m) {
-  py::module datatools = m.def_submodule("datatools");
+PYBIND11_MODULE(projectaria, m) {
+  py::module tools = m.def_submodule("tools");
 
-  py::module dataprovider = datatools.def_submodule("dataprovider");
+  py::module dataprovider = tools.def_submodule("dataprovider");
   dataprovider::exportPlayers(dataprovider);
   dataprovider::exportDataProvider(dataprovider);
 
-  py::module sensors = datatools.def_submodule("sensors");
+  py::module sensors = tools.def_submodule("sensors");
   sensors::exportSensors(sensors);
 
-  py::module mpsIO = datatools.def_submodule("mpsIO");
+  py::module mpsIO = tools.def_submodule("mps_io");
   mpsIO::exportMpsIO(mpsIO);
 }
