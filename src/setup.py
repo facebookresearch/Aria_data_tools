@@ -20,6 +20,8 @@ import sys
 from setuptools import Extension, find_packages, setup
 from setuptools.command.build_ext import build_ext
 
+ROOT_DIR = os.path.dirname(os.path.abspath(__file__))
+
 # Convert distutils Windows platform specifiers to CMake -A arguments
 PLAT_TO_CMAKE = {
     "win32": "Win32",
@@ -27,6 +29,12 @@ PLAT_TO_CMAKE = {
     "win-arm32": "ARM",
     "win-arm64": "ARM64",
 }
+
+
+def _get_version():
+    path = os.path.join(ROOT_DIR, "version.txt")
+    version = open(path, "r").read().strip()
+    return version
 
 
 # A CMakeExtension needs a sourcedir instead of a file list.
@@ -128,18 +136,24 @@ class CMakeBuild(build_ext):
         )
 
 
-# The information here can also be placed in setup.cfg - better separation of
-# logic and declaration, and simpler if you include description/version in a file.
-setup(
-    name="pyark",
-    version="0.0.1",
-    author="Meta Reality Labs Research",
-    description="Python API for sensor models and streaming of Aria datasets.",
-    long_description="",
-    ext_modules=[CMakeExtension("pyark")],
-    cmdclass={"build_ext": CMakeBuild},
-    zip_safe=False,
-    extras_require={"test": ["pytest>=6.0"]},
-    python_requires=">=3.6",
-    packages=find_packages(),
-)
+def main():
+    # The information here can also be placed in setup.cfg - better separation of
+    # logic and declaration, and simpler if you include description/version in a file.
+    setup(
+        name="projectaria.tools",
+        version=_get_version(),
+        description="Project Aria Tools",
+        long_description="Python API for sensor models and streaming of Aria datasets.",
+        url="https://github.com/facebookresearch/aria_data_tools",
+        ext_modules=[CMakeExtension("projectaria", sourcedir=ROOT_DIR)],
+        author="Meta Reality Labs Research",
+        cmdclass={"build_ext": CMakeBuild},
+        zip_safe=False,
+        python_requires=">=3.6",
+        packages=find_packages(),
+        license="Apache-2.0",
+    )
+
+
+if __name__ == "__main__":
+    main()

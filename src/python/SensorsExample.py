@@ -16,7 +16,7 @@ import argparse
 
 import numpy as np
 
-from pyark.datatools import sensors
+from projectaria.tools import sensors
 
 
 def parse_args():
