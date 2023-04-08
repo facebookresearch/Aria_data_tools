@@ -42,7 +42,7 @@ jobs:
         run: |
           cd src
           python3 -m cibuildwheel --output-dir dist
-        env:
+        # env:
           # CIBW_ARCHS_LINUX: x86_64
           # # apple M1 image is not supported yet in Github Action: https://github.com/actions/runner-images/issues/2187
           # # We need to manually build this locally until this will be supported.
