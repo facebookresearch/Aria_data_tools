@@ -8,6 +8,6 @@ before-build="bash scripts/install_manylinux_deps.sh"
 skip="*-manylinux_i686 *musllinux*"
 
 [tool.cibuildwheel.macos]
-archs = ["universal2"]
+archs = ["x86_64", "arm64"]
 before-build="brew install boost cereal cmake fmt glog jpeg-turbo libpng lz4 xxhash zstd"
 environment = "CMAKE_ARGS='-DCMAKE_OSX_DEPLOYMENT_TARGET=11.0'"
