@@ -7,5 +7,5 @@ before-build="bash scripts/install_manylinux_deps.sh"
 skip="*-manylinux_i686 *musllinux*"
 
 [tool.cibuildwheel.macos]
-before_build="brew install boost cereal cmake fmt glog jpeg-turbo libpng lz4 xxhash zstd"
+before-build="brew install boost cereal cmake fmt glog jpeg-turbo libpng lz4 xxhash zstd"
 environment = "CMAKE_OSX_DEPLOYMENT_TARGET=11.0"
