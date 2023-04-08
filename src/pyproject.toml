@@ -3,7 +3,7 @@ build="cp38-*64"
 
 [tool.cibuildwheel.linux]
 archs = ["x86_64"]
-before_build="bash scripts/install_manylinux_deps.sh"
+before-build="bash scripts/install_manylinux_deps.sh"
 skip="*-manylinux_i686 *musllinux*"
 
 [tool.cibuildwheel.macos]
