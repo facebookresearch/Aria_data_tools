@@ -1,4 +1,4 @@
-name: Deployment
+name: Build wheels and deploy
 
 on:
   # this workflow can only be manually triggered for now.
@@ -15,31 +15,6 @@ on:
           - prod
 
 jobs:
-  create-sdist:
-    if: github.repository == 'vijay609/Aria_data_tools'
-    runs-on: ubuntu-latest
-    name: Create source Distribution
-    steps:
-      - uses: actions/checkout@v3
-        with:
-          submodules: recursive
-      - name: Set up Python
-        uses: actions/setup-python@v4
-        with:
-          python-version: '3.8'
-      - name: Upgrade pip
-        run: |
-          python3 -m pip install --upgrade pip
-      - name: Create Source Distribution
-        run: |
-          python3 -m pip install setuptools wheel twine
-          python3 setup.py sdist
-
-      - uses: actions/upload-artifact@v2
-        with:
-          name: python-package-distributions
-          path: dist/*.tar.gz
-
   build-wheels:
     if: github.repository == 'vijay609/Aria_data_tools'
     name: Build wheels on ${{ matrix.os }}
@@ -63,23 +38,24 @@ jobs:
         run: |
           python3 -m pip install cibuildwheel
 
-      # - name: Build wheels for CPython
-      #   run: |
-      #     cd src
-      #     python3 -m cibuildwheel --output-dir dist
-      #   env:
-      #     CIBW_ARCHS_LINUX: x86_64
-      #     # apple M1 image is not supported yet in Github Action: https://github.com/actions/runner-images/issues/2187
-      #     # We need to manually build this locally until this will be supported.
-      #     CIBW_ARCHS_MACOS: x86_64 # "x86_64 arm64"
-      #     CIBW_BUILD: "cp36-*64 cp37-*64 cp38-*64 cp39-*64 cp310-*64 cp311-*64"
-      #     CIBW_BEFORE_BUILD_LINUX: bash scripts/install-manylinux-deps.sh
-      #     CIBW_BEFORE_BUILD_MACOS: bash scripts/install-macos-deps.sh
-      #     CIBW_SKIP: "*-manylinux_i686 *musllinux*"
-      # - uses: actions/upload-artifact@v2
-      #   with:
-      #     name: python-package-distributions
-      #     path: dist
+      - name: Build wheels for CPython
+        run: |
+          cd src
+          python3 -m cibuildwheel --output-dir dist
+        env:
+          # CIBW_ARCHS_LINUX: x86_64
+          # apple M1 image is not supported yet in Github Action: https://github.com/actions/runner-images/issues/2187
+          # We need to manually build this locally until this will be supported.
+          CIBW_ARCHS_MACOS: x86_64 # "x86_64 arm64"
+          CIBW_BUILD: "cp36-*64 cp37-*64 cp38-*64 cp39-*64 cp310-*64 cp311-*64"
+          # CIBW_BEFORE_BUILD_LINUX: bash scripts/install-manylinux-deps.sh
+          CIBW_BEFORE_BUILD_MACOS: brew install boost cmake cereal fmt glog jpeg-turbo libpng lz4 xxhash zstd
+          CIBW_SKIP: "*-manylinux_i686 *musllinux*"
+          CMAKE_ARGS: "-DCMAKE_OSX_DEPLOYMENT_TARGET=11.0"
+      - uses: actions/upload-artifact@v2
+        with:
+          name: python-package-distributions
+          path: dist
 
   # publish-to-pypi:
   #   runs-on: ubuntu-latest
