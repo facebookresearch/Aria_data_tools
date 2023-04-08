@@ -21,7 +21,8 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [macOS-latest]
+        # os: [macOS-latest]
+        os: [ubuntu-20.04]
     steps:
       - uses: actions/checkout@v3
         with:
@@ -43,12 +44,12 @@ jobs:
           cd src
           python3 -m cibuildwheel --output-dir dist
         env:
-          # CIBW_ARCHS_LINUX: x86_64
+          CIBW_ARCHS_LINUX: x86_64
           # apple M1 image is not supported yet in Github Action: https://github.com/actions/runner-images/issues/2187
           # We need to manually build this locally until this will be supported.
           CIBW_ARCHS_MACOS: x86_64 # "x86_64 arm64"
           CIBW_BUILD: "cp36-*64 cp37-*64 cp38-*64 cp39-*64 cp310-*64 cp311-*64"
-          # CIBW_BEFORE_BUILD_LINUX: bash scripts/install-manylinux-deps.sh
+          CIBW_BEFORE_BUILD_LINUX: bash scripts/install-manylinux-deps.sh
           CIBW_BEFORE_BUILD_MACOS: brew install boost cmake cereal fmt glog jpeg-turbo libpng lz4 xxhash zstd
           CIBW_SKIP: "*-manylinux_i686 *musllinux*"
           CMAKE_ARGS: "-DCMAKE_OSX_DEPLOYMENT_TARGET=11.0"
