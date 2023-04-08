@@ -267,7 +267,7 @@ void AriaViewer::run() {
       }
 
       // Draw radar (using history saved data)
-      if (!eyeGazeHistory_.empty()) {
+      if (!eyeGazeHistory_.empty() && showETRadar) {
         eyeGazeRadar.Activate(radar_view_camera);
 
         // Draw radar view background
