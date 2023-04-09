@@ -41,4 +41,4 @@ skip="*-manylinux_i686 *musllinux*"
 [tool.cibuildwheel.macos]
 archs = ["x86_64"]
 before-build="brew install boost cereal cmake fmt glog jpeg-turbo libpng lz4 xxhash zstd"
-environment="CMAKE_ARGS='-DCMAKE_OSX_DEPLOYMENT_TARGET=11.0'"
+environment = {"CMAKE_ARGS"="-DCMAKE_OSX_DEPLOYMENT_TARGET=11.0", "CC"="clang", "CXX"="clang++"}
