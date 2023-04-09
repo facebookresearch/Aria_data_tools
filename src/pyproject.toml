@@ -42,13 +42,10 @@ skip="*-manylinux_i686 *musllinux*"
 [tool.cibuildwheel.macos]
 # archs = ["x86_64", "arm64"]
 archs = ["arm64"]
-# before-build="arch -brew install boost cereal cmake fmt glog jpeg-turbo libpng lz4 xxhash zstd"
+# before-build="brew install boost cereal cmake fmt glog jpeg-turbo libpng lz4 xxhash zstd"
 # environment="CMAKE_ARGS='-DCMAKE_OSX_DEPLOYMENT_TARGET=11.0'"
-
-# [[tool.cibuildwheel.overrides]]
-# select = "arm64"
-before-build="arch -arm64 brew install boost cereal cmake fmt glog jpeg-turbo libpng lz4 xxhash zstd"
 before-build='''
+cd /tmp
 setopt sh_word_split
 mkdir arm-homebrew && curl -L https://github.com/Homebrew/brew/tarball/master | tar xz --strip 1 -C arm-homebrew
 alias arm-brew='$(pwd)/arm-homebrew/bin/brew'
@@ -58,6 +55,7 @@ do
     parsed=($response)
     arm-brew install $parsed[3]
 done
+cd -
 '''
 
 environment="CMAKE_ARGS='-DCMAKE_OSX_DEPLOYMENT_TARGET=11.0' ARCHFLAGS='-arch arm64'"
