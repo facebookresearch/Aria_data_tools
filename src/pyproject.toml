@@ -50,14 +50,14 @@ cd ${HOME}
 setopt sh_word_split
 mkdir arm-homebrew && curl -L https://github.com/Homebrew/brew/tarball/master | tar xz --strip 1 -C arm-homebrew
 alias arm-brew='$(pwd)/arm-homebrew/bin/brew'
-for PKG in boost cereal cmake fmt glog jpeg-turbo libpng lz4 xxhash zstd
+PACKAGES=(boost cereal cmake fmt glog jpeg-turbo libpng lz4 xxhash zstd)
+for PKG in "${PACKAGES[@]}"
 do
     response=$(arm-brew fetch --force --bottle-tag=arm64_big_sur ${PKG} | grep "Downloaded to")
     echo $response
-    parsed=($response)
-    echo $parsed
-    echo arm-brew install $parsed[3]
-    arm-brew install $parsed[3]
+    result=$(arm-brew --cache --bottle-tag=arm64_monterey $PACKAGE)
+    echo "Looking for arm64 version of $result"
+    arm-brew install $result
 done
 cd -
 '''
