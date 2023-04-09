@@ -62,15 +62,15 @@ jobs:
     - name: Display the list of artifacts
       run: ls -R dist
 
-  #   - name: Publish to Test PyPI
-  #     if: github.event.inputs.deploy == 'test'
-  #     uses: pypa/gh-action-pypi-publish@v1.4.2
-  #     with:
-  #       user: __token__
-  #       password: ${{ secrets.TEST_PYPI_TOKEN }}
-  #       repository_url: https://test.pypi.org/legacy/
-  #       skip_existing: true
-  #       verbose: true
+    - name: Publish to Test PyPI
+      if: github.event.inputs.deploy == 'test'
+      uses: pypa/gh-action-pypi-publish@v1.4.2
+      with:
+        user: __token__
+        password: ${{ secrets.TEST_PYPI_TOKEN_PROJECTARIA_TOOLS }}
+        repository_url: https://test.pypi.org/legacy/
+        skip_existing: true
+        verbose: true
 
   #   - name: Publish to PyPI
   #     if: github.event.inputs.deploy == 'prod' && startsWith(github.ref, 'refs/tags')
