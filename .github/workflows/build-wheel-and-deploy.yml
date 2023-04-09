@@ -32,9 +32,7 @@ jobs:
           python-version: '3.8'
       - name: Upgrade pip
         run: |
-          python3 -m pip --version
           python3 -m pip install --upgrade pip
-          python3 -m pip --version
 
       - name: Install cibuildwheel
         run: |
@@ -42,8 +40,7 @@ jobs:
 
       - name: Build wheels for CPython
         run: |
-          cd src
-          python3 -m cibuildwheel --output-dir dist
+          python3 -m cibuildwheel --output-dir dist ./src
       - uses: actions/upload-artifact@v2
         with:
           name: python-package-distributions
