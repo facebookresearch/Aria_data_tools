@@ -45,7 +45,7 @@ archs = ["arm64"]
 # before-build="brew install boost cereal cmake fmt glog jpeg-turbo libpng lz4 xxhash zstd"
 # environment="CMAKE_ARGS='-DCMAKE_OSX_DEPLOYMENT_TARGET=11.0'"
 before-build='''
-#!/bin/bash
+#!/bin/zsh
 cd ${HOME}
 setopt sh_word_split
 mkdir arm-homebrew && curl -L https://github.com/Homebrew/brew/tarball/master | tar xz --strip 1 -C arm-homebrew
