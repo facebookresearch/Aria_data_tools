@@ -1,6 +1,5 @@
 [tool.cibuildwheel]
-# build="cp36-*64 cp37-*64 cp38-*64 cp39-*64 cp310-*64 cp311-*64"
-build="cp38-*64"
+build="cp36-*64 cp37-*64 cp38-*64 cp39-*64 cp310-*64 cp311-*64"
 
 [tool.cibuildwheel.linux]
 archs = ["x86_64"]
@@ -40,27 +39,6 @@ cd /tmp && git clone --recursive https://github.com/boostorg/boost.git -b boost-
 skip="*-manylinux_i686 *musllinux*"
 
 [tool.cibuildwheel.macos]
-# archs = ["x86_64", "arm64"]
-archs = ["arm64"]
-# before-build="brew install boost cereal cmake fmt glog jpeg-turbo libpng lz4 xxhash zstd"
-# environment="CMAKE_ARGS='-DCMAKE_OSX_DEPLOYMENT_TARGET=11.0'"
-before-build='''
-#!/bin/zsh
-cd ${HOME}
-setopt sh_word_split
-mkdir arm-homebrew && curl -L https://github.com/Homebrew/brew/tarball/master | tar xz --strip 1 -C arm-homebrew
-alias arm-brew='$(pwd)/arm-homebrew/bin/brew'
-PACKAGES=(boost cereal cmake fmt glog jpeg-turbo libpng lz4 xxhash zstd)
-for PKG in "${PACKAGES[@]}"
-do
-    response=$(arm-brew fetch --force --bottle-tag=arm64_big_sur ${PKG} | grep "Downloaded to")
-    echo $response
-    result=$(arm-brew --cache --bottle-tag=arm64_big_sur $PKG)
-    arm-brew tap /users
-    echo "Looking for arm64 version of $result"
-    arm-brew install $result
-done
-cd -
-'''
-
-environment="CMAKE_ARGS='-DCMAKE_OSX_DEPLOYMENT_TARGET=11.0' ARCHFLAGS='-arch arm64'"
+archs = ["x86_64"]
+before-build="brew install boost cereal cmake fmt glog jpeg-turbo libpng lz4 xxhash zstd"
+environment="CMAKE_ARGS='-DCMAKE_OSX_DEPLOYMENT_TARGET=11.0'"
