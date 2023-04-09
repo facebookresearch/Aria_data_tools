@@ -44,7 +44,7 @@ jobs:
       - uses: actions/upload-artifact@v2
         with:
           name: python-package-distributions
-          path: src/dist
+          path: dist
 
   publish-to-pypi:
     runs-on: ubuntu-latest
@@ -57,10 +57,10 @@ jobs:
       with:
         name: python-package-distributions
         # PyPI publish action uploads everything under dist/* by default
-        path: src/dist
+        path: dist
 
     - name: Display the list of artifacts
-      run: ls -R src/dist
+      run: ls -R dist
 
   #   - name: Publish to Test PyPI
   #     if: github.event.inputs.deploy == 'test'

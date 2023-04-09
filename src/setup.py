@@ -140,12 +140,12 @@ def main():
     # The information here can also be placed in setup.cfg - better separation of
     # logic and declaration, and simpler if you include description/version in a file.
     setup(
-        name="projectaria.tools",
+        name="projectaria_tools",
         version=_get_version(),
         description="Project Aria Tools",
         long_description="Python API for sensor models and streaming of Aria datasets.",
         url="https://github.com/facebookresearch/aria_data_tools",
-        ext_modules=[CMakeExtension("projectaria", sourcedir=ROOT_DIR)],
+        ext_modules=[CMakeExtension("projectaria_tools", sourcedir=ROOT_DIR)],
         author="Meta Reality Labs Research",
         cmdclass={"build_ext": CMakeBuild},
         zip_safe=False,
