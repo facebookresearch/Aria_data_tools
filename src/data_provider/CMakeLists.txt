@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-add_library(dataprovider AriaDataProvider.h AriaStreamIds.h AriaStreamIds.cpp utils.h utils.cpp)
+add_library(dataprovider AriaDataProvider.h AriaStreamIds.h utils.h utils.cpp)
 target_link_libraries(dataprovider
     PUBLIC
         players
