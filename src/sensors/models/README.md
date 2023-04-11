@@ -7,14 +7,14 @@ stage for every device. The calibration process derives intrinsic and extrinsic 
 is stored on every device and stamped on every VRS data file it records. One can fetch this
 info from VRS using Aria Data Provider and parse it into a structured representation as:
 ```
->>> import pyark.datatools as datatools
->>> vrs_data_provider = datatools.dataprovider.AriaVrsDataProvider()
+>>> import projectaria_tools as pyark
+>>> vrs_data_provider = pyark.dataprovider.AriaVrsDataProvider()
 >>> vrs_data_provider.openFile('./data/aria_unit_test_sequence_calib.vrs')
 # There are calibration strings for each image and motion stream
 # Reading the configuration record for any one of them will load the device model
 >>> slam_camera_recordable_type_id = 1201
 >>> slam_left_camera_instance_id = 1
->>> slam_left_camera_stream_id = datatools.dataprovider.StreamId(slam_camera_recordable_type_id, slam_left_camera_instance_id)
+>>> slam_left_camera_stream_id = pyark.dataprovider.StreamId(slam_camera_recordable_type_id, slam_left_camera_instance_id)
 >>> vrs_data_provider.setStreamPlayer(slam_left_camera_stream_id)
 >>> vrs_data_provider.readFirstConfigurationRecord(slam_left_camera_stream_id)
 True
@@ -22,7 +22,7 @@ True
 True
 >>> device_model = vrs_data_provider.getDeviceModel()
 >>> device_model
-<pyark.datatools.sensors.DeviceModel object at 0x7f955808c2b0>
+<pyark.sensors.DeviceModel object at 0x7f955808c2b0>
 ```
 
 ## Sensors
