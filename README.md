@@ -28,7 +28,7 @@ Go to the [Project Aria website](https://about.facebook.com/realitylabs/projecta
 ## Getting Started
 
 * [Documentation](https://facebookresearch.github.io/Aria_data_tools/docs/overview/)
-* [Install Aria Data Tools](https://facebookresearch.github.io/Aria_data_tools/docs/Install/)
+* [Install Aria Data Tools](https://github.com/facebookresearch/Aria_data_tools/blob/main/BUILD.md)
 * [Aria Pilot Dataset](https://about.facebook.com/realitylabs/projectaria/datasets)
 * [Aria Pilot Dataset Documentation](https://facebookresearch.github.io/Aria_data_tools/docs/pilotdata/pilotdata-index/)
 * [Examples of how to use the tools](https://facebookresearch.github.io/Aria_data_tools/docs/howto/examples/)
