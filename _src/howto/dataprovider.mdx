@@ -18,8 +18,8 @@ Use the following commands in Python3 to retrieve and read sensor data from VRS.
 ### 1. Create an Aria Data Provider instance
 
 ```
->>> import pyark.datatools as datatools
->>> vrs_data_provider = datatools.dataprovider.AriaVrsDataProvider()
+>>> import projectaria_tools as pyark
+>>> vrs_data_provider = pyark.dataprovider.AriaVrsDataProvider()
 ```
 
 ### 2. Select your VRS file
@@ -51,7 +51,7 @@ Use the following commands if you wish to set this directly using the VRS [Strea
 ```
 >>> slam_camera_recordable_type_id = 1201
 >>> slam_left_camera_instance_id = 1
->>> slam_left_camera_stream_id = datatools.dataprovider.StreamId(slam_camera_recordable_type_id, slam_left_camera_instance_id)
+>>> slam_left_camera_stream_id = pyark.dataprovider.StreamId(slam_camera_recordable_type_id, slam_left_camera_instance_id)
 >>> vrs_data_provider.setStreamPlayer(slam_left_camera_stream_id)
 ```
 
@@ -132,14 +132,14 @@ There are calibration strings for each image and motion stream. Reading the conf
 ```
 >>> slam_left_camera_stream_id = slam_left_camera_player.getStreamId()
 >>> slam_left_camera_stream_id
-<pyark.datatools.dataprovider.StreamId object at 0x7f955808c270>
+<pyark.dataprovider.StreamId object at 0x7f955808c270>
 >>> vrs_data_provider.readFirstConfigurationRecord(slam_left_camera_stream_id)
 True
 >>> vrs_data_provider.loadDeviceModel()
 True
 >>> device_model = vrs_data_provider.getDeviceModel()
 >>> device_model
-<pyark.datatools.sensors.DeviceModel object at 0x7f955808c2b0>
+<pyark.sensors.DeviceModel object at 0x7f955808c2b0>
 ```
 
 Then a 3D point from one sensor coordinate system can be transformed into another with:
