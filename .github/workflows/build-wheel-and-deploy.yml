@@ -1,0 +1,47 @@
+name: Build wheels and deploy
+
+on:
+  # this workflow can only be manually triggered for now.
+  workflow_dispatch:
+    inputs:
+      deploy:
+        description: 'Where to deploy the artifacts? Only build (build), deploy to test PyPI (test), or deploy to PyPI (prod).'
+        required: true
+        type: choice
+        default: 'build'
+        options:
+          - build
+          - test
+          - prod
+
+jobs:
+  build-wheels:
+    if: github.repository == 'facebookresearch/Aria_data_tools'
+    name: Build wheels on ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [macOS-latest, ubuntu-20.04]
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          submodules: recursive
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.8'
+      - name: Upgrade pip
+        run: |
+          python3 -m pip install --upgrade pip
+
+      - name: Install cibuildwheel
+        run: |
+          python3 -m pip install cibuildwheel
+
+      - name: Build wheels for CPython
+        run: |
+          python3 -m cibuildwheel --output-dir dist ./src
+      - uses: actions/upload-artifact@v2
+        with:
+          name: python-package-distributions
+          path: dist
