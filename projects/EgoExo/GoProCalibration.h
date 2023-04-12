@@ -16,16 +16,29 @@
 
 #pragma once
 
-#include <chrono>
-#include <map>
-#include "models/DeviceModel.h"
+#include <sophus/se3.hpp>
 
-namespace ark::datatools {
+#include <array>
+#include <vector>
 
-// A time sorted list of DeviceModels data
-using TemporalDeviceModels = std::map<std::chrono::microseconds, sensors::DeviceModel>;
+namespace ego_exo {
 
-// Read Online Calibration data from a file
-TemporalDeviceModels readOnlineCalibration(const std::string& filepath);
+//
+// GoPro Camera data
+//
 
-} // namespace ark::datatools
+// GoPro intrinsic calib, and extrinsic pose in the world frame
+struct GoProCalibration {
+  // GoPro's unique identifier, currently we are using path of the video file
+  std::string uid;
+  // GoPro's pose in world frame
+  Sophus::SE3d T_world_gopro;
+  // image size
+  int width, height;
+  // cam intrinsic calibration params ("fx, fy, cx, cy, k1, k2, k3, k4")
+  std::array<float, 8> intrinsics;
+};
+
+using GoProCalibrations = std::vector<GoProCalibration>;
+
+} // namespace ego_exo

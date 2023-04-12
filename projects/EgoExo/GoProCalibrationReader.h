@@ -16,16 +16,33 @@
 
 #pragma once
 
-#include <chrono>
-#include <map>
-#include "models/DeviceModel.h"
+#include "GoProCalibration.h"
 
-namespace ark::datatools {
+#include <string>
 
-// A time sorted list of DeviceModels data
-using TemporalDeviceModels = std::map<std::chrono::microseconds, sensors::DeviceModel>;
+namespace ego_exo {
 
-// Read Online Calibration data from a file
-TemporalDeviceModels readOnlineCalibration(const std::string& filepath);
+constexpr std::array<const char*, 18> kGoProPoseHeader = {
+    "gopro_uid",
+    "tx_world_gopro",
+    "ty_world_gopro",
+    "tz_world_gopro",
+    "qx_world_gopro",
+    "qy_world_gopro",
+    "qz_world_gopro",
+    "qw_world_gopro",
+    "image_width",
+    "image_height",
+    "intrinsics_0",
+    "intrinsics_1",
+    "intrinsics_2",
+    "intrinsics_3",
+    "intrinsics_4",
+    "intrinsics_5",
+    "intrinsics_6",
+    "intrinsics_7",
+};
 
-} // namespace ark::datatools
+GoProCalibrations loadGoProCalibrations(const std::string& fileName);
+
+} // namespace ego_exo

@@ -14,18 +14,21 @@
  * limitations under the License.
  */
 
-#pragma once
+#include "CompressedIStream.h"
 
-#include <chrono>
-#include <map>
-#include "models/DeviceModel.h"
+#include <boost/iostreams/filter/gzip.hpp>
+#include <cassert>
 
-namespace ark::datatools {
+namespace utils {
+CompressedIStream::CompressedIStream(const std::string& path, StreamCompressionMode compression)
+    : std::istream(&inbuf_),
+      backingIfstream_(path.c_str(), std::ios_base::in | std::ios_base::binary),
+      inbuf_() {
+  if (compression == StreamCompressionMode::GZIP) {
+    inbuf_.push(boost::iostreams::gzip_decompressor());
+  }
 
-// A time sorted list of DeviceModels data
-using TemporalDeviceModels = std::map<std::chrono::microseconds, sensors::DeviceModel>;
-
-// Read Online Calibration data from a file
-TemporalDeviceModels readOnlineCalibration(const std::string& filepath);
-
-} // namespace ark::datatools
+  assert(backingIfstream_.good());
+  inbuf_.push(backingIfstream_);
+}
+} // namespace utils

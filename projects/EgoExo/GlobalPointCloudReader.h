@@ -16,16 +16,27 @@
 
 #pragma once
 
-#include <chrono>
-#include <map>
-#include "models/DeviceModel.h"
+#include "GlobalPointCloud.h"
 
-namespace ark::datatools {
+#include "CompressedIStream.h"
 
-// A time sorted list of DeviceModels data
-using TemporalDeviceModels = std::map<std::chrono::microseconds, sensors::DeviceModel>;
+#include <array>
+#include <vector>
 
-// Read Online Calibration data from a file
-TemporalDeviceModels readOnlineCalibration(const std::string& filepath);
+namespace ego_exo {
 
-} // namespace ark::datatools
+constexpr std::array<const char*, 8> kGlobalPointCloudColumns = {
+    "uid",
+    "px_world",
+    "py_world",
+    "pz_world",
+    "num_observations",
+    "inv_dist_std",
+    "dist_std",
+    "norm_image_gradient_squared"};
+
+GlobalPointCloud readGlobalPointCloud(
+    const std::string& path,
+    const utils::StreamCompressionMode compression);
+
+} // namespace ego_exo

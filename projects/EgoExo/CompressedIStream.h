@@ -16,16 +16,27 @@
 
 #pragma once
 
-#include <chrono>
-#include <map>
-#include "models/DeviceModel.h"
+#include <boost/iostreams/filtering_streambuf.hpp>
+#include <fstream>
+#include <string>
 
-namespace ark::datatools {
+namespace utils {
 
-// A time sorted list of DeviceModels data
-using TemporalDeviceModels = std::map<std::chrono::microseconds, sensors::DeviceModel>;
+enum class StreamCompressionMode {
+  NONE,
+  GZIP,
+};
 
-// Read Online Calibration data from a file
-TemporalDeviceModels readOnlineCalibration(const std::string& filepath);
+using boost_filtering_inbuf = boost::iostreams::filtering_streambuf<boost::iostreams::input>;
 
-} // namespace ark::datatools
+class CompressedIStream : public std::istream {
+ public:
+  explicit CompressedIStream(
+      const std::string& path,
+      StreamCompressionMode compression = StreamCompressionMode::GZIP);
+
+ private:
+  std::ifstream backingIfstream_; // destruct AFTER inbuf_
+  boost_filtering_inbuf inbuf_; // destruct BEFORE backingIfstream_
+};
+} // namespace utils

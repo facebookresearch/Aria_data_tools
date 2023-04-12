@@ -21,7 +21,7 @@
 
 namespace ark::datatools {
 
-TemporalDeviceModels readOnlineCalibration(const std::filesystem::path& filepath) {
+TemporalDeviceModels readOnlineCalibration(const std::string& filepath) {
   std::ifstream infile(filepath);
   if (infile) {
     std::string jsonCalibrationString = "";

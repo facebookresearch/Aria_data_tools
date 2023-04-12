@@ -118,7 +118,9 @@ constexpr std::array<const char*, 17> CloseLoopTrajectoryColumns = {
 Trajectory readCloseLoop(const std::string& path) {
   io::CSVReader<CloseLoopTrajectoryColumns.size()> csv(path);
   // Read in the CSV header
-  const auto readHeader = [&](auto&&... args) { csv.read_header(io::ignore_no_column, args...); };
+  const auto readHeader = [&](auto&&... args) {
+    csv.read_header(io::ignore_no_column | io::ignore_extra_column, args...);
+  };
   std::apply(readHeader, CloseLoopTrajectoryColumns);
 
   Trajectory trajectory;
