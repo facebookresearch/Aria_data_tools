@@ -50,7 +50,8 @@ void exportSensors(py::module& m) {
   py::class_<Sophus::SE3d>(m, "SE3d")
       .def(py::init<>())
       .def("rotationMatrix", [](const Sophus::SE3d& self) { return self.rotationMatrix(); })
-      .def("translation", [](const Sophus::SE3d& self) { return self.translation(); });
+      .def("translation", [](const Sophus::SE3d& self) { return self.translation(); })
+      .def("quaternion", [](const Sophus::SE3d& self) { return self.unit_quaternion(); });
 
   py::class_<CameraCalibration>(m, "CameraCalibration")
       .def(py::init<>())
