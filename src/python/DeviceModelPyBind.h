@@ -53,6 +53,12 @@ void exportSensors(py::module& m) {
       .def("translation", [](const Sophus::SE3d& self) { return self.translation(); })
       .def("quaternion", [](const Sophus::SE3d& self) { return self.unit_quaternion(); });
 
+  py::class_<Eigen::Quaterniond>(m, "Quaterniond")
+      .def("x", (double& (Eigen::Quaterniond::*)()) & Eigen::Quaterniond::x)
+      .def("y", (double& (Eigen::Quaterniond::*)()) & Eigen::Quaterniond::y)
+      .def("z", (double& (Eigen::Quaterniond::*)()) & Eigen::Quaterniond::z)
+      .def("w", (double& (Eigen::Quaterniond::*)()) & Eigen::Quaterniond::w);
+
   py::class_<CameraCalibration>(m, "CameraCalibration")
       .def(py::init<>())
       .def_readwrite("label", &CameraCalibration::label)
