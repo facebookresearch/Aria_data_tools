@@ -29,6 +29,16 @@ if (NOT CMAKE_BUILD_TYPE AND NOT MSVC)
   set(CMAKE_BUILD_TYPE "Release")
 endif (NOT CMAKE_BUILD_TYPE AND NOT MSVC)
 
+# Allow to use set for parent projects
+set(CMAKE_POLICY_DEFAULT_CMP0077 NEW)
+
+find_package(Pangolin QUIET)
+if (Pangolin_FOUND)
+    set(BUILD_WITH_PANGOLIN ON)
+else()
+    set(BUILD_WITH_PANGOLIN OFF)
+endif()
+
 # This folder is "Project" using aria data tools core libraries
 add_subdirectory(../../src ariaDataToolsCore EXCLUDE_FROM_ALL)
 
@@ -38,6 +48,7 @@ add_library(pilotDatasetProvider_lib
     speech_to_text_datum.h)
 target_link_libraries(pilotDatasetProvider_lib
     PUBLIC
+        aria_viewer_lib
         vrsdataprovider
         Sophus::Sophus
         )
@@ -48,13 +59,6 @@ target_include_directories(pilotDatasetProvider_lib
         "../../src/third_party/"#fast-cpp-csv-parser
         )
 
-find_package(Pangolin QUIET)
-if (Pangolin_FOUND)
-    set(BUILD_WITH_PANGOLIN ON)
-else()
-    set(BUILD_WITH_PANGOLIN OFF)
-endif()
-
 if (BUILD_WITH_PANGOLIN)
     message("--- Pangolin library has been found. Visualizer will be built")
     find_package(Threads REQUIRED)
@@ -64,8 +68,8 @@ if (BUILD_WITH_PANGOLIN)
         ./viewer/PilotDatasetViewer.h)
     target_link_libraries(pilotDataset_viewer
         PRIVATE
-        pilotDatasetProvider_lib
         aria_viewer_lib
+        pilotDatasetProvider_lib
         ${Pangolin_LIBRARIES}
         Threads::Threads)
 else()
