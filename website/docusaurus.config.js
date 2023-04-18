@@ -120,6 +120,28 @@ const repoUrl = 'https://github.com/facebookresearch/Aria_data_tools';
               },
             ],
           },
+          {
+            title: 'Legal',
+            // Please do not remove the privacy and terms, it's a legal requirement.
+            items: [
+              {
+                  label: 'Privacy',
+                  href: 'https://opensource.facebook.com/legal/privacy/',
+              },
+              {
+                  label: 'Terms',
+                  href: 'https://opensource.facebook.com/legal/terms/',
+              },
+              {
+                  label: 'Data Policy',
+                  href: 'https://opensource.facebook.com/legal/data-policy/',
+              },
+              {
+                  label: 'Cookie Policy',
+                  href: 'https://opensource.facebook.com/legal/cookie-policy/',
+              },
+            ],
+          },
         ],
         logo: {
           alt: 'Facebook Open Source Logo',
