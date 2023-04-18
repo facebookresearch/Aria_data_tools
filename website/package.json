@@ -49,6 +49,6 @@
     "ansi-html": "0.0.8"
   },
   "devDependencies": {
-    "yarn-audit-fix": "^9.3.9"
+    "yarn-audit-fix": "^9.3.10"
   }
 }
