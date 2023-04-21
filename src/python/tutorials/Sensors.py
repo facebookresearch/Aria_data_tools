@@ -31,6 +31,13 @@ def parse_args():
     return parser.parse_args()
 
 
+# Sensors samples
+# Show how to manipulate the most common function in Sensors module
+# Teachings:
+# - How to retrieve calibration data from a given VRS file
+# - How to retrieve per sensor calibration data
+# - How to retrieve Camera calibration and use it to project/unproject points
+# - How to transfer points between sensor frames
 if __name__ == "__main__":
     args = parse_args()
 
