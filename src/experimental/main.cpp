@@ -97,7 +97,7 @@ struct VrsExportLoader : public vrs::utils::UserDefinedImageMutator {
         extension_); // default -> "jpg"
 
     // Do the necessary work on the image (load and replace pixel data in the Pixel Frame)
-    std::cout << path << std::endl;
+    frame->readJpegFrameFromFile(path, true);
 
     // increment the frameCounter for this streamId
     ++frameCounter_[streamId.getNumericName()];
@@ -109,14 +109,16 @@ struct VrsExportLoader : public vrs::utils::UserDefinedImageMutator {
 
 int main(int argc, const char* argv[]) {
   if (argc < 3) {
-    std::cerr << "Perform image mutation of a VRS file by using VRS Copy + Filter mechanism\n"
-              << "Two VRS file path must be provided as argument <VRS_IN> <VRS_OUT>. exiting."
-              << std::endl;
+    std::cerr
+        << "Perform image mutation of a VRS file by using VRS Copy + Filter mechanism\n"
+        << "Three file paths must be provided as argument <VRS_IN> <VRS_OUT> <VRS_EXPORT_PATH>. exiting."
+        << std::endl;
     return EXIT_FAILURE;
   }
 
   const std::string vrsPathIn = argv[1];
   const std::string vrsPathOut = argv[2];
+  const std::string vrsExportPath = argv[3];
 
   if (vrsPathIn == vrsPathOut) {
     std::cerr << " <VRS_IN> <VRS_OUT> paths  must be different." << std::endl;
@@ -134,10 +136,10 @@ int main(int argc, const char* argv[]) {
   copyOptions.setCompressionPreset(vrs::CompressionPreset::Default);
 
   // Functor to perform image processing/conversion
-  // See here the some example of Mutator (Vertical flip, Nullify, Reload VRSexport frame(WIP))
-  VerticalImageFlipMutator imageMutator;
+  // See here the some example of Mutator (Vertical flip, Nullify, Reload VRSexport frame)
+  // VerticalImageFlipMutator imageMutator;
   // NullifyModuloTwoTimestamp imageMutator;
-  // VrsExportLoader imageMutator("<YOUR_VRS_EXPORT_PATH>");
+  VrsExportLoader imageMutator(vrsExportPath);
 
   auto copyMakeStreamFilterFunction = [&imageMutator](
                                           vrs::RecordFileReader& fileReader,
