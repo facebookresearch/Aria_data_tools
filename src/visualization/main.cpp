@@ -58,20 +58,6 @@ int main(int argc, const char* argv[]) {
   }
 
   const std::string vrsPath = argv[1];
-  // override default pose and eyetracking paths from commandline. If left empty
-  // strings they will be automatically set according to the folder layout.
-  std::string posePath = "";
-  std::string eyetrackingPath = "";
-  std::string speechToTextPath = "";
-  if (argc >= 3) {
-    posePath = argv[2];
-  }
-  if (argc >= 4) {
-    eyetrackingPath = argv[3];
-  }
-  if (argc >= 5) {
-    speechToTextPath = argv[4];
-  }
 
   // get and open data provider
   std::shared_ptr<dataprovider::AriaDataProvider> dataProvider =
