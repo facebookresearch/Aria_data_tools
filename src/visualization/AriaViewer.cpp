@@ -281,6 +281,7 @@ void AriaViewer::run() {
     plotAudio.Show(showAudio);
     plotAcc.Show(showLeftImu || showRightImu);
     plotGyro.Show(showLeftImu || showRightImu);
+    plotMag.Show(showMagnetometer);
 
     {
       std::lock_guard<std::mutex> lock(*p_render_mutex);
