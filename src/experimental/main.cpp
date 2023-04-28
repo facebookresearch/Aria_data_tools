@@ -127,7 +127,7 @@ int main(int argc, const char* argv[]) {
   vrs::utils::FilteredFileReader filteredReader;
   // Initialize VRS Reader and filters
   filteredReader.setSource(vrsPathIn);
-  filteredReader.reader.openFile(filteredReader.path);
+  filteredReader.openFile();
   filteredReader.applyFilters({});
 
   // Configure Copy Filter and initialize the copy
