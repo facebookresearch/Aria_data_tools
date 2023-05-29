@@ -17,19 +17,19 @@ find_package(Threads REQUIRED)
 
 add_library(aria_viewer_lib AriaViewerBase.cpp AriaViewerBase.h)
 target_link_libraries(aria_viewer_lib
-    PUBLIC
+        PUBLIC
         dataprovider
         Sophus::Sophus)
 target_include_directories(aria_viewer_lib PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 
-message("--- Compiling aria_viewer.")
-add_executable(aria_viewer main.cpp AriaViewer.cpp)
-target_link_libraries(aria_viewer PRIVATE aria_viewer_lib ${Pangolin_LIBRARIES} Threads::Threads)
+message("--- Compiling alpharobotics_homealone_kit_viewer.")
+add_executable(alpharobotics_homealone_kit_viewer main.cpp AriaViewer.cpp)
+target_link_libraries(alpharobotics_homealone_kit_viewer PRIVATE aria_viewer_lib mps_io ${Pangolin_LIBRARIES} Threads::Threads)
 
-message("--- Compiling aria_multi_viewer.")
-add_executable(aria_multi_viewer main_multi.cpp AriaViewer.cpp)
-target_link_libraries(aria_multi_viewer PRIVATE aria_viewer_lib ${Pangolin_LIBRARIES} Threads::Threads)
+message("--- Compiling alpharobotics_homealone_kit_multi_viewer.")
+add_executable(alpharobotics_homealone_kit_multi_viewer main_multi.cpp AriaViewer.cpp)
+target_link_libraries(alpharobotics_homealone_kit_multi_viewer PRIVATE aria_viewer_lib ${Pangolin_LIBRARIES} Threads::Threads)
 
-message("--- Compiling aria_sensors_viewer.")
-add_executable(aria_sensors_viewer main_aria_sensors_viewer.cpp)
-target_link_libraries(aria_sensors_viewer PRIVATE dataprovider ${Pangolin_LIBRARIES})
+message("--- Compiling alpharobotics_homealone_kit_sensor_viewer.")
+add_executable(alpharobotics_homealone_kit_sensor_viewer main_aria_sensors_viewer.cpp)
+target_link_libraries(alpharobotics_homealone_kit_sensor_viewer PRIVATE dataprovider ${Pangolin_LIBRARIES})
