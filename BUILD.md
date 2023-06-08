@@ -18,7 +18,7 @@ Requirements:
 <!-- empty line -->
 
 ```
-pip install projectaria_tools
+pip install projectaria-tools==0.0.3
 
 python
 >>> import projectaria_tools
