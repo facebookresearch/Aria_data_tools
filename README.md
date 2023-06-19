@@ -1,5 +1,8 @@
 # Aria Data Tools
 
+# /!\ We are moving to a new repository /!\
+This project is now deprecated, and moving to be hosted to [facebookresearch/projectaria_tools](https://github.com/facebookresearch/projectaria_tools/).
+
 ## About
 
 Project Aria makes open data and open tooling available to support researchers expand the horizons of Augmented Reality, Machine Perception and Artificial Intelligence by releasing the Aria Pilot Dataset and Aria Research Kit: Aria Data Tools.
