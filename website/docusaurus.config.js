@@ -22,7 +22,7 @@ const repoUrl = 'https://github.com/facebookresearch/Aria_data_tools';
 /** @type {import('@docusaurus/types').DocusaurusConfig} */
 (module.exports = {
   title: 'Aria Data Tools',
-  tagline: 'Open tooling to support researchers expand the horizons of Augmented Reality, Machine Perception and Artificial Intelligence',
+  tagline: 'An archive of the original Aria open source tooling. Only use this for the Aria Pilot Dataset. Go to Project Aria Tools for current documentation and tooling.',
   url: 'https://facebookresearch.github.io',
   baseUrl: '/Aria_data_tools/',
   onBrokenLinks: 'throw',
@@ -53,7 +53,7 @@ const repoUrl = 'https://github.com/facebookresearch/Aria_data_tools';
     /** @type {import('@docusaurus/preset-classic').ThemeConfig} */
     ({
       navbar: {
-        title: 'Aria Data Tools',
+        title: 'Archive: Aria Data Tools',
         logo: {
           alt: 'aria-research-kit-sdk Logo',
           src: 'img/glasses-solid.svg',
@@ -61,19 +61,19 @@ const repoUrl = 'https://github.com/facebookresearch/Aria_data_tools';
         items: [
           {
             type: 'doc',
-            docId: 'overview',
+            docId: 'pilotdata/pilotdata-index',
             position: 'left',
-            label: 'Documentation',
+            label: 'Aria Pilot Dataset Documentation',
           },
                     {
-            href: 'https://about.facebook.com/realitylabs/projectaria/datasets',
+            href: 'https://www.projectaria.com/datasets/apd/',
             label: 'Aria Pilot Dataset',
             position: 'left',
           },
-          {
-            href: 'https://about.facebook.com/realitylabs/projectaria/',
-            label: 'Project Aria',
+                    {
+            href: 'https://facebookresearch.github.io/projectaria_tools/docs/intro',
             position: 'left',
+            label: 'Project Aria Tools',
           },
           {
             href: 'https://github.com/facebookresearch/aria_data_tools',
@@ -86,24 +86,28 @@ const repoUrl = 'https://github.com/facebookresearch/Aria_data_tools';
         style: 'dark',
         links: [
           {
-            title: 'Learn',
+            title: 'Project Aria',
             items: [
               {
-                label: 'Documentation',
-                to: '/docs/overview',
+                label: 'About Project Aria',
+                href: 'https://www.projectaria.com/',
+              },
+              {
+                label: 'Project Aria Tools',
+                href: 'https://facebookresearch.github.io/projectaria_tools/docs/intro',
               },
             ],
           },
           {
-            title: 'Project Aria',
+            title: 'Open Source Initiatives (OSI)',
             items: [
               {
-                label: 'Introducing Project Aria',
-                href: 'https://about.facebook.com/realitylabs/projectaria/',
+                label: 'Open Datasets',
+                href: 'https://www.projectaria.com/datasets/',
               },
               {
-                label: 'Aria Pilot Dataset',
-                href: 'https://about.facebook.com/realitylabs/projectaria/datasets',
+                label: 'Grand Challenges',
+                href: 'https://www.projectaria.com/challenges/',
               },
             ],
           },
@@ -125,11 +129,11 @@ const repoUrl = 'https://github.com/facebookresearch/Aria_data_tools';
             // Please do not remove the privacy and terms, it's a legal requirement.
             items: [
               {
-                  label: 'Privacy',
+                  label: 'Privacy Policy',
                   href: 'https://opensource.facebook.com/legal/privacy/',
               },
               {
-                  label: 'Terms',
+                  label: 'Terms of Use',
                   href: 'https://opensource.facebook.com/legal/terms/',
               },
               {

@@ -3,6 +3,8 @@
 # /!\ We are moving to a new repository /!\
 This project is now deprecated, and moving to be hosted to [facebookresearch/projectaria_tools](https://github.com/facebookresearch/projectaria_tools/).
 
+The [Aria Pilot Dataset documentation](https://facebookresearch.github.io/Aria_data_tools/docs/pilotdata/pilotdata-index/) will continue to be hosted in the Aria Data Tools wiki *in the short term* as it uses a different file structure compared to more recent Aria open data releases.
+
 ## About
 
 Project Aria makes open data and open tooling available to support researchers expand the horizons of Augmented Reality, Machine Perception and Artificial Intelligence by releasing the Aria Pilot Dataset and Aria Research Kit: Aria Data Tools.
