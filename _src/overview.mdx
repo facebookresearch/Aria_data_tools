@@ -1,40 +1,25 @@
 ---
 sidebar_position: 1
 id: overview
-title: Overview
+title: About Aria Data Tools
 ---
+:::caution
+Aria Data Tools is an archive of the original Aria open source tooling. Only use this for the Aria Pilot Dataset. Go to [Project Aria Tools](https://facebookresearch.github.io/projectaria_tools/docs/intro) if you're working with any other Aria data.
+:::
+
 # Overview
 
-Project Aria makes open data and open tooling available to support researchers expand the horizons of Augmented Reality, Machine Perception and Artificial Intelligence by releasing the Aria Pilot Dataset and Aria Research Kit: Aria Data Tools.
+Aria Data Tools was [Project Aria's](https://www.projectaria.com/) first open source release, go to [projectaria.com](https://www.projectaria.com/) to find out about more recent open science initiatives and how to get involved.
 
-On June 19 2022, Meta presented a tutorial at CVPR: [Towards always-on egocentric vision research using Meta’s Aria glasses](https://ariatutorial2022.github.io/), which went over Aria Data Tools and the Aria Pilot Dataset in detail.
+## Aria Data Tools
 
-## What is Project Aria?
+Aria Data Tools was released on June 19 2022 for a tutorial at CVPR: [Towards always-on egocentric vision research using Meta’s Aria glasses](https://ariatutorial2022.github.io/). This repo was deprecated in June 2023 when [Project Aria Tools](https://facebookresearch.github.io/projectaria_tools/docs/intro) was released.
 
-[Project Aria](https://about.facebook.com/realitylabs/projectaria/) is a research device that collects first-person view (egocentric) data to accelerate machine perception and AI research for future AR glasses. Sensors on Project Aria capture egocentric video and audio, in addition to eye-gaze, inertial, and location information. On-device compute power is used to encrypt and store information that, when uploaded to separate designated back-end storage, helps researchers build the capabilities necessary for AR to work in the real world.
+We recommend using [Project Aria Tools](https://facebookresearch.github.io/projectaria_tools/docs/intro) wherever possible. Project Aria Tools does not have Aria Data Tool's aria_multi_viewer utility for visualizing multiple time-synchronized recordings, but it is more up to date and will continue to be maintained. [Getting Started With Aria Data Utilities](https://facebookresearch.github.io/projectaria_tools/docs/data_utilities/getting_started) in Project Aria Tools includes Jupyter Notebook Tutorials that can be run locally, or on Google Colab.
 
+## Aria Pilot Dataset
 
-![image of Project Aria device with sensor information](/img/Aria-technical-specs.jpeg)
-
-Go to [Sensors & Measurements](/sensors-measurements.mdx) for more information about the data Project Aria sensors can collect.
-
-## What is Aria Data Tools?
-
-Aria Data Tools provides C++ and Python3 tools to interact with [Project Aria](https://about.facebook.com/realitylabs/projectaria/) data to:
-
-* Read and visualize Project Aria sequences and sensor data
-* Retrieve calibration data and interact with Project Aria camera models
-
-These tools provide additional functions when used with the Aria Pilot Dataset’s derived data.
-
-## What is the Aria Pilot Dataset?
-
-The Aria Pilot Dataset provides data from a variety of egocentric scenarios, including cooking, exercising, playing games and spending time with friends. This release also provides egocentric Project Aria data time synched with a multi-view camera recording rig. We believe these datasets can enable researchers to build and foster reproducible research on Computer Vision and AI/ML algorithms for scene perception, reconstruction and user surrounding understanding.
-
-Go to the [Project Aria website](https://about.facebook.com/realitylabs/projectaria/datasets) to access the Aria Pilot Dataset.
-
-## What is the Aria Research Kit?
-The Aria Research Kit provides tooling, documentation and resources to support researchers participating in Project Aria. Aria Data Tools is one component of the Aria Research Kit. If you need access to the full Aria Research Kit, please fill out the [Project Aria: Partnership Interest Form](https://docs.google.com/forms/d/e/1FAIpQLSdA4Rba4nmsr18VkBcBCCwRnWLgBtX7KoCDH-uWfRdrBxTG1A/viewform).
+[Aria Pilot Dataset documentation](/docs/pilotdata/pilotdata-index/) is stored in *Archive: Aria Data Tools*, because it was Project Aria's first open source initiative and it uses a different data structure compared to our latest open releases.
 
 ## Privacy
 
@@ -45,5 +30,3 @@ The Aria Research Kit provides tooling, documentation and resources to support r
 ## Contact
 
 ProjectAriaDataset@fb.com
-
-Meta is building an academic program to enable researchers to use Project Aria devices for academic research. Academic and industrial research institutions interested in participating in Project Aria can submit their proposals through the [Project Aria: Partnership Interest Form](https://docs.google.com/forms/d/e/1FAIpQLSdA4Rba4nmsr18VkBcBCCwRnWLgBtX7KoCDH-uWfRdrBxTG1A/viewform).
