@@ -71,11 +71,7 @@ bool AriaImageSensorPlayer::onImageRead(
   auto& imageSpec = cb.image();
   size_t blockSize = cb.getBlockSize();
   // Synchronously read the image data, which is jpg compressed with Aria
-  if (imageSpec.getImageFormat() == vrs::ImageFormat::JPG) {
-    vrs::utils::PixelFrame::readJpegFrame(data_.pixelFrame, r.reader, cb.getBlockSize());
-    callback_(r, data_.pixelFrame->getBuffer(), verbose_);
-  } else if (imageSpec.getImageFormat() == vrs::ImageFormat::RAW) {
-    vrs::utils::PixelFrame::readRawFrame(data_.pixelFrame, r.reader, imageSpec);
+  if (vrs::utils::PixelFrame::readFrame(data_.pixelFrame, r.reader, cb)) {
     callback_(r, data_.pixelFrame->getBuffer(), verbose_);
   }
   if (verbose_) {
