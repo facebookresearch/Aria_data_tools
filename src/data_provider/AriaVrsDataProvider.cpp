@@ -15,10 +15,13 @@
  */
 
 #include "AriaVrsDataProvider.h"
-#include "AriaStreamIds.h"
+
+#include <iostream>
 
 #include <fmt/core.h>
 #include <fmt/ostream.h>
+
+#include "AriaStreamIds.h"
 
 namespace {
 

@@ -15,8 +15,10 @@
  */
 
 #include <chrono>
+#include <iostream>
 #include <string>
 #include <thread>
+
 #include "AriaStreamIds.h"
 #include "AriaViewer.h"
 

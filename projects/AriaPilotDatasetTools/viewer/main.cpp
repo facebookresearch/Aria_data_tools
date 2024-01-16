@@ -16,8 +16,10 @@
 
 #include <chrono>
 #include <filesystem>
+#include <iostream>
 #include <string>
 #include <thread>
+
 #include "AriaStreamIds.h"
 #include "PilotDatasetViewer.h"
 #include "utils.h"

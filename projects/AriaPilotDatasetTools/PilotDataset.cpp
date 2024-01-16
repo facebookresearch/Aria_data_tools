@@ -16,6 +16,9 @@
 
 #include "PilotDataset.h"
 
+#include <filesystem>
+#include <iostream>
+
 #include "AriaStreamIds.h"
 #include "utils.h"
 
@@ -23,8 +26,6 @@
 #define CSV_IO_NO_THREAD
 #endif
 #include "fast-cpp-csv-parser/csv.h"
-
-#include <filesystem>
 
 namespace {
 constexpr const char* kTrajectoryPathSuffix = "location/trajectory.csv";
