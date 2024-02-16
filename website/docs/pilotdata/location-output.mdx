@@ -7,6 +7,8 @@ import useBaseUrl from '@docusaurus/useBaseUrl'
 
 :::caution
 Aria Pilot Dataset documentation is stored in *Archive: Aria Data Tools*, because it was Project Aria's first open source initiative and it uses a different data structure compared to our latest open releases.  For the most up to date tooling and to find out about our other open datasets go to [Project Aria Tools](https://facebookresearch.github.io/projectaria_tools/docs/intro).
+
+This website will be deleted in September 2024.
 :::
 
 # Location Output Data
@@ -15,7 +17,7 @@ Location Output Data shows the Project Aria device’s position and orientation 
 
 Each recording has a corresponding `trajectory.csv file`, which contains the co-location data of the Project Aria device. The trajectory is saved by a series of timestamped transformations of the Project Aria device's left IMU relative to the world coordinates (frames). The transformations are saved in 1KHz, to give high transformation accuracy when interpolating the trajectory at any arbitrary timestamp.
 
-To give co-location information across different recordings, trajectories from the same [location](/pilotdata/everyday/everyday.mdx) are all aligned into the same world frame. Trajectories from the same [sequence](/pilotdata/everyday/scripts.mdx) are all aligned into the same world frame. The origin of the world frames are arbitrarily defined. The gravity acceleration vector always points up in the z axis of the world frame.
+To give co-location information across different recordings, trajectories from the same location are all aligned into the same world frame. Trajectories from the same sequence are all aligned into the same world frame. The origin of the world frames are arbitrarily defined. The gravity acceleration vector always points up in the z axis of the world frame.
 
 The Location Output Dataset for each recording is stored in `location/trajectory.csv`
 

@@ -22,7 +22,7 @@ const repoUrl = 'https://github.com/facebookresearch/Aria_data_tools';
 /** @type {import('@docusaurus/types').DocusaurusConfig} */
 (module.exports = {
   title: 'Aria Data Tools',
-  tagline: 'An archive of the original Aria open source tooling. Only use this for the Aria Pilot Dataset. Go to Project Aria Tools for current documentation and tooling.',
+  tagline: 'An archive of the original Project Aria open source tooling, this website will be deleted in September 2024. Go to Project Aria Tools for current documentation and tooling.',
   url: 'https://facebookresearch.github.io',
   baseUrl: '/Aria_data_tools/',
   onBrokenLinks: 'throw',

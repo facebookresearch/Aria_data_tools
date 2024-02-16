@@ -7,11 +7,18 @@ import useBaseUrl from '@docusaurus/useBaseUrl'
 
 :::caution
 Aria Pilot Dataset documentation is stored in *Archive: Aria Data Tools*, because it was Project Aria's first open source initiative and it uses a different data structure compared to our latest open releases.  For the most up to date tooling and to find out about our other open datasets go to [Project Aria Tools](https://facebookresearch.github.io/projectaria_tools/docs/intro).
+
+This website will be deleted in September 2024.
 :::
 
-# Aria Pilot Dataset Overview
 
-The Aria Pilot dataset is the first open dataset captured using [Project Aria](https://about.facebook.com/realitylabs/projectaria/), Meta’s research device used for accelerating machine perception and AI research, developed at Reality-Labs Research.
+The Everyday Activities Activities section of this dataset has been updated to align with [Project Aria Tools](https://facebookresearch.github.io/projectaria_tools/docs/intro) file formatting and contains improved Machine Perception Services (MPS) and re-relased as the [Aria Everyday Activities (AEA) dataset](https://www.projectaria.com/datasets/aea/).
+
+* [Aria Everyday Activities Documentation](https://facebookresearch.github.io/projectaria_tools/docs/open_datasets/aria_everyday_activities_dataset)
+
+## Aria Pilot Dataset Overview
+
+The Aria Pilot dataset is the first open dataset captured using [Project Aria](https://projedctaria.com), Meta’s research device used for accelerating machine perception and AI research, developed at Reality-Labs Research.
 
 The dataset provides sequences collected with Project Aria devices from a variety of egocentric scenarios, including cooking, exercising, playing games and spending time with friends, for researchers to engage with the challenges of always-on egocentric vision.
 
@@ -50,21 +57,8 @@ Go to the [Project Aria website](https://about.facebook.com/realitylabs/projecta
 **Figure 1:** *Shared 3D Global Trajectories for Multi-User Activities in the Same Location*
 
 
-The main dataset contains multiple activity sequences for one to two Project Aria device wearers. Each wearer followed scripts that represented a typical scenario people might encounter throughout their day. The scripts provided the wearers with prompts they used while collecting data.
+Please go to [Aria Everyday Activities Documentation](https://facebookresearch.github.io/projectaria_tools/docs/open_datasets/aria_everyday_activities_dataset) in [Project Aria Tools](https://facebookresearch.github.io/projectaria_tools/docs/intro) for the most up to date version of this dataset.
 
-* [Activities](/pilotdata/everyday/activities.mdx) provides details of the scenarios recorded and where specific activities are in the recording sequence
-* [Recording Scripts](/pilotdata/everyday/scripts.mdx) provides more details about each scenario
-* [Everyday Activities Sensor Profile](/pilotdata/everyday/sensor-profiles.mdx) provides information about the sensor profile used to gather data
-* [Everyday Activities File Structure](/pilotdata/everyday/everyday.mdx) provides information about how the data is structured and information about raw sensor data
-
-In addition to the raw sensor data, we’ve provided derived meta-data for:
-
-* High-frequency trajectory in 1KHz - [Location Output Data](/pilotdata/location-output.mdx)
-* High-frequency time-synchronization between multiple users in the same activity - [Timestamps Mapping Data](/pilotdata/timestamps.mdx)
-* Eye gaze reprojected into the RGB camera stream - [Eye Gaze Data](/pilotdata/reprojected-gaze.mdx)
-* Time-aligned speech to text - [Speech2Text Output Data](/pilotdata/speech2text.mdx)
-
-The data has been gathered across five indoor locations. Data for each location is [stored in their own folder](/pilotdata/everyday/everyday.mdx).
 
 ## Desktop Activities
 
