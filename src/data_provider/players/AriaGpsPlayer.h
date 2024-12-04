@@ -32,13 +32,14 @@ struct AriaGpsConfigRecord {
 };
 
 struct AriaGpsDataRecord {
-  int64_t captureTimestampNs;
-  int64_t utcTimeMs;
-  std::string provider;
-  float latitude;
-  float longitude;
-  float altitude;
-  float accuracy;
+  int64_t captureTimestampNs; ///< @brief capture time in device domain
+  int64_t utcTimeMs; ///< @brief capture time in UTC domain
+  std::string provider; ///< @brief GPS provider
+  float latitude; ///< @brief latitude of the position in Degrees Minutes Seconds (DMS)
+  float longitude; ///< @brief longitude of the position in Degrees Minutes Seconds (DMS)
+  float altitude; ///< @brief altitude of the position
+  float accuracy; ///< @brief horizontal accuracy of the position in meters
+  float verticalAccuracy; ///< @brief vertical accuracy of the position in meters
   float speed;
   std::vector<std::string> rawData;
 };
