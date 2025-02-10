@@ -80,7 +80,7 @@ auto kWifiBeaconCallback =
 
 const int kAriaNativeRgbResolution = 2880;
 const int kAriaNativeEtResolution = 640;
-}; // namespace
+} // namespace
 
 namespace ark {
 namespace datatools {
