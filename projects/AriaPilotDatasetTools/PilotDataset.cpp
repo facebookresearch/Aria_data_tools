@@ -177,7 +177,7 @@ std::optional<ark::datatools::dataprovider::SpeechToTextDatum> querySpeechToText
 namespace ark::datatools::dataprovider {
 
 std::optional<std::map<int64_t, Sophus::SE3d>> loadPosesFromCsv(const std::string& posePath) {
-  std::string trajectoryCsvFile = "";
+  std::string trajectoryCsvFile;
   if (!std::filesystem::is_directory(posePath)) {
     trajectoryCsvFile = posePath;
   } else {
@@ -195,7 +195,7 @@ std::optional<std::map<int64_t, Sophus::SE3d>> loadPosesFromCsv(const std::strin
 
 std::optional<std::map<int64_t, SpeechToTextDatum>> loadSpeechToTextFromCsv(
     const std::string& speechToTextPath) {
-  std::string speechToTextCsvFile = "";
+  std::string speechToTextCsvFile;
   if (!std::filesystem::is_directory(speechToTextPath)) {
     speechToTextCsvFile = speechToTextPath;
   } else {
@@ -213,7 +213,7 @@ std::optional<std::map<int64_t, SpeechToTextDatum>> loadSpeechToTextFromCsv(
 
 std::optional<std::map<int64_t, Eigen::Vector2f>> loadEyetrackingFromCsv(
     const std::string& eyetrackingPath) {
-  std::string eyetrackingCsvFile = "";
+  std::string eyetrackingCsvFile;
   if (!std::filesystem::is_directory(eyetrackingPath)) {
     eyetrackingCsvFile = eyetrackingPath;
   } else {
