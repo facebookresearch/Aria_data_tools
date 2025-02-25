@@ -24,7 +24,7 @@ namespace ark::datatools {
 TemporalDeviceModels readOnlineCalibration(const std::string& filepath) {
   std::ifstream infile(filepath);
   if (infile) {
-    std::string jsonCalibrationString = "";
+    std::string jsonCalibrationString;
     TemporalDeviceModels temporalDeviceModels;
     while (std::getline(infile, jsonCalibrationString)) {
       sensors::DeviceModel deviceModel = sensors::DeviceModel::fromJson(jsonCalibrationString);
