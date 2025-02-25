@@ -70,7 +70,7 @@ struct NullifyModuloTwoTimestamp : public vrs::utils::UserDefinedImageMutator {
 struct VrsExportLoader : public vrs::utils::UserDefinedImageMutator {
   std::string folderPath_;
   std::string extension_;
-  std::string filenamePostfix_ = "";
+  std::string filenamePostfix_;
   std::map<std::string, uint64_t> frameCounter_;
 
   explicit VrsExportLoader(const std::string& folderPath, const std::string& extension = "jpg")
