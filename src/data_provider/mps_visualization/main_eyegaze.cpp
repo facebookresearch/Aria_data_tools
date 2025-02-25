@@ -50,7 +50,7 @@ int main(int argc, const char* argv[]) {
   }
 
   const std::string vrsPath = argv[1];
-  std::string eyeGazeRecordsPath = "";
+  std::string eyeGazeRecordsPath;
   if (argc == 3) {
     eyeGazeRecordsPath = argv[2];
   }
