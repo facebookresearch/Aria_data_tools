@@ -28,9 +28,7 @@
 namespace py = pybind11;
 using namespace pybind11::literals;
 
-namespace ark {
-namespace datatools {
-namespace sensors {
+namespace ark::datatools::sensors {
 
 void exportSensors(py::module& m) {
   m.doc() = "A pybind11 binding for Aria Research Kit (ARK) camera model and calibration APIs.";
@@ -180,6 +178,4 @@ void exportSensors(py::module& m) {
   m.def("getCalibrationFromVrsFile", &getCalibrationFromVrsFile, "reader"_a);
   m.def("getCalibStrFromFile", &getCalibStrFromFile, "reader"_a);
 }
-} // namespace sensors
-} // namespace datatools
-} // namespace ark
+} // namespace ark::datatools::sensors

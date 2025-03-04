@@ -23,9 +23,7 @@
 #include <pybind11/pybind11.h>
 #include <pybind11/stl.h>
 
-namespace ark {
-namespace datatools {
-namespace dataprovider {
+namespace ark::datatools::dataprovider {
 
 namespace py = pybind11;
 
@@ -195,6 +193,4 @@ void exportDataProvider(py::module& m) {
       .def("streamExistsInSource", &AriaVrsDataProvider::streamExistsInSource, py::arg("streamId"));
 }
 
-} // namespace dataprovider
-} // namespace datatools
-} // namespace ark
+} // namespace ark::datatools::dataprovider

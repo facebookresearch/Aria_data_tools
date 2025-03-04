@@ -28,9 +28,7 @@
 #include <pybind11/numpy.h>
 #include <pybind11/pybind11.h>
 
-namespace ark {
-namespace datatools {
-namespace dataprovider {
+namespace ark::datatools::dataprovider {
 
 namespace py = pybind11;
 
@@ -235,6 +233,4 @@ void exportPlayers(py::module& m) {
       .def_readwrite("realTimestampNs", &AriaTimeSyncDataRecord::realTimestampNs);
 }
 
-} // namespace dataprovider
-} // namespace datatools
-} // namespace ark
+} // namespace ark::datatools::dataprovider
