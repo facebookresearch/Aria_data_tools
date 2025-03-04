@@ -23,9 +23,7 @@
 // font defined in pangolin
 extern const unsigned char AnonymousPro_ttf[];
 
-namespace ark {
-namespace datatools {
-namespace visualization {
+namespace ark::datatools::visualization {
 
 AriaViewer::AriaViewer(
     datatools::dataprovider::AriaDataProvider* dataProvider,
@@ -304,6 +302,4 @@ std::pair<double, double> AriaViewer::initDataStreams(
   return speedDataRate;
 }
 
-} // namespace visualization
-} // namespace datatools
-} // namespace ark
+} // namespace ark::datatools::visualization

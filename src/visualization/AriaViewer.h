@@ -19,9 +19,7 @@
 #include "AriaViewerBase.h"
 #include "utils.h"
 
-namespace ark {
-namespace datatools {
-namespace visualization {
+namespace ark::datatools::visualization {
 
 class AriaViewer : public AriaViewerBase {
  public:
@@ -41,6 +39,4 @@ class AriaViewer : public AriaViewerBase {
       const std::vector<vrs::StreamId>& kImuStreamIds = {},
       const std::vector<vrs::StreamId>& kDataStreams = {}) override;
 };
-} // namespace visualization
-} // namespace datatools
-} // namespace ark
+} // namespace ark::datatools::visualization

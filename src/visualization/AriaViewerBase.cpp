@@ -17,9 +17,7 @@
 #include "AriaViewerBase.h"
 #include "AriaStreamIds.h"
 
-namespace ark {
-namespace datatools {
-namespace visualization {
+namespace ark::datatools::visualization {
 
 AriaViewerBase::AriaViewerBase(
     datatools::dataprovider::AriaDataProvider* dataProvider,
@@ -201,6 +199,4 @@ bool AriaViewerBase::readData(double currentTimestampSec) {
   return false;
 }
 
-} // namespace visualization
-} // namespace datatools
-} // namespace ark
+} // namespace ark::datatools::visualization

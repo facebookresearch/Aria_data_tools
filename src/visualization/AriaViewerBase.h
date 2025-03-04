@@ -20,9 +20,7 @@
 #include "models/DeviceModel.h"
 #include "utils.h"
 
-namespace ark {
-namespace datatools {
-namespace visualization {
+namespace ark::datatools::visualization {
 
 class AriaViewerBase {
  public:
@@ -162,6 +160,4 @@ class AriaViewerBase {
   std::vector<vrs::StreamId> dataStreams_;
 };
 
-} // namespace visualization
-} // namespace datatools
-} // namespace ark
+} // namespace ark::datatools::visualization
