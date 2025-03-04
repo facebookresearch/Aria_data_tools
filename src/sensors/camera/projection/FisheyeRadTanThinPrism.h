@@ -19,9 +19,7 @@
 #include <camera/projection/common.h>
 #include <Eigen/Core>
 
-namespace ark {
-namespace datatools {
-namespace sensors {
+namespace ark::datatools::sensors {
 
 // Model for fisheye cameras with radial, tangential, and thin-prism distortion.
 // Specifically, the model is:
@@ -550,6 +548,4 @@ template <>
 const char FisheyeRadTanThinPrism<6, true, false, true>::kDescription[];
 #endif // !defined(_MSC_VER) || defined(__clang__)
 
-} // namespace sensors
-} // namespace datatools
-} // namespace ark
+} // namespace ark::datatools::sensors

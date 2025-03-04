@@ -23,10 +23,7 @@
 #include <camera/math/optimization/IgnoreJetInfinitesimal.h>
 #include <camera/portability/Inline.h>
 
-namespace ark {
-namespace datatools {
-namespace sensors {
-namespace CameraNewtonsMethod {
+namespace ark::datatools::sensors::CameraNewtonsMethod {
 constexpr int kMaxIterations = 50;
 constexpr float kFloatTolerance = 1e-5;
 constexpr float kDoubleTolerance = 1e-7;
@@ -83,7 +80,4 @@ inline ARK_HOST_DEVICE T initTheta(const T& r) {
   using std::sqrt;
   return sqrt(r);
 }
-} // namespace CameraNewtonsMethod
-} // namespace sensors
-} // namespace datatools
-} // namespace ark
+} // namespace ark::datatools::sensors::CameraNewtonsMethod

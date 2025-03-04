@@ -23,9 +23,7 @@
 #include <sophus/so3.hpp>
 #include <Eigen/Core>
 
-namespace ark {
-namespace datatools {
-namespace sensors {
+namespace ark::datatools::sensors {
 
 // Kannala and Brandt Like 'Generic' Projection Model
 // http://cs.iupui.edu/~tuceryan/pdf-repository/Kannala2006.pdf
@@ -334,6 +332,4 @@ class KannalaBrandtK3Projection {
   }
 };
 
-} // namespace sensors
-} // namespace datatools
-} // namespace ark
+} // namespace ark::datatools::sensors
