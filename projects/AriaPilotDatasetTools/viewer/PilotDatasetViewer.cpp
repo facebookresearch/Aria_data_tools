@@ -24,9 +24,7 @@
 // font defined in pangolin
 extern const unsigned char AnonymousPro_ttf[];
 
-namespace ark {
-namespace datatools {
-namespace visualization {
+namespace ark::datatools::visualization {
 
 PilotDatasetViewer::PilotDatasetViewer(
     dataprovider::PilotDatasetProvider* dataProvider,
@@ -362,6 +360,4 @@ void PilotDatasetViewer::drawRigs(
   }
 }
 
-} // namespace visualization
-} // namespace datatools
-} // namespace ark
+} // namespace ark::datatools::visualization

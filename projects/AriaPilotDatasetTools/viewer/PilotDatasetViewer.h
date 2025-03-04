@@ -20,9 +20,7 @@
 
 #include "PilotDataset.h"
 
-namespace ark {
-namespace datatools {
-namespace visualization {
+namespace ark::datatools::visualization {
 
 class PilotDatasetViewer : public AriaViewerBase {
  public:
@@ -62,6 +60,4 @@ class PilotDatasetViewer : public AriaViewerBase {
 
   const dataprovider::PilotDatasetProvider* dataProvider_;
 };
-} // namespace visualization
-} // namespace datatools
-} // namespace ark
+} // namespace ark::datatools::visualization
