@@ -23,9 +23,7 @@ template <typename T, int N>
 struct Jet;
 }
 
-namespace ark {
-namespace datatools {
-namespace sensors {
+namespace ark::datatools::sensors {
 
 template <typename T>
 inline ARK_HOST_DEVICE double IgnoreJetInfinitesimal(const T& j) {
@@ -48,6 +46,4 @@ inline ARK_HOST_DEVICE Eigen::Matrix<double, Derived::RowsAtCompileTime, Derived
 IgnoreEigenJetInfinitesimal(const Eigen::MatrixBase<Derived>& mat) {
   return mat.unaryExpr([](const typename Derived::Scalar& v) { return IgnoreJetInfinitesimal(v); });
 }
-} // namespace sensors
-} // namespace datatools
-} // namespace ark
+} // namespace ark::datatools::sensors
