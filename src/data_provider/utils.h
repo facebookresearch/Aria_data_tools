@@ -22,9 +22,7 @@
 #include <string>
 #include <unordered_map>
 
-namespace ark {
-namespace datatools {
-namespace dataprovider {
+namespace ark::datatools::dataprovider {
 
 // Table to map Aria numeric StreamID to calibration label string.
 // Please check our documentation for more details.
@@ -42,6 +40,4 @@ std::string getTimeSyncPath(const std::string& vrsPath);
 
 std::map<int64_t, int64_t> readTimeSyncCsv(const std::string& inputTimeSyncCsv);
 
-} // namespace dataprovider
-} // namespace datatools
-} // namespace ark
+} // namespace ark::datatools::dataprovider

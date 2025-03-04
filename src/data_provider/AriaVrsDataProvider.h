@@ -34,9 +34,7 @@
 #include <mutex>
 #include <unordered_map>
 
-namespace ark {
-namespace datatools {
-namespace dataprovider {
+namespace ark::datatools::dataprovider {
 
 class AriaVrsDataProvider : public AriaDataProvider {
  public:
@@ -186,6 +184,4 @@ class AriaVrsDataProvider : public AriaDataProvider {
   std::mutex readerMutex_;
   vrs::RecordFileReader reader_;
 };
-} // namespace dataprovider
-} // namespace datatools
-} // namespace ark
+} // namespace ark::datatools::dataprovider

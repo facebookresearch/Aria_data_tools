@@ -82,9 +82,7 @@ const int kAriaNativeRgbResolution = 2880;
 const int kAriaNativeEtResolution = 640;
 } // namespace
 
-namespace ark {
-namespace datatools {
-namespace dataprovider {
+namespace ark::datatools::dataprovider {
 
 bool AriaVrsDataProvider::openFile(const std::string& vrsFilePath) {
   std::unique_lock<std::mutex> readerLock(readerMutex_);
@@ -820,6 +818,4 @@ bool AriaVrsDataProvider::tryScaleEtCameraCalibration() {
   return false;
 }
 
-} // namespace dataprovider
-} // namespace datatools
-} // namespace ark
+} // namespace ark::datatools::dataprovider

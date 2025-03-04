@@ -22,9 +22,7 @@
 #include <set>
 #include "models/DeviceModel.h"
 
-namespace ark {
-namespace datatools {
-namespace dataprovider {
+namespace ark::datatools::dataprovider {
 
 class AriaDataProvider {
  protected:
@@ -83,6 +81,4 @@ class AriaDataProvider {
 
   std::string sourcePath_;
 };
-} // namespace dataprovider
-} // namespace datatools
-} // namespace ark
+} // namespace ark::datatools::dataprovider

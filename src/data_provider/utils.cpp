@@ -23,9 +23,7 @@
 #endif
 #include "fast-cpp-csv-parser/csv.h"
 
-namespace ark {
-namespace datatools {
-namespace dataprovider {
+namespace ark::datatools::dataprovider {
 
 void getDirContent(const std::string& dirPath, std::vector<std::string>& dirContent) {
   std::set<std::string> pathSet;
@@ -72,6 +70,4 @@ std::vector<std::string> strSplit(const std::string& s, const char delimiter) {
   return result;
 }
 
-} // namespace dataprovider
-} // namespace datatools
-} // namespace ark
+} // namespace ark::datatools::dataprovider
