@@ -24,9 +24,7 @@
 #include <camera/projection/KannalaBrandtK3.h>
 #include <models/DeviceModel.h>
 
-namespace ark {
-namespace datatools {
-namespace sensors {
+namespace ark::datatools::sensors {
 
 namespace {
 
@@ -820,6 +818,4 @@ bool DeviceModel::tryCropAndScaleCameraCalibration(
   return false;
 }
 
-} // namespace sensors
-} // namespace datatools
-} // namespace ark
+} // namespace ark::datatools::sensors

@@ -26,9 +26,7 @@
 #include <unordered_set>
 #include <vector>
 
-namespace ark {
-namespace datatools {
-namespace sensors {
+namespace ark::datatools::sensors {
 
 struct CameraProjectionModel {
   enum class ModelType {
@@ -149,6 +147,4 @@ class DeviceModel {
   std::string deviceSubtype_; // "DVT-L" or "DVT-S"
 };
 
-} // namespace sensors
-} // namespace datatools
-} // namespace ark
+} // namespace ark::datatools::sensors
