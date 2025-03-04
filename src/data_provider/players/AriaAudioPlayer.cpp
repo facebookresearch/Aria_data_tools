@@ -22,9 +22,7 @@
 #include <vrs/ErrorCode.h>
 #include <vrs/RecordFileReader.h>
 
-namespace ark {
-namespace datatools {
-namespace dataprovider {
+namespace ark::datatools::dataprovider {
 
 bool AriaAudioPlayer::onDataLayoutRead(
     const vrs::CurrentRecord& r,
@@ -70,6 +68,4 @@ bool AriaAudioPlayer::onAudioRead(
   return true;
 }
 
-} // namespace dataprovider
-} // namespace datatools
-} // namespace ark
+} // namespace ark::datatools::dataprovider

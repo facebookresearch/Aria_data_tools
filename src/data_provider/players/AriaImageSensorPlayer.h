@@ -20,9 +20,7 @@
 #include <vrs/RecordFormatStreamPlayer.h>
 #include <vrs/utils/PixelFrame.h>
 
-namespace ark {
-namespace datatools {
-namespace dataprovider {
+namespace ark::datatools::dataprovider {
 
 using ImageCallback =
     std::function<bool(const vrs::CurrentRecord& r, std::vector<uint8_t>& data, bool verbose)>;
@@ -117,6 +115,4 @@ class AriaImageSensorPlayer : public vrs::RecordFormatStreamPlayer {
   bool verbose_ = false;
 };
 
-} // namespace dataprovider
-} // namespace datatools
-} // namespace ark
+} // namespace ark::datatools::dataprovider

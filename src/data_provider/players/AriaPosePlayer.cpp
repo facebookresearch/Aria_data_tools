@@ -18,9 +18,7 @@
 
 #include "AriaPosePlayer.h"
 
-namespace ark {
-namespace datatools {
-namespace dataprovider {
+namespace ark::datatools::dataprovider {
 
 bool AriaPosePlayer::onDataLayoutRead(
     const vrs::CurrentRecord& r,
@@ -49,6 +47,4 @@ bool AriaPosePlayer::onDataLayoutRead(
   return true;
 }
 
-} // namespace dataprovider
-} // namespace datatools
-} // namespace ark
+} // namespace ark::datatools::dataprovider

@@ -18,9 +18,7 @@
 
 #include "AriaGpsPlayer.h"
 
-namespace ark {
-namespace datatools {
-namespace dataprovider {
+namespace ark::datatools::dataprovider {
 
 bool AriaGpsPlayer::onDataLayoutRead(
     const vrs::CurrentRecord& r,
@@ -48,6 +46,4 @@ bool AriaGpsPlayer::onDataLayoutRead(
   return true;
 }
 
-} // namespace dataprovider
-} // namespace datatools
-} // namespace ark
+} // namespace ark::datatools::dataprovider

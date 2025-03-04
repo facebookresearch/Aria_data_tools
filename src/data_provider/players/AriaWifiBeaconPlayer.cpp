@@ -18,9 +18,7 @@
 
 #include "AriaWifiBeaconPlayer.h"
 
-namespace ark {
-namespace datatools {
-namespace dataprovider {
+namespace ark::datatools::dataprovider {
 
 bool AriaWifiBeaconPlayer::onDataLayoutRead(
     const vrs::CurrentRecord& r,
@@ -47,6 +45,4 @@ bool AriaWifiBeaconPlayer::onDataLayoutRead(
   return true;
 }
 
-} // namespace dataprovider
-} // namespace datatools
-} // namespace ark
+} // namespace ark::datatools::dataprovider

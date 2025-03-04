@@ -20,9 +20,7 @@
 
 #include <vrs/ErrorCode.h>
 
-namespace ark {
-namespace datatools {
-namespace dataprovider {
+namespace ark::datatools::dataprovider {
 
 bool AriaMotionSensorPlayer::onDataLayoutRead(
     const vrs::CurrentRecord& r,
@@ -59,6 +57,4 @@ bool AriaMotionSensorPlayer::onDataLayoutRead(
   return true;
 }
 
-} // namespace dataprovider
-} // namespace datatools
-} // namespace ark
+} // namespace ark::datatools::dataprovider

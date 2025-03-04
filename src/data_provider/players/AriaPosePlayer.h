@@ -19,9 +19,7 @@
 #include <data_layout/aria/PoseMetadata.h>
 #include <vrs/RecordFormatStreamPlayer.h>
 
-namespace ark {
-namespace datatools {
-namespace dataprovider {
+namespace ark::datatools::dataprovider {
 
 using PoseCallback =
     std::function<bool(const vrs::CurrentRecord& r, vrs::DataLayout& dataLayout, bool verbose)>;
@@ -81,6 +79,4 @@ class AriaPosePlayer : public vrs::RecordFormatStreamPlayer {
   bool verbose_ = false;
 };
 
-} // namespace dataprovider
-} // namespace datatools
-} // namespace ark
+} // namespace ark::datatools::dataprovider

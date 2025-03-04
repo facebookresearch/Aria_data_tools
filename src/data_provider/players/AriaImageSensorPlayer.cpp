@@ -21,9 +21,7 @@
 #include <vrs/MultiRecordFileReader.h>
 #include <vrs/RecordFormat.h>
 
-namespace ark {
-namespace datatools {
-namespace dataprovider {
+namespace ark::datatools::dataprovider {
 
 bool AriaImageSensorPlayer::onDataLayoutRead(
     const vrs::CurrentRecord& r,
@@ -86,6 +84,4 @@ bool AriaImageSensorPlayer::onImageRead(
   return true; // read next blocks, if any
 }
 
-} // namespace dataprovider
-} // namespace datatools
-} // namespace ark
+} // namespace ark::datatools::dataprovider

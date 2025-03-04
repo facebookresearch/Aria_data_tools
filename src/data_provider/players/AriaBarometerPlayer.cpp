@@ -18,9 +18,7 @@
 
 #include "AriaBarometerPlayer.h"
 
-namespace ark {
-namespace datatools {
-namespace dataprovider {
+namespace ark::datatools::dataprovider {
 
 bool AriaBarometerPlayer::onDataLayoutRead(
     const vrs::CurrentRecord& r,
@@ -43,6 +41,4 @@ bool AriaBarometerPlayer::onDataLayoutRead(
   return true;
 }
 
-} // namespace dataprovider
-} // namespace datatools
-} // namespace ark
+} // namespace ark::datatools::dataprovider

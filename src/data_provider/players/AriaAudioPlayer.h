@@ -19,9 +19,7 @@
 #include <data_layout/aria/AudioMetadata.h>
 #include <vrs/RecordFormatStreamPlayer.h>
 
-namespace ark {
-namespace datatools {
-namespace dataprovider {
+namespace ark::datatools::dataprovider {
 
 using AudioCallback =
     std::function<bool(const vrs::CurrentRecord& r, std::vector<int32_t>& data, bool verbose)>;
@@ -95,6 +93,4 @@ class AriaAudioPlayer : public vrs::RecordFormatStreamPlayer {
   bool verbose_ = false;
 };
 
-} // namespace dataprovider
-} // namespace datatools
-} // namespace ark
+} // namespace ark::datatools::dataprovider

@@ -18,9 +18,7 @@
 
 #include "AriaTimeSyncPlayer.h"
 
-namespace ark {
-namespace datatools {
-namespace dataprovider {
+namespace ark::datatools::dataprovider {
 
 bool AriaTimeSyncPlayer::onDataLayoutRead(
     const vrs::CurrentRecord& r,
@@ -40,6 +38,4 @@ bool AriaTimeSyncPlayer::onDataLayoutRead(
   return true;
 }
 
-} // namespace dataprovider
-} // namespace datatools
-} // namespace ark
+} // namespace ark::datatools::dataprovider
