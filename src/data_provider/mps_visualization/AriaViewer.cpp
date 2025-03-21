@@ -351,7 +351,7 @@ bool AriaViewer::readData(double currentTimestampSec) {
       std::unique_lock<std::mutex> dataLock(dataMutex_);
       currentTimestamp_ = durationDoubleToChronoUsCast(currentTimestampSec).count();
       // Handle image streams & update eye gaze data if available
-      for (auto& streamId : kImageStreamIds) {
+      for (const auto& streamId : kImageStreamIds) {
         if (dataProvider_->tryFetchNextData(streamId, currentTimestampSec)) {
           if (streamId == dataprovider::kEyeCameraStreamId) {
             const auto ret =
