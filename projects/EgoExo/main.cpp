@@ -32,7 +32,7 @@ namespace {
 // Return the list of files included in a given folder
 std::vector<std::string> getDirContent(const std::filesystem::path& dirPath) {
   std::set<std::string> pathSet;
-  for (auto& p : std::filesystem::directory_iterator(dirPath)) {
+  for (const auto& p : std::filesystem::directory_iterator(dirPath)) {
     pathSet.insert(p.path());
   }
   return {pathSet.begin(), pathSet.end()};
