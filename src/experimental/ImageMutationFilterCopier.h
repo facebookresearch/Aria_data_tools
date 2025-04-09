@@ -68,7 +68,7 @@ class ImageMutationFilter : public RecordFilterCopier {
       size_t,
       const ContentBlock& cb,
       vector<uint8_t>& pixels) override {
-    auto& imageSpec = cb.image();
+    const auto& imageSpec = cb.image();
 
     // Synchronously read the image data, which is jpg compressed with Aria
     if (imageSpec.getImageFormat() == vrs::ImageFormat::JPG) {
