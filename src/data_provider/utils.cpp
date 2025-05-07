@@ -27,8 +27,8 @@ namespace ark::datatools::dataprovider {
 
 void getDirContent(const std::string& dirPath, std::vector<std::string>& dirContent) {
   std::set<std::string> pathSet;
-  for (auto& p : std::filesystem::directory_iterator(dirPath)) {
-    pathSet.insert(p.path());
+  for (const auto& p : std::filesystem::directory_iterator(dirPath)) {
+    pathSet.insert(p.path().string());
   }
   std::copy(pathSet.begin(), pathSet.end(), std::back_inserter(dirContent));
 }
