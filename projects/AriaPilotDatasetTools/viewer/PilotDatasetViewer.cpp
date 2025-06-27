@@ -22,7 +22,7 @@
 #include "AriaStreamIds.h"
 
 // font defined in pangolin
-extern const unsigned char AnonymousPro_ttf[];
+extern const unsigned char AnonymousPro_ttf[]; // NOLINT(modernize-avoid-c-arrays)
 
 namespace ark::datatools::visualization {
 
