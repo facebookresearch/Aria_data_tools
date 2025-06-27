@@ -28,7 +28,7 @@
 
 using namespace ark::datatools;
 
-extern const unsigned char AnonymousPro_ttf[];
+extern const unsigned char AnonymousPro_ttf[]; // NOLINT(modernize-avoid-c-arrays)
 static pangolin::GlFont kGlFont(AnonymousPro_ttf, 20);
 
 int main(int argc, char** argv) {
