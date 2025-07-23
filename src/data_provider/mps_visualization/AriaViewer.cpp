@@ -272,8 +272,9 @@ void AriaViewer::run() {
 
         // Draw radar view background
         glColor3f(1, 1., 1.);
-        for (double r = .1; r < 2; r += 0.5)
+        for (double r = .1; r < 2; r += 0.5) {
           pangolin::glDrawCirclePerimeter(Eigen::Vector2d(0, 0), r);
+        }
 
         // Draw eye gaze yaw, pitch history
         glColor3f(1, 0.8, 0);
@@ -282,8 +283,9 @@ void AriaViewer::run() {
         // Draw current gaze yaw, pitch
         const Eigen::Vector2f center(eyeGazeHistory_.back().x(), eyeGazeHistory_.back().y());
         pangolin::glDrawVertices(std::vector<Eigen::Vector2f>{center}, GL_POINTS);
-        for (double r = .1; r < .3; r += 0.1)
+        for (double r = .1; r < .3; r += 0.1) {
           pangolin::glDrawCirclePerimeter(center.cast<double>(), r);
+        }
       }
     }
 
@@ -356,8 +358,9 @@ bool AriaViewer::readData(double currentTimestampSec) {
           if (streamId == dataprovider::kEyeCameraStreamId) {
             const auto ret =
                 queryEyetrack(durationDoubleToChronoUsCast(currentTimestampSec), eyeGazeData_);
-            if (ret)
+            if (ret) {
               lastEyeGazeRecord_ = *ret;
+            }
           }
           auto imageBufferVector = dataProvider_->getImageBufferVector(streamId);
           if (imageBufferVector) {
