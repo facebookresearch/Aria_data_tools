@@ -85,7 +85,7 @@ class AriaViewerBase {
       const vrs::StreamId& streamId,
       const std::vector<float>& temperature,
       const std::vector<float>& pressure) {
-    if (temperature.size() && pressure.size()) {
+    if (!temperature.empty() && !pressure.empty()) {
       setDataChanged(true, streamId);
       temperature_ = temperature;
       pressure_ = pressure;

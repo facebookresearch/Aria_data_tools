@@ -552,7 +552,7 @@ std::string DeviceModel::getDeviceSubtype() const {
 }
 
 std::optional<Sophus::SE3d> DeviceModel::getCADSensorPose(const std::string& label) const {
-  if (deviceSubtype_.size() > 0 && T_Device_FrameMap.count(deviceSubtype_) &&
+  if (!deviceSubtype_.empty() && T_Device_FrameMap.count(deviceSubtype_) &&
       T_Device_FrameMap.at(deviceSubtype_).count(label)) {
     return T_Device_FrameMap.at(deviceSubtype_).at(label);
   }
