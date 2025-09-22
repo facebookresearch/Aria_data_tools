@@ -119,10 +119,8 @@ class DeviceModel {
 
   std::optional<Sophus::SE3d> getCADSensorPose(const std::string& label) const;
 
-  bool tryCropAndScaleCameraCalibration(
-      const std::string& label,
-      const int nativeResolution,
-      const int imageWidth);
+  bool
+  tryCropAndScaleCameraCalibration(const std::string& label, int nativeResolution, int imageWidth);
 
   std::vector<std::string> getCameraLabels() const;
   std::vector<std::string> getImuLabels() const;

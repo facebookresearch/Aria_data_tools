@@ -45,11 +45,11 @@ void ProjectEyeGazeRayInCamera(
     const std::string& cameraString,
     const sensors::DeviceModel& deviceModel,
     const Eigen::Vector3d& eyeGazeVector,
-    const double minDepth,
-    const double maxDepth,
-    const double samples,
+    double minDepth,
+    double maxDepth,
+    double samples,
     std::map<double, Eigen::Vector2d>& camProjectionPerDepth,
-    const int cameraWidth = -1,
-    const int cameraHeight = -1);
+    int cameraWidth = -1,
+    int cameraHeight = -1);
 
 } // namespace ark::datatools

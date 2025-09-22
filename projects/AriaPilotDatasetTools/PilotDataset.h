@@ -51,7 +51,7 @@ class PilotDatasetProvider : public AriaVrsDataProvider {
   std::optional<Sophus::SE3d> getLatestPoseOfStream(const vrs::StreamId& streamId);
   std::optional<Sophus::SE3d> getPoseOfStreamAtTimestampNs(
       const vrs::StreamId& streamId,
-      const int64_t timestampNs);
+      int64_t timestampNs);
 
  protected:
   std::map<int64_t, Sophus::SE3d> imuLeftPoses_;

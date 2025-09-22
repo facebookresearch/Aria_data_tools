@@ -37,6 +37,6 @@ constexpr std::array<const char*, 8> kGlobalPointCloudColumns = {
 
 GlobalPointCloud readGlobalPointCloud(
     const std::string& path,
-    const utils::StreamCompressionMode compression);
+    utils::StreamCompressionMode compression);
 
 } // namespace ego_exo

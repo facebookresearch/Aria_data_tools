@@ -34,7 +34,7 @@ const std::unordered_map<std::string, std::string> kDeviceNumericIdToLabel = {
     {"214-1", "camera-rgb"}};
 
 void getDirContent(const std::string& dirPath, std::vector<std::string>& dirContent);
-std::vector<std::string> strSplit(const std::string& s, const char delimiter);
+std::vector<std::string> strSplit(const std::string& s, char delimiter);
 
 std::string getTimeSyncPath(const std::string& vrsPath);
 
