@@ -37,8 +37,8 @@ class PilotDatasetViewer : public AriaViewerBase {
 
   std::pair<double, double> initDataStreams(
       const std::vector<vrs::StreamId>& kImageStreamIds,
-      const std::vector<vrs::StreamId>&,
-      const std::vector<vrs::StreamId>&) override;
+      const std::vector<vrs::StreamId>& /*kImuStreamIds*/,
+      const std::vector<vrs::StreamId>& /*kDataStreams*/) override;
 
  private:
   void setPose(const std::optional<Sophus::SE3d>& T_World_ImuLeft);

@@ -29,7 +29,8 @@ namespace {
 // Demonstration on how to implement a variant of the abstract class "UserDefinedImageMutator"
 // to perform vertical image flip in a VRS file copy operate
 struct VerticalImageFlipMutator : public vrs::utils::UserDefinedImageMutator {
-  bool operator()(double, const vrs::StreamId&, vrs::utils::PixelFrame* frame) override {
+  bool operator()(double /*unused*/, const vrs::StreamId& /*unused*/, vrs::utils::PixelFrame* frame)
+      override {
     // Perform a vertical line flip if the frame is valid
     if (!frame) {
       return false;
@@ -53,7 +54,8 @@ struct VerticalImageFlipMutator : public vrs::utils::UserDefinedImageMutator {
 // Demonstration on how to implement a variant of the abstract class "UserDefinedImageMutator"
 // to nullify (black image) images that have a "timestamp%2 ==0" in a VRS file copy operate
 struct NullifyModuloTwoTimestamp : public vrs::utils::UserDefinedImageMutator {
-  bool operator()(double timestamp, const vrs::StreamId&, vrs::utils::PixelFrame* frame) override {
+  bool operator()(double timestamp, const vrs::StreamId& /*unused*/, vrs::utils::PixelFrame* frame)
+      override {
     if (!frame) {
       return false;
     }

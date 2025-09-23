@@ -65,7 +65,7 @@ class ImageMutationFilter : public RecordFilterCopier {
   }
   void filterImage(
       const CurrentRecord& record,
-      size_t,
+      size_t /*blockIndex*/,
       const ContentBlock& cb,
       vector<uint8_t>& pixels) override {
     const auto& imageSpec = cb.image();

@@ -218,8 +218,8 @@ void PilotDatasetViewer::run() {
 
 std::pair<double, double> PilotDatasetViewer::initDataStreams(
     const std::vector<vrs::StreamId>& kImageStreamIds,
-    const std::vector<vrs::StreamId>&,
-    const std::vector<vrs::StreamId>&) {
+    const std::vector<vrs::StreamId>& /*kImuStreamIds*/,
+    const std::vector<vrs::StreamId>& /*kDataStreams*/) {
   std::unique_lock<std::mutex> dataLock(dataMutex_);
 
   // Call mother initialization
