@@ -344,12 +344,13 @@ void PilotDatasetViewer::drawRigs(
     }
 
     // draw line connecting rig coordinate frames
-    pangolin::glDrawLineStrip(std::vector<Eigen::Vector3d>{
-        T_World_CamSlamLeft.translation(),
-        T_World_CamRgb.translation(),
-        T_World_ImuLeft.translation(),
-        T_World_CamSlamRight.translation(),
-    });
+    pangolin::glDrawLineStrip(
+        std::vector<Eigen::Vector3d>{
+            T_World_CamSlamLeft.translation(),
+            T_World_CamRgb.translation(),
+            T_World_ImuLeft.translation(),
+            T_World_CamSlamRight.translation(),
+        });
 
     // Always draw the latest camera.
     if (counter != T_World_Camera_.size() - 1 && counter + camSparsity >= T_World_Camera_.size()) {

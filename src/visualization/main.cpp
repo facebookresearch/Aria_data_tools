@@ -88,8 +88,9 @@ int main(int argc, const char* argv[]) {
         double thisWaitTimeSec =
             waitTimeSec - since<std::chrono::microseconds>(start).count() * 1e-6;
         if (thisWaitTimeSec > 0.) {
-          std::this_thread::sleep_for(std::chrono::nanoseconds(
-              static_cast<int64_t>(thisWaitTimeSec * 1e9 / viewer->getPlaybackSpeedFactor())));
+          std::this_thread::sleep_for(
+              std::chrono::nanoseconds(
+                  static_cast<int64_t>(thisWaitTimeSec * 1e9 / viewer->getPlaybackSpeedFactor())));
         }
         start = std::chrono::steady_clock::now();
       }

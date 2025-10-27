@@ -92,16 +92,17 @@ void centerViewOnMap(
   const Eigen::VectorXf distances = krDirectionsFromCenter * focalLength / (windowWidth / 2);
   const float distance = distances.maxCoeff();
   const Eigen::Vector3f eye = center - distance * viewDir;
-  glcam.SetModelViewMatrix(pangolin::ModelViewLookAtRDF(
-      eye.x(),
-      eye.y(),
-      eye.z(),
-      center.x(),
-      center.y(),
-      center.z(),
-      -gdir.x(),
-      -gdir.y(),
-      -gdir.z()));
+  glcam.SetModelViewMatrix(
+      pangolin::ModelViewLookAtRDF(
+          eye.x(),
+          eye.y(),
+          eye.z(),
+          center.x(),
+          center.y(),
+          center.z(),
+          -gdir.x(),
+          -gdir.y(),
+          -gdir.z()));
 }
 
 } // namespace pangolin_helpers
@@ -114,8 +115,16 @@ Data3DGui::Data3DGui(
     const std::vector<GoProCalibration>& goProCalibs)
     : cloud_(cloud_world), fullTrajsWorld_(fullTrajs_world), goProCalibs_(goProCalibs) {
   pangolin::CreateWindowAndBind("EgoExo - Data Inspector", kWindowWidth, kWindowHeight);
-  visualization3dState_ = pangolin::OpenGlRenderState(pangolin::ProjectionMatrixRDF_TopLeft(
-      kMapPanelWidth, kWindowHeight, 1000, 1000, kMapPanelWidth / 2, kWindowHeight / 2, 0.1, 1000));
+  visualization3dState_ = pangolin::OpenGlRenderState(
+      pangolin::ProjectionMatrixRDF_TopLeft(
+          kMapPanelWidth,
+          kWindowHeight,
+          1000,
+          1000,
+          kMapPanelWidth / 2,
+          kWindowHeight / 2,
+          0.1,
+          1000));
   vis3dState_ = std::make_unique<pangolin::Handler3D>(visualization3dState_);
   mapView_ =
       &pangolin::CreateDisplay()

@@ -74,8 +74,9 @@ int main(int argc, const char* argv[]) {
     timeSyncToTimeRecordings.emplace_back(
         dataprovider::readTimeSyncCsv(dataprovider::getTimeSyncPath(vrsPath)));
     // start viewer with dataprovider
-    viewers.emplace_back(std::make_shared<visualization::AriaViewer>(
-        dataProvider.get(), 1280, 800, "AriaViewer", argi - 1));
+    viewers.emplace_back(
+        std::make_shared<visualization::AriaViewer>(
+            dataProvider.get(), 1280, 800, "AriaViewer", argi - 1));
     // initialize and setup datastreams
     viewers.back()->initDataStreams(kImageStreamIds, kImuStreamIds, kDataStreams);
   }
@@ -123,8 +124,10 @@ int main(int argc, const char* argv[]) {
       // subtract time it took to load data from wait time
       double thisWaitTimeSec = waitTimeSec - since<std::chrono::microseconds>(start).count() * 1e-6;
       if (thisWaitTimeSec > 0.) {
-        std::this_thread::sleep_for(std::chrono::nanoseconds(
-            static_cast<int64_t>(thisWaitTimeSec * 1e9 / viewers[0]->getPlaybackSpeedFactor())));
+        std::this_thread::sleep_for(
+            std::chrono::nanoseconds(
+                static_cast<int64_t>(
+                    thisWaitTimeSec * 1e9 / viewers[0]->getPlaybackSpeedFactor())));
       }
     }
     std::cout << "Finished reading records" << std::endl;
