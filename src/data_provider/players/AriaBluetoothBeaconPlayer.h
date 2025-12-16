@@ -46,6 +46,8 @@ class AriaBluetoothBeaconPlayer : public vrs::RecordFormatStreamPlayer {
   AriaBluetoothBeaconPlayer(const AriaBluetoothBeaconPlayer&) = delete;
   AriaBluetoothBeaconPlayer& operator=(const AriaBluetoothBeaconPlayer&) = delete;
   AriaBluetoothBeaconPlayer(AriaBluetoothBeaconPlayer&&) = default;
+  AriaBluetoothBeaconPlayer& operator=(AriaBluetoothBeaconPlayer&&) = delete;
+  ~AriaBluetoothBeaconPlayer() override = default;
 
   void setCallback(BluetoothBeaconCallback callback) {
     callback_ = callback;
