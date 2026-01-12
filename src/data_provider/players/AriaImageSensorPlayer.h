@@ -73,23 +73,23 @@ class AriaImageSensorPlayer : public vrs::RecordFormatStreamPlayer {
     callback_ = callback;
   }
 
-  const AriaImageData& getData() const {
+  [[nodiscard]] const AriaImageData& getData() const {
     return data_;
   }
 
-  const AriaImageConfigRecord& getConfigRecord() const {
+  [[nodiscard]] const AriaImageConfigRecord& getConfigRecord() const {
     return configRecord_;
   }
 
-  const AriaImageDataRecord& getDataRecord() const {
+  [[nodiscard]] const AriaImageDataRecord& getDataRecord() const {
     return dataRecord_;
   }
 
-  const vrs::StreamId& getStreamId() const {
+  [[nodiscard]] const vrs::StreamId& getStreamId() const {
     return streamId_;
   }
 
-  double getNextTimestampSec() const {
+  [[nodiscard]] double getNextTimestampSec() const {
     return nextTimestampSec_;
   }
 

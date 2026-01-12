@@ -53,19 +53,19 @@ class AriaBluetoothBeaconPlayer : public vrs::RecordFormatStreamPlayer {
     callback_ = callback;
   }
 
-  const AriaBluetoothBeaconConfigRecord& getConfigRecord() const {
+  [[nodiscard]] const AriaBluetoothBeaconConfigRecord& getConfigRecord() const {
     return configRecord_;
   }
 
-  const AriaBluetoothBeaconDataRecord& getDataRecord() const {
+  [[nodiscard]] const AriaBluetoothBeaconDataRecord& getDataRecord() const {
     return dataRecord_;
   }
 
-  const vrs::StreamId& getStreamId() const {
+  [[nodiscard]] const vrs::StreamId& getStreamId() const {
     return streamId_;
   }
 
-  double getNextTimestampSec() const {
+  [[nodiscard]] double getNextTimestampSec() const {
     return nextTimestampSec_;
   }
 

@@ -53,19 +53,19 @@ class AriaGpsPlayer : public vrs::RecordFormatStreamPlayer {
     callback_ = callback;
   }
 
-  const AriaGpsConfigRecord& getConfigRecord() const {
+  [[nodiscard]] const AriaGpsConfigRecord& getConfigRecord() const {
     return configRecord_;
   }
 
-  const AriaGpsDataRecord& getDataRecord() const {
+  [[nodiscard]] const AriaGpsDataRecord& getDataRecord() const {
     return dataRecord_;
   }
 
-  const vrs::StreamId& getStreamId() const {
+  [[nodiscard]] const vrs::StreamId& getStreamId() const {
     return streamId_;
   }
 
-  double getNextTimestampSec() const {
+  [[nodiscard]] double getNextTimestampSec() const {
     return nextTimestampSec_;
   }
 

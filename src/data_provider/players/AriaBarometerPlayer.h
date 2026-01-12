@@ -48,19 +48,19 @@ class AriaBarometerPlayer : public vrs::RecordFormatStreamPlayer {
     callback_ = callback;
   }
 
-  const AriaBarometerConfigRecord& getConfigRecord() const {
+  [[nodiscard]] const AriaBarometerConfigRecord& getConfigRecord() const {
     return configRecord_;
   }
 
-  const AriaBarometerDataRecord& getDataRecord() const {
+  [[nodiscard]] const AriaBarometerDataRecord& getDataRecord() const {
     return dataRecord_;
   }
 
-  const vrs::StreamId& getStreamId() const {
+  [[nodiscard]] const vrs::StreamId& getStreamId() const {
     return streamId_;
   }
 
-  double getNextTimestampSec() const {
+  [[nodiscard]] double getNextTimestampSec() const {
     return nextTimestampSec_;
   }
 

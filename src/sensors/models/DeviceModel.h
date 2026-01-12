@@ -39,13 +39,13 @@ struct CameraProjectionModel {
   ModelType modelName;
   Eigen::VectorXd projectionParams;
 
-  Eigen::Vector2d project(const Eigen::Vector3d& p) const;
-  Eigen::Vector3d unproject(const Eigen::Vector2d& uv) const;
+  [[nodiscard]] Eigen::Vector2d project(const Eigen::Vector3d& p) const;
+  [[nodiscard]] Eigen::Vector3d unproject(const Eigen::Vector2d& uv) const;
 
   // Return principal point location as {cx, cy}
-  Eigen::Vector2d getPrincipalPoint() const;
+  [[nodiscard]] Eigen::Vector2d getPrincipalPoint() const;
   // Return focal lengths as {fx, fy}
-  Eigen::Vector2d getFocalLengths() const;
+  [[nodiscard]] Eigen::Vector2d getFocalLengths() const;
 };
 
 struct CameraCalibration {
@@ -66,9 +66,11 @@ struct LinearRectificationModel {
 
   // Compensates the input vector (acceleration for accelerator, or angular
   // velocity for gyroscope) with a linear model
-  Eigen::Vector3d compensateForSystematicErrorFromMeasurement(const Eigen::Vector3d& v_raw) const;
+  [[nodiscard]] Eigen::Vector3d compensateForSystematicErrorFromMeasurement(
+      const Eigen::Vector3d& v_raw) const;
   // inverse function of compensateForSystematicErrorFromMeasurement
-  Eigen::Vector3d distortWithSystematicError(const Eigen::Vector3d& v_compensated) const;
+  [[nodiscard]] Eigen::Vector3d distortWithSystematicError(
+      const Eigen::Vector3d& v_compensated) const;
 };
 
 struct ImuCalibration {

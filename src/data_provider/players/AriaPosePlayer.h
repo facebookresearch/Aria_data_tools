@@ -45,19 +45,19 @@ class AriaPosePlayer : public vrs::RecordFormatStreamPlayer {
     callback_ = callback;
   }
 
-  const AriaPoseConfigRecord& getConfigRecord() const {
+  [[nodiscard]] const AriaPoseConfigRecord& getConfigRecord() const {
     return configRecord_;
   }
 
-  const AriaPoseDataRecord& getDataRecord() const {
+  [[nodiscard]] const AriaPoseDataRecord& getDataRecord() const {
     return dataRecord_;
   }
 
-  const vrs::StreamId& getStreamId() const {
+  [[nodiscard]] const vrs::StreamId& getStreamId() const {
     return streamId_;
   }
 
-  double getNextTimestampSec() const {
+  [[nodiscard]] double getNextTimestampSec() const {
     return nextTimestampSec_;
   }
 

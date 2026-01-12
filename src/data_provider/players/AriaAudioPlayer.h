@@ -51,23 +51,23 @@ class AriaAudioPlayer : public vrs::RecordFormatStreamPlayer {
     callback_ = callback;
   }
 
-  const AriaAudioData& getData() const {
+  [[nodiscard]] const AriaAudioData& getData() const {
     return data_;
   }
 
-  const AriaAudioConfigRecord& getConfigRecord() const {
+  [[nodiscard]] const AriaAudioConfigRecord& getConfigRecord() const {
     return configRecord_;
   }
 
-  const AriaAudioDataRecord& getDataRecord() const {
+  [[nodiscard]] const AriaAudioDataRecord& getDataRecord() const {
     return dataRecord_;
   }
 
-  const vrs::StreamId& getStreamId() const {
+  [[nodiscard]] const vrs::StreamId& getStreamId() const {
     return streamId_;
   }
 
-  double getNextTimestampSec() const {
+  [[nodiscard]] double getNextTimestampSec() const {
     return nextTimestampSec_;
   }
 

@@ -51,19 +51,19 @@ class AriaWifiBeaconPlayer : public vrs::RecordFormatStreamPlayer {
     callback_ = callback;
   }
 
-  const AriaWifiBeaconConfigRecord& getConfigRecord() const {
+  [[nodiscard]] const AriaWifiBeaconConfigRecord& getConfigRecord() const {
     return configRecord_;
   }
 
-  const AriaWifiBeaconDataRecord& getDataRecord() const {
+  [[nodiscard]] const AriaWifiBeaconDataRecord& getDataRecord() const {
     return dataRecord_;
   }
 
-  const vrs::StreamId& getStreamId() const {
+  [[nodiscard]] const vrs::StreamId& getStreamId() const {
     return streamId_;
   }
 
-  double getNextTimestampSec() const {
+  [[nodiscard]] double getNextTimestampSec() const {
     return nextTimestampSec_;
   }
 
