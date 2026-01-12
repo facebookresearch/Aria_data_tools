@@ -15,7 +15,6 @@
 import argparse
 
 import numpy as np
-
 from projectaria_tools import sensors
 
 
