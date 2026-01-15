@@ -68,6 +68,8 @@ class AriaImageSensorPlayer : public vrs::RecordFormatStreamPlayer {
   AriaImageSensorPlayer(const AriaImageSensorPlayer&) = delete;
   AriaImageSensorPlayer& operator=(const AriaImageSensorPlayer&) = delete;
   AriaImageSensorPlayer(AriaImageSensorPlayer&&) = default;
+  AriaImageSensorPlayer& operator=(AriaImageSensorPlayer&&) = delete;
+  ~AriaImageSensorPlayer() override = default;
 
   void setCallback(ImageCallback callback) {
     callback_ = callback;
