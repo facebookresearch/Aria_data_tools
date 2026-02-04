@@ -86,7 +86,7 @@ int main(int argc, const char* argv[]) {
     std::vector<Eigen::Vector3f> points;
     points.reserve(loadedPoses.size());
     for (const auto& pose : loadedPoses) {
-      points.push_back(pose.T_world_device.translation().cast<float>());
+      points.emplace_back(pose.T_world_device.translation().cast<float>());
     }
     fullTrajs_world.push_back(std::move(points));
   }
