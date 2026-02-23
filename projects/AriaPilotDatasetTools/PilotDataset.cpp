@@ -279,7 +279,7 @@ std::optional<Sophus::SE3d> PilotDatasetProvider::getLatestPoseOfStream(
   }
 
   // get latest timestamp of pose
-  int64_t currentTimestampNs = static_cast<int64_t>(1e9 * getNextTimestampSec(streamId));
+  auto currentTimestampNs = static_cast<int64_t>(1e9 * getNextTimestampSec(streamId));
   return getPoseOfStreamAtTimestampNs(streamId, currentTimestampNs);
 }
 
@@ -314,7 +314,7 @@ std::optional<Sophus::SE3d> PilotDatasetProvider::getPoseOfStreamAtTimestampNs(
 std::optional<Sophus::SE3d> PilotDatasetProvider::getPose() const {
   if (hasPoses_) {
     // Always query using the slam-camera-left timestamp.
-    int64_t slamCameraLeftTimestampNs =
+    auto slamCameraLeftTimestampNs =
         static_cast<int64_t>(1e9 * getNextTimestampSec(kSlamLeftCameraStreamId));
     return queryPose(slamCameraLeftTimestampNs, imuLeftPoses_);
   } else {
